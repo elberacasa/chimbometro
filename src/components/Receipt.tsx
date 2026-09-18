@@ -21,11 +21,18 @@ function formatAnswer(a: Answer): string {
   return `${a.choice} ${formatPercent(a.probabilities[a.choice] ?? a.confidence)}`;
 }
 
-export function Receipt({ data, at }: { data: ReceiptData | null; at: string | null }) {
+type Props = {
+  data: ReceiptData | null;
+  at: string | null;
+  /** Flags whose evidence the page actually used (raised flags with a cited fragment). */
+  cited: string[];
+};
+
+export function Receipt({ data, at, cited }: Props) {
   return (
     <div className={styles.printer}>
       <div className={styles.slot} aria-hidden="true" />
-      {data && at ? <Paper key={at} data={data} at={at} /> : <EmptyPaper />}
+      {data && at ? <Paper key={at} data={data} at={at} cited={cited} /> : <EmptyPaper />}
     </div>
   );
 }
@@ -41,8 +48,12 @@ function EmptyPaper() {
   );
 }
 
-function Paper({ data, at }: { data: ReceiptData; at: string }) {
-  const answers = Object.entries(data.response.answers) as Array<[string, Answer]>;
+function Paper({ data, at, cited }: { data: ReceiptData; at: string; cited: string[] }) {
+  const all = Object.entries(data.response.answers) as Array<[string, Answer]>;
+  const answers = all.filter(([id]) => !id.startsWith("evidencia_"));
+  // Evidence was asked for every flag; list only the citations the page used, summarize the rest.
+  const evidence = all.filter(([id]) => cited.includes(id.replace("evidencia_", "")));
+  const unused = all.length - answers.length - evidence.length;
   return (
     <article className={styles.paper} aria-label="Recibo de la consulta a Jev">
       <header className={styles.head}>
@@ -70,6 +81,21 @@ function Paper({ data, at }: { data: ReceiptData; at: string }) {
               <td className="num">{formatAnswer(a)}</td>
             </tr>
           ))}
+          {evidence.map(([id, a]) => (
+            <tr key={id}>
+              <th scope="row">{id.replace("evidencia_", "cita ")}</th>
+              <td>{KIND[a.type]}</td>
+              <td className="num">{formatAnswer(a)}</td>
+            </tr>
+          ))}
+          {unused > 0 && (
+            <tr>
+              <th scope="row" colSpan={2}>
+                {unused} citas sin usar
+              </th>
+              <td>bandera no activada</td>
+            </tr>
+          )}
         </tbody>
       </table>
 

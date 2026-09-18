@@ -83,6 +83,7 @@
 .lines thead th:last-child,
 .lines td:last-child {
   text-align: right;
+  white-space: nowrap;
 }
 
 .lines th[scope="row"] {

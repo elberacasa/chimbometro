@@ -3,6 +3,7 @@ import evalData from "@/content/eval.json";
 import subreddit from "@/content/subreddit.json";
 import { ArchitectureDiagram } from "@/components/docs/ArchitectureDiagram";
 import { CostBars, EvalRuns, LatencyHistogram } from "@/components/docs/Charts";
+import { Lab } from "@/components/docs/Lab";
 import { PolicyPlayground } from "@/components/docs/PolicyPlayground";
 import styles from "@/components/docs/Docs.module.css";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
@@ -29,6 +30,7 @@ const NAV = [
   { href: "#preguntas", label: "Preguntas" },
   { href: "#formula", label: "Fórmula" },
   { href: "#datos", label: "Datos" },
+  { href: "#laboratorio", label: "Laboratorio" },
 ];
 
 const TOC = [
@@ -39,6 +41,7 @@ const TOC = [
   ["streaming", "Streaming"],
   ["seguridad", "Seguridad"],
   ["datos", "Latencia y costo"],
+  ["laboratorio", "Laboratorio"],
 ] as const;
 
 const EXAMPLE = EXAMPLES[0]!;
@@ -305,6 +308,13 @@ p′ᵢ     = max(0, (pᵢ − umbral) / (1 − umbral))`}
             />
             <EvalRuns runs={evalData.runs} at={evalData.at} />
             <CostBars rows={costRows} />
+          </section>
+
+          <section id="laboratorio" className={styles.section}>
+            <h2>Laboratorio: qué más puede hacer Jev</h2>
+            <Lab
+              chimbaEval={{ passed: evalData.passed, total: evalData.total, median: evalMedian }}
+            />
           </section>
         </main>
       </div>

@@ -235,10 +235,49 @@ export function Meter() {
               </p>
             </>
           )}
+
+          <h2 className={styles.h2}>Cómo leer el recibo</h2>
+          <dl className={styles.glossary}>
+            <div>
+              <dt>sí/no</dt>
+              <dd>
+                La probabilidad de que algo sea cierto, de 0 a 1. Un 0,5 significa que Jev no lo
+                sabe, no que la bandera esté «a medias».
+              </dd>
+            </div>
+            <div>
+              <dt>escala</dt>
+              <dd>Dónde cae la oferta entre niveles descritos, de 0 (justa) a 3 (absurda).</dd>
+            </div>
+            <div>
+              <dt>elección</dt>
+              <dd>
+                La opción más probable y su probabilidad, entre opciones definidas de antemano.
+              </dd>
+            </div>
+            <div>
+              <dt>cita</dt>
+              <dd>
+                El fragmento de tu oferta que Jev eligió como evidencia de una bandera. Elige entre
+                fragmentos reales, así que no puede inventar una cita.
+              </dd>
+            </div>
+            <div>
+              <dt>tokens</dt>
+              <dd>
+                Pedazos de texto que Jev lee. Se cobran solo los de entrada: tu oferta más las
+                preguntas. Lo que Jev responde es gratis.
+              </dd>
+            </div>
+          </dl>
         </div>
 
         <aside className={styles.receipt} aria-label="Recibo de la consulta">
-          <Receipt data={analysis?.receipt ?? null} at={result?.at ?? null} />
+          <Receipt
+            data={analysis?.receipt ?? null}
+            at={result?.at ?? null}
+            cited={analysis?.evidence.map((e) => e.flag) ?? []}
+          />
         </aside>
       </section>
     </>

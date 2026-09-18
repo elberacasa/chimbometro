@@ -1,0 +1,69 @@
+{
+  "at": "2026-09-18T14:15-04:00",
+  "listings": 501,
+  "jobPosts": 496,
+  "eligible": 130,
+  "eligibleJunior": 11,
+  "eligibleWithUsd": 71,
+  "lowConfidence": 108,
+  "questions": 7,
+  "inputTokens": 636917,
+  "costUsd": 0.026751,
+  "latencyP50Ms": 680,
+  "sources": [
+    {
+      "id": "hn",
+      "name": "Hacker News: Who is hiring? (septiembre 2026)",
+      "url": "https://news.ycombinator.com/submitted?id=whoishiring",
+      "jobPosts": 256,
+      "eligible": 30
+    },
+    {
+      "id": "getonbrd",
+      "name": "Get on Board",
+      "url": "https://www.getonbrd.com",
+      "jobPosts": 200,
+      "eligible": 71
+    },
+    {
+      "id": "wwr",
+      "name": "We Work Remotely",
+      "url": "https://weworkremotely.com",
+      "jobPosts": 24,
+      "eligible": 24
+    },
+    {
+      "id": "remotive",
+      "name": "Remotive",
+      "url": "https://remotive.com",
+      "jobPosts": 16,
+      "eligible": 5
+    }
+  ],
+  "examples": [
+    {
+      "title": "We The Flywheel | AI-Native Engineers & Operators | REMOTE (worldwide) | Contract / Part-t",
+      "url": "https://news.ycombinator.com/item?id=49522930",
+      "where": "anywhere",
+      "confidence": 1.0
+    },
+    {
+      "title": "Proxybase | Backend Systems Engineer (Rust) | Remote, Global | Full-Time",
+      "url": "https://news.ycombinator.com/item?id=49523422",
+      "where": "anywhere",
+      "confidence": 1.0
+    },
+    {
+      "title": "CyberAtlas | https://cyberatlas.ai | Software Engineer | REMOTE Worldwide | Full-time",
+      "url": "https://news.ycombinator.com/item?id=49523704",
+      "where": "anywhere",
+      "confidence": 1.0
+    },
+    {
+      "title": "Renaissance Philanthropy | Research Engineer (Speech AI/ML) | Remote (worldwide)",
+      "url": "https://news.ycombinator.com/item?id=49523770",
+      "where": "anywhere",
+      "confidence": 1.0
+    }
+  ]
+}
