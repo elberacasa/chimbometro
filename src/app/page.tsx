@@ -1,26 +1,31 @@
-import { Meter } from "@/components/Meter";
-import { BuildCost } from "@/components/sections/BuildCost";
-import { HowItWorks } from "@/components/sections/HowItWorks";
-import { Subreddit } from "@/components/sections/Subreddit";
+import { RadarView } from "@/components/radar/RadarView";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
+import { SNAPSHOT_KEY } from "@/lib/radar/refresh";
+import type { RadarSnapshot } from "@/lib/radar/types";
+import { serverConfig } from "@/lib/server/config";
 import styles from "./page.module.css";
 
-const NAV = [
-  { href: "#como-funciona", label: "Cómo funciona" },
-  { href: "#el-sub", label: "Por qué existe" },
-  { href: "#costos", label: "Costos" },
-  { href: "/docs", label: "Documentación" },
-];
+// The snapshot changes a few times a day: render once a minute at most, so a traffic spike means
+// one Redis read per minute instead of one per visitor. Live updates refetch on the client.
+export const dynamic = "force-static";
+export const revalidate = 60;
 
-export default function Home() {
+/** The snapshot plus the moment it was read, which relative times ("hace 12 minutos") use. */
+async function loadSnapshot() {
+  const renderedAt = Date.now();
+  const config = serverConfig();
+  if (!config.ok) return { snapshot: null, renderedAt };
+  const snapshot = await config.store.getJson<RadarSnapshot>(SNAPSHOT_KEY).catch(() => null);
+  return { snapshot, renderedAt };
+}
+
+export default async function RadarPage() {
+  const { snapshot, renderedAt } = await loadSnapshot();
   return (
     <div className={styles.page}>
-      <SiteHeader nav={NAV} animatedLogo />
+      <SiteHeader current="radar" animatedLogo />
       <main>
-        <Meter />
-        <HowItWorks />
-        <Subreddit />
-        <BuildCost />
+        <RadarView initial={snapshot} renderedAt={renderedAt} />
       </main>
       <SiteFooter />
     </div>

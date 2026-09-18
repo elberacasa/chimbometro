@@ -58,7 +58,10 @@ export function Lab({
               <td className="num">{formatInt(radar.listings)} empleos</td>
               <td className="num">{radar.questions}</td>
               <td className="num">{formatUsd(radar.costUsd)}</td>
-              <td>Qué empleos remotos aceptan a alguien que vive en Venezuela.</td>
+              <td>
+                Qué empleos remotos aceptan a alguien que vive en Venezuela. Hoy es el radar de la
+                portada.
+              </td>
             </tr>
           </tbody>
         </table>

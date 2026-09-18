@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { readEvents, type ChimbaEvent } from "./events";
+import { readNdjson } from "./ndjson";
+
+type Event = { type: string; message?: string };
 
 function streamOf(chunks: Uint8Array[]) {
   return new ReadableStream<Uint8Array>({
@@ -11,14 +13,14 @@ function streamOf(chunks: Uint8Array[]) {
 }
 
 async function collect(chunks: Uint8Array[]) {
-  const out: ChimbaEvent[] = [];
-  for await (const e of readEvents(streamOf(chunks))) out.push(e);
+  const out: Event[] = [];
+  for await (const e of readNdjson<Event>(streamOf(chunks))) out.push(e);
   return out;
 }
 
 const encode = (s: string) => new TextEncoder().encode(s);
 
-describe("readEvents", () => {
+describe("readNdjson", () => {
   it("reassembles events whose bytes arrive split, even inside a multibyte character", async () => {
     const a = JSON.stringify({ type: "received", t: 0, chars: 42, guardMs: 3 });
     const b = JSON.stringify({ type: "error", t: 5, message: "Jev está con mucha demanda." });

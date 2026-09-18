@@ -4,6 +4,7 @@ import subreddit from "@/content/subreddit.json";
 import { ArchitectureDiagram } from "@/components/docs/ArchitectureDiagram";
 import { CostBars, EvalRuns, LatencyHistogram } from "@/components/docs/Charts";
 import { Lab } from "@/components/docs/Lab";
+import { RadarDocs } from "@/components/docs/RadarDocs";
 import { PolicyPlayground } from "@/components/docs/PolicyPlayground";
 import styles from "@/components/docs/Docs.module.css";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
@@ -19,22 +20,14 @@ import { DEFAULT_LIMITS, MAX_BODY_BYTES } from "@/lib/server/guard";
 import pageStyles from "../page.module.css";
 
 export const metadata: Metadata = {
-  title: "Documentación técnica del Chimbómetro",
+  title: "Laboratorio de Chamba: cómo funciona por dentro",
   description:
     "Cómo el Chimbómetro usa Jev: arquitectura, cada pregunta tal como se envía, la fórmula, el protocolo de streaming, la seguridad y los costos reales.",
 };
 
-const NAV = [
-  { href: "/", label: "Medir una oferta" },
-  { href: "#arquitectura", label: "Arquitectura" },
-  { href: "#preguntas", label: "Preguntas" },
-  { href: "#formula", label: "Fórmula" },
-  { href: "#datos", label: "Datos" },
-  { href: "#laboratorio", label: "Laboratorio" },
-];
-
 const TOC = [
-  ["arquitectura", "Arquitectura"],
+  ["radar", "El radar"],
+  ["arquitectura", "Arquitectura del Chimbómetro"],
   ["preguntas", "Las preguntas"],
   ["evidencia", "Evidencia"],
   ["formula", "La fórmula"],
@@ -69,7 +62,7 @@ export default async function Docs() {
 
   return (
     <div className={pageStyles.page}>
-      <SiteHeader nav={NAV} />
+      <SiteHeader current="docs" />
       <div className={styles.layout}>
         <nav className={styles.toc} aria-label="En esta página">
           <p>En esta página</p>
@@ -84,11 +77,11 @@ export default async function Docs() {
 
         <main className={styles.content}>
           <header className={styles.intro}>
-            <h1>Cómo funciona el Chimbómetro por dentro</h1>
+            <h1>Cómo funciona Chamba por dentro</h1>
             <p>
-              Una oferta, {totalQuestions} preguntas, un solo request a Jev y una fórmula que puedes
-              leer. Cada número de esta página sale del código o de mediciones reales, así que no
-              puede quedar desactualizado.
+              Un radar que lee cientos de ofertas por centavos y un medidor que juzga una oferta en
+              menos de un segundo, los dos con Jev. Cada número de esta página sale del código o de
+              mediciones reales, así que no puede quedar desactualizado.
             </p>
             <dl className={styles.facts}>
               <div>
@@ -112,8 +105,13 @@ export default async function Docs() {
             </dl>
           </header>
 
+          <section id="radar" className={styles.section}>
+            <h2>El radar de empleos</h2>
+            <RadarDocs />
+          </section>
+
           <section id="arquitectura" className={styles.section}>
-            <h2>Arquitectura</h2>
+            <h2>Arquitectura del Chimbómetro</h2>
             <p>
               El navegador nunca habla con Jev. La oferta va a una función de Vercel que tiene la
               API key, verifica que la petición sea legítima, le hace las preguntas a Jev, calcula

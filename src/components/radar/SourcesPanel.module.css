@@ -1,0 +1,92 @@
+.panel {
+  font-size: var(--step--1);
+}
+
+.h2 {
+  font-size: var(--step-3);
+}
+
+.sub {
+  margin: 0.4rem 0 1rem;
+  color: var(--ink-3);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.list > li {
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--rule);
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-weight: 650;
+}
+
+.head a {
+  color: var(--ink);
+}
+
+.ok {
+  font-weight: 400;
+  color: var(--ink-3);
+}
+
+.failed {
+  color: var(--bad);
+}
+
+.numbers {
+  margin-top: 0.25rem;
+  color: var(--ink-2);
+}
+
+.numbers strong {
+  color: var(--ink);
+}
+
+.urls {
+  list-style: none;
+  margin: 0.35rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.urls a {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--ink-3);
+  overflow-wrap: anywhere;
+}
+
+.run {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1.4rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+}
+
+.run div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.run dt {
+  color: var(--ink-3);
+}
+
+.run dd {
+  margin: 0;
+  text-align: right;
+}

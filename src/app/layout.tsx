@@ -23,13 +23,13 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Chimbómetro: ¿qué tan chimba es esa oferta?",
+  title: "Chamba: empleos remotos que sí aceptan a Venezuela",
   description:
-    "Pega una oferta de trabajo y Jev te dice en menos de un segundo qué tan mala es, con cada probabilidad, token y centavo a la vista.",
+    "Un radar de empleos remotos para devs en Venezuela: Jev lee cada oferta de cuatro bolsas públicas y cita la frase que dice si puedes aplicar. Incluye el Chimbómetro para medir ofertas.",
   authors: [{ name: "elberacasa", url: "https://github.com/elberacasa" }],
   openGraph: {
-    title: "Chimbómetro",
-    description: "¿Qué tan chimba es esa oferta? Pégala y Jev la mide en menos de un segundo.",
+    title: "Chamba",
+    description: "Empleos remotos que sí aceptan a Venezuela, leídos uno por uno por Jev.",
     locale: "es_VE",
     type: "website",
   },

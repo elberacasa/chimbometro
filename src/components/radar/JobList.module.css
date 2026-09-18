@@ -1,0 +1,212 @@
+.wrap {
+  min-width: 0;
+}
+
+.filters {
+  display: grid;
+  gap: 0.7rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.2rem;
+}
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.switch input {
+  width: 1.05rem;
+  height: 1.05rem;
+  accent-color: var(--ink);
+}
+
+.select select,
+.search input {
+  font: inherit;
+  font-size: var(--step--1);
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.6rem;
+}
+
+.search {
+  flex: 1 1 14rem;
+}
+
+.search input {
+  width: 100%;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.chipsLabel {
+  width: 3.6rem;
+  font-size: var(--step--1);
+  color: var(--ink-3);
+}
+
+.chips button {
+  appearance: none;
+  border: 1px solid var(--rule-strong);
+  background: transparent;
+  color: var(--ink-2);
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.chips button:hover {
+  border-color: var(--ink-3);
+}
+
+.chips button[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.count {
+  margin: 1rem 0 0.4rem;
+  font-weight: 650;
+}
+
+.count span {
+  font-weight: 400;
+  color: var(--ink-3);
+}
+
+.empty {
+  padding: 2rem 0;
+  color: var(--ink-2);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.job {
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.2rem 1rem;
+}
+
+.title {
+  flex: 1 1 22rem;
+  font-weight: 650;
+  font-size: 1.02rem;
+  line-height: 1.35;
+  color: var(--ink);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.title:hover {
+  text-decoration: underline;
+}
+
+.when {
+  font-size: var(--step--1);
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.55rem 0 0;
+  padding: 0;
+}
+
+.tags li {
+  font-size: 0.76rem;
+  padding: 0.12rem 0.55rem;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+  color: var(--ink-2);
+}
+
+.tags li.yes {
+  background: color-mix(in srgb, var(--good) 16%, transparent);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.tags li.noTag {
+  background: color-mix(in srgb, var(--bad) 10%, transparent);
+  color: var(--ink);
+}
+
+.tags li.confirm {
+  background: color-mix(in srgb, var(--warn) 22%, transparent);
+  color: var(--ink);
+}
+
+.quote {
+  display: grid;
+  gap: 0.1rem;
+  margin: 0.6rem 0 0;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--good);
+  font-size: var(--step--1);
+}
+
+.quote q,
+.claim {
+  color: var(--ink);
+}
+
+.fromSource {
+  border-left-color: var(--rule-strong);
+}
+
+.quote span {
+  font-size: 0.72rem;
+  color: var(--ink-3);
+}
+
+.quote .claim {
+  font-size: var(--step--1);
+}
+
+.more {
+  margin-top: 1.2rem;
+  appearance: none;
+  border: 1.5px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  border-radius: var(--radius);
+  padding: 0.6rem 1.1rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}

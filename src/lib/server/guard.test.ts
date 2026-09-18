@@ -89,6 +89,21 @@ describe("admit", () => {
   });
 });
 
+describe("MemoryStore values and locks", () => {
+  it("stores JSON with expiry and hands a lock to one holder at a time", async () => {
+    const { store, at } = setup();
+    await store.setJson("snap", { n: 1 }, 60);
+    expect(await store.getJson("snap")).toEqual({ n: 1 });
+    expect(await store.claim("lock", 60)).toBe(true);
+    expect(await store.claim("lock", 60)).toBe(false);
+    await store.release("lock");
+    expect(await store.claim("lock", 60)).toBe(true);
+    at(T0 + 61_000);
+    expect(await store.getJson("snap")).toBeNull();
+    expect(await store.claim("lock", 60)).toBe(true);
+  });
+});
+
 describe("todayStats", () => {
   it("counts measurements and their cost for the current UTC day only", async () => {
     const { store } = setup();
@@ -144,6 +159,14 @@ describe("UpstashStore", () => {
       ["EXPIRE", "k", "60", "NX"],
     ]);
     expect((init.headers as Record<string, string>).Authorization).toBe("Bearer tok");
+  });
+
+  it("claims a lock with SET NX EX and reports whether it got it", async () => {
+    const fetchMock = vi.fn(async () => Response.json({ result: null }));
+    vi.stubGlobal("fetch", fetchMock);
+    expect(await new UpstashStore("https://redis.example", "tok").claim("lock", 900)).toBe(false);
+    const [, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
+    expect(JSON.parse(init.body as string)).toEqual(["SET", "lock", "1", "NX", "EX", "900"]);
   });
 
   it("throws on HTTP errors so the route can fail closed", async () => {

@@ -1,0 +1,108 @@
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--ink);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 40;
+  font-weight: 800;
+  font-size: 1.65rem;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  transform: translateY(0.04em);
+}
+
+.mark {
+  display: block;
+  overflow: visible;
+}
+
+.ring,
+.ringInner {
+  fill: none;
+  stroke: var(--ink);
+}
+
+.ring {
+  stroke-width: 2.4;
+}
+
+.ringInner {
+  stroke-width: 1.4;
+  opacity: 0.45;
+}
+
+.sweep {
+  transform-box: view-box;
+  transform-origin: 16px 16px;
+  /* Resting position: just past the blip. */
+  transform: rotate(62deg);
+}
+
+.wedge {
+  fill: var(--good);
+  opacity: 0.28;
+}
+
+.beam {
+  stroke: var(--good);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.blip {
+  fill: var(--good);
+}
+
+.center {
+  fill: var(--ink);
+}
+
+/* One sweep on load; the blip appears as the beam passes over it. */
+.animated .sweep {
+  animation: sweep 1300ms cubic-bezier(0.35, 0, 0.25, 1) both;
+}
+
+.animated .blip {
+  animation: blip 1300ms both;
+}
+
+@keyframes sweep {
+  from {
+    transform: rotate(-298deg);
+  }
+  to {
+    transform: rotate(62deg);
+  }
+}
+
+@keyframes blip {
+  0%,
+  78% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  86% {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.blip {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated .sweep,
+  .animated .blip {
+    animation: none;
+  }
+}

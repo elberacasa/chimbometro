@@ -1,26 +1,34 @@
 import Link from "next/link";
-import { Logo } from "./Logo";
+import { Brand } from "./Brand";
 import styles from "./SiteChrome.module.css";
 
-type NavItem = { href: string; label: string };
+const PRODUCTS = [
+  { id: "radar", href: "/", label: "Radar de empleos" },
+  { id: "chimbometro", href: "/chimbometro", label: "Chimbómetro" },
+  { id: "docs", href: "/docs", label: "Laboratorio" },
+] as const;
+
+export type ProductId = (typeof PRODUCTS)[number]["id"];
 
 export function SiteHeader({
-  nav,
+  current,
   animatedLogo = false,
 }: {
-  nav: NavItem[];
+  current: ProductId;
   animatedLogo?: boolean;
 }) {
   return (
     <header className={styles.header}>
-      <Link href="/" className={styles.home} aria-label="Chimbómetro, inicio">
-        <Logo animated={animatedLogo} />
+      <Link href="/" className={styles.home} aria-label="Chamba, inicio">
+        <Brand animated={animatedLogo} />
       </Link>
-      <nav aria-label="Secciones">
+      <nav aria-label="Herramientas">
         <ul className={styles.nav}>
-          {nav.map((item) => (
-            <li key={item.href}>
-              <Link href={item.href}>{item.label}</Link>
+          {PRODUCTS.map((p) => (
+            <li key={p.id}>
+              <Link href={p.href} aria-current={p.id === current ? "page" : undefined}>
+                {p.label}
+              </Link>
             </li>
           ))}
         </ul>
@@ -33,12 +41,12 @@ export function SiteFooter() {
   return (
     <footer className={styles.footer}>
       <p>
-        Hecho en Venezuela por <a href="https://github.com/elberacasa">elberacasa</a> para
+        Chamba es un proyecto de <a href="https://github.com/elberacasa">elberacasa</a> para
         r/dev_venezuela.
       </p>
       <p>
-        Funciona con Jev, un modelo de <a href="https://typesafe.ai">TypeSafe AI</a>. Este proyecto
-        no está afiliado a TypeSafe. No guardamos el texto de las ofertas que mides.
+        Funciona con Jev, un modelo de <a href="https://typesafe.ai">TypeSafe AI</a>. No está
+        afiliado a TypeSafe. No guardamos el texto de las ofertas que mides en el Chimbómetro.
       </p>
     </footer>
   );

@@ -1,4 +1,5 @@
 import type { SystemOneResponse } from "@/lib/jev/types";
+import { readNdjson } from "@/lib/stream/ndjson";
 import type { AllQuestions, Analysis } from "./analyze";
 
 /**
@@ -28,21 +29,7 @@ export type ChimbaEvent =
 
 export const JEV_ENDPOINT = "api.typesafe.ai/v1/systemone";
 
-/** Reads an NDJSON body, yielding events as their lines arrive. */
-export async function* readEvents(body: ReadableStream<Uint8Array>): AsyncGenerator<ChimbaEvent> {
-  const reader = body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = "";
-  for (;;) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    let newline: number;
-    while ((newline = buffer.indexOf("\n")) >= 0) {
-      const line = buffer.slice(0, newline).trim();
-      buffer = buffer.slice(newline + 1);
-      if (line) yield JSON.parse(line) as ChimbaEvent;
-    }
-  }
-  if (buffer.trim()) yield JSON.parse(buffer) as ChimbaEvent;
+/** Reads the /api/chimba stream. */
+export function readEvents(body: ReadableStream<Uint8Array>) {
+  return readNdjson<ChimbaEvent>(body);
 }

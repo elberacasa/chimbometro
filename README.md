@@ -1,20 +1,24 @@
-# Chimbómetro
+# Chamba
 
-Pega una oferta de trabajo y mide qué tan chimba es. Built for r/dev_venezuela with
+Empleos remotos que sí aceptan a Venezuela. Built for r/dev_venezuela with
 [Jev](https://docs.typesafe.ai), TypeSafe's System One model: it answers typed questions with
 calibrated probabilities instead of writing text.
 
-One request asks Jev 20 questions in parallel: 9 red flags (yes/no), how unfair the offer is
-(0–3), a verdict (one of six), and, per red flag, which fragment of the offer is the evidence
-("select instead of generate", so citations can't be invented). Plain code turns the probabilities
-into a 0–100 score. The page shows every step live: a pipeline diagram driven by the real stream,
-a trace with server timestamps, lines from each flag to the words that triggered it, and a receipt
-with tokens, cost and latency. `/docs` explains the architecture, every question as sent, the
-formula (with a playground that re-scores saved answers without calling Jev), and real latency and
-cost charts. Every Jev call made while building the project is recorded in
-[`ledger/jev-usage.jsonl`](ledger/jev-usage.jsonl).
+**Radar (`/`).** The server fetches ~500 listings from four public job boards (HN "Who is hiring?",
+Get on Board, We Work Remotely, Remotive). Structured source fields decide location in code;
+otherwise Jev reads each listing, answers 7 questions (is it a job, where can you work from, does it
+exclude Venezuela, USD, seniority, role, English) and picks the sentence that proves the location.
+Only new listings are judged: a full run is ~20 s and ~$0.05, a daily update costs cents. Visitors can
+watch an update live (at most one every 15 minutes) or replay the last one; every URL the server
+requested is listed on the page.
 
-Typical request: 20 questions, ~3,500 input tokens, ~$0.00015, ~0.7 s.
+**Chimbómetro (`/chimbometro`).** Paste a job offer; one request asks Jev 20 questions (9 red flags,
+unfairness, verdict, and per flag the fragment that proves it) and code turns the probabilities into a
+0–100 score. The page streams every step live and prints a receipt with tokens, cost and latency.
+
+**Laboratorio (`/docs`).** Architecture, every question as sent, a formula playground, security,
+latency and cost charts, and what we learned using Jev. Every Jev call made while building is in
+[`ledger/jev-usage.jsonl`](ledger/jev-usage.jsonl).
 
 ## Run it
 
@@ -41,6 +45,8 @@ test against Redis on purpose.
 src/
   app/api/chimba/route.ts   POST endpoint; streams NDJSON events as each step happens
   app/api/stats/route.ts    today's measured offers and Jev spend (cached 10 s)
+  app/api/radar/            snapshot, live refresh (NDJSON; daily cron with CRON_SECRET), replay
+  lib/radar/                sources, questions, judge (eligibility rules), refresh orchestrator
   app/docs/                 technical documentation page
   lib/server/               guard (limits, budget, origin) and server-only config
   lib/jev/                  typed HTTP client, pricing, wire types (no SDK dependency)

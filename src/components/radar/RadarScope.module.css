@@ -1,0 +1,149 @@
+/* A dark instrument in both themes, like the trace pane: it is a screen, not page chrome. */
+
+.figure {
+  --scope-bg: #0d1726;
+  --scope-glow: #13233a;
+  --scope-line: #25385a;
+  --scope-text: #7d8ca6;
+  --scope-beam: #4fd18b;
+  --scope-hit: #4fd18b;
+  --scope-miss: #5a6b88;
+
+  margin: 0;
+  padding: 1rem 1rem 0.8rem;
+  border-radius: var(--radius);
+  background: var(--scope-bg);
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.rim {
+  stroke: var(--scope-line);
+  stroke-width: 1.5;
+}
+
+.ring,
+.axis {
+  fill: none;
+  stroke: var(--scope-line);
+  stroke-width: 1;
+}
+
+.axis {
+  stroke-dasharray: 2 4;
+}
+
+.ringLabel,
+.sourceLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--scope-text);
+}
+
+.sourceLabel {
+  font-size: 11px;
+  fill: #b9c6da;
+}
+
+.hit {
+  fill: var(--scope-hit);
+}
+
+.miss {
+  fill: var(--scope-miss);
+  opacity: 0.55;
+}
+
+.center {
+  fill: var(--scope-beam);
+}
+
+.beam {
+  transform-box: view-box;
+  transform-origin: 160px 160px;
+  transform: rotate(-90deg);
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+.beamLine {
+  stroke: var(--scope-beam);
+  stroke-width: 1.5;
+  opacity: 0.8;
+}
+
+/* While a live update runs, the beam turns; when it stops, it fades out where it is. */
+.sweeping .beam {
+  opacity: 1;
+  animation: sweep 2.4s linear infinite;
+}
+
+@keyframes sweep {
+  from {
+    transform: rotate(-90deg);
+  }
+  to {
+    transform: rotate(270deg);
+  }
+}
+
+/* A listing Jev just judged. */
+.ping {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ping 900ms ease-out;
+}
+
+@keyframes ping {
+  0% {
+    transform: scale(4);
+    opacity: 0.2;
+  }
+  60% {
+    transform: scale(1.4);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1.1rem;
+  padding-top: 0.6rem;
+  font-size: 0.72rem;
+  color: var(--scope-text);
+}
+
+.keyHit::before,
+.keyMiss::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 0.4rem;
+  border-radius: 50%;
+  vertical-align: 0.05em;
+}
+
+.keyHit::before {
+  background: var(--scope-hit);
+}
+
+.keyMiss::before {
+  background: var(--scope-miss);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sweeping .beam,
+  .ping {
+    animation: none;
+  }
+}
