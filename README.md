@@ -9,20 +9,20 @@ offers. Built for [r/dev_venezuela](https://www.reddit.com/r/dev_venezuela/) on 
 Live: [chimbometro.vercel.app](https://chimbometro.vercel.app)<br>
 How it was built: [the Laboratorio](https://chimbometro.vercel.app/docs)
 
-![The job radar: 86 of 434 remote tech jobs accept someone living in Venezuela](docs/images/radar.jpg)
+![The job radar: 342 of 760 remote tech jobs accept someone living in Venezuela](docs/images/radar.jpg)
 
 ## Why Jev
 
-![500 job listings read in 21 seconds for 5 cents](docs/images/jev-en.png)
+![874 job listings read in 34 seconds for 11 cents](docs/images/jev-en.png)
 
 Jev is a System One model: instead of writing text, it answers typed questions (yes or no, pick
 one, score on a scale) with probabilities. That changes what an AI feature costs and how it
 behaves:
 
-- **Fast enough to run in a request.** A radar call asks 8 questions about one listing and returns
-  in 265 ms (median of 500 calls). A Chimbómetro call asks 20 and still finishes in under a second.
+- **Fast enough to run in a request.** A radar call asks 9 questions about one listing and returns
+  in 275 ms (median of 874 calls). A Chimbómetro call asks 20 and still finishes in under a second.
 - **Cheap enough to run on everything.** At $0.042 per million input tokens and free output, one
-  dollar judges about 9,800 job listings. The daily radar update costs a few cents.
+  dollar judges about 8,000 job listings. The daily radar update costs a few cents.
 - **Easy to check.** Answers are numbers and choices, so code applies the thresholds and shows
   the uncertainty. Evidence is picked from sentences that exist in the listing, so a citation
   cannot be invented. Judgments can still be wrong, which is why every one links to its source
@@ -40,18 +40,61 @@ absurd job offers. Chamba addresses both.
 
 ### Job radar
 
-Every day, and whenever a visitor asks for it, the server fetches around 500 listings from four
-public job boards: Hacker News "Who is hiring?", Get on Board, We Work Remotely and Remotive. For
-each new listing Jev answers eight questions in a single request: is it a real job, is it a tech
-role, where can the hired person live, does it require something a person in Venezuela would not
-have (work authorization, a US license, a clearance), USD pay, seniority, role and English level.
+Every day, and whenever a visitor asks for it, the server fetches around 900 listings from five
+public job boards: Hacker News "Who is hiring?", Get on Board, Himalayas, Jobicy and We Work
+Remotely. For each new listing Jev answers nine questions in a single request: is it a real job,
+is it a tech role, where can the hired person live, does it require something a person in
+Venezuela would not have (work authorization, a US license, a clearance, a time zone), does it take
+juniors, USD pay, seniority, role and English level.
 It also picks the sentence of the listing that proves where the job can be done, so every result
 shows its evidence and links to the original.
 
 Anyone can watch an update live: the page streams every URL the server requests and every
 listing Jev judges, with tokens and cost adding up in real time.
 
-![A replay of a real radar update: 500 listings fetched and judged in 21 seconds](docs/images/radar-live.gif)
+![A replay of a real radar update: 874 listings fetched and judged in 34 seconds](docs/images/radar-live.gif)
+
+### How the sources were chosen
+
+The first radar read four boards because they were the ones we knew. To choose better, Jev read
+the 80 newest listings of eight public boards (`npm run jev:sources`, 518 listings, $0.066) and we
+measured what matters to someone job hunting from Venezuela: how many tech jobs accept them, and
+what each one costs to find.
+
+| Board | Tech jobs | Accept Venezuela | Cost per useful job | |
+| --- | ---: | ---: | ---: | --- |
+| Himalayas | 67 | 64 | $0.00016 | kept |
+| Jobicy | 75 | 45 | $0.00025 | kept |
+| We Work Remotely | 62 | 42 | $0.00027 | kept |
+| Get on Board | 59 | 15 | $0.00062 | kept |
+| Hacker News | 74 | 11 | $0.00073 | kept |
+| Working Nomads | 26 | 3 | $0.00117 | dropped |
+| Remotive | 9 | 1 | $0.00141 | dropped |
+| Remote OK | 34 | 5 | $0.00210 | dropped |
+
+The radar went from 86 of 434 tech jobs that accept Venezuela to 342 of 760, and from 2 jobs open
+to juniors to 12. Every board is fetched at most once per the interval its API terms ask for.
+
+### How Jev gets better
+
+Where a board states the location in a field, code decides. The experiment also had Jev read the
+text on its own and saved every disagreement: 85 of them, reviewed one by one. Sometimes the board
+was wrong ("Anywhere in the World" in the field, "within one hour of CET" in the text), so Jev's
+exclusion question always applies. Sometimes Jev was wrong, and that changed the questions.
+
+Every real mistake goes the same way: it becomes an eval case, the question changes, and
+`npm run jev:eval-radar` runs all cases against the real model before the radar re-reads
+everything with the new version.
+
+| Version | Found by | What was wrong | Eval cases |
+| --- | --- | --- | ---: |
+| 2 | A user | A US-licensed insurance sales job showed up as a junior tech role | 12 |
+| 3 | Auditing the 86 accepted jobs | "Junior and Senior" posts counted as unclear; "NAMER, EMEA, APJ" read as worldwide | 15 |
+| 4 | Comparing boards | "LATAM, USA" and standard work-authorization text read as exclusions; CET-only hours barely caught | 19 |
+| 5 | Reviewing the juniors | Boards tagged "expert senior engineers wanted" as entry-level | 20 |
+
+All 20 cases pass. One is still open and documented: a "LATAM, USA" listing whose standard
+authorization line keeps it just over the exclusion threshold (0.51).
 
 ### Chimbómetro
 
@@ -82,19 +125,20 @@ protocol, security, latency and cost charts, and the mistakes made along the way
 
 ## What it cost to build
 
-![The whole project cost $0.16 in Jev](docs/images/cost-en.png)
+![The whole project cost $0.44 in Jev](docs/images/cost-en.png)
 
 Every Jev call made while building the project is recorded in
 [`ledger/jev-usage.jsonl`](ledger/jev-usage.jsonl): the research, every eval, every local test
-and both full radar runs. The docs page renders the same totals, and `npm run readme:art` redraws
+and every full radar run. The docs page renders the same totals, and `npm run readme:art` redraws
 the charts above from the ledger and the last radar run.
 
 | | |
 | --- | --- |
-| Total Jev spend | **$0.16** across 1,991 calls and 3.8M input tokens |
+| Total Jev spend | **$0.44** across 4,325 calls and 10.5M input tokens |
 | Reading 206 subreddit posts (research) | $0.014 |
+| Comparing eight job boards (518 listings) | $0.066 |
 | One Chimbómetro measurement | about $0.00015, 20 questions, under a second |
-| A full radar run (500 listings, 4,000 questions) | $0.051, 20.5 s |
+| A full radar run (874 listings, five boards) | $0.107, 34 s |
 | A daily radar update | only new listings are judged, so it costs cents |
 
 ## How it works
@@ -105,15 +149,16 @@ browser ──POST──▶ /api/chimba ──▶ guard (origin, size, budget, r
                                  ──▶ score.ts: the formula, plain code
         ◀── NDJSON stream: received, sent, answered, scored
 
-cron / visitor ──▶ /api/radar/refresh ──▶ 4 public job APIs and feeds
-                                        ──▶ Jev: 8 questions per new listing, 8 at a time
+cron / visitor ──▶ /api/radar/refresh ──▶ 5 public job APIs and feeds
+                                        ──▶ Jev: 9 questions per new listing, 8 at a time
                                         ──▶ snapshot in Redis ──▶ radar page (ISR, 60 s)
 ```
 
 Decisions worth knowing:
 
-- **Structured data is decided in code.** When a source states the location in a field (Get on
-  Board's remote modality, "Anywhere in the World"), code decides and Jev only judges free text.
+- **Structured data is decided in code, and checked by Jev.** When a board states the location or
+  the level in a field, code decides. Jev's exclusion question still applies, and a "junior" field
+  loses when the text clearly says otherwise: fields are sometimes just defaults.
 - **Select, don't generate.** Evidence is a choice among fragments that exist in the listing, so a
   citation cannot be invented.
 - **Uncertainty is shown.** Low-confidence location judgments are marked "Por confirmar".
@@ -137,9 +182,11 @@ Locally, rate limits use memory, so development never touches production data. S
 
 | Script | What it does |
 | --- | --- |
-| `npm run check` | Typecheck, lint and 80 unit tests |
+| `npm run check` | Typecheck, lint and 88 unit tests |
 | `npm run jev:eval` | Chimbómetro verdicts on example offers |
-| `npm run jev:eval-radar` | Radar judgments on 12 tricky listings |
+| `npm run jev:eval-radar` | Radar judgments on 20 tricky listings, most of them real mistakes |
+| `npm run jev:sources` | Compare the candidate job boards with Jev |
+| `npm run radar:refresh` | A full radar update into memory, saved for review; `-- --publish` sends it live |
 | `npm run readme:art` | Redraw the README images from the ledger and the last run |
 | `npm run build` | Production build |
 

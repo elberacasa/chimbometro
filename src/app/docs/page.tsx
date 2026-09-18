@@ -6,6 +6,7 @@ import { CostBars, EvalRuns, LatencyHistogram } from "@/components/docs/Charts";
 import { BuildStory } from "@/components/docs/BuildStory";
 import { Lab } from "@/components/docs/Lab";
 import { RadarDocs } from "@/components/docs/RadarDocs";
+import { SourcesLab } from "@/components/docs/SourcesLab";
 import { PolicyPlayground } from "@/components/docs/PolicyPlayground";
 import styles from "@/components/docs/Docs.module.css";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
@@ -29,6 +30,7 @@ export const metadata: Metadata = {
 const TOC = [
   ["historia", "Cómo lo construimos"],
   ["radar", "El radar"],
+  ["fuentes", "Fuentes y mejoras"],
   ["arquitectura", "Arquitectura del Chimbómetro"],
   ["preguntas", "Las preguntas"],
   ["evidencia", "Evidencia"],
@@ -116,6 +118,11 @@ export default async function Docs() {
           <section id="radar" className={styles.section}>
             <h2>El radar de empleos</h2>
             <RadarDocs />
+          </section>
+
+          <section id="fuentes" className={styles.section}>
+            <h2>Cómo elegimos las fuentes y cómo mejora Jev</h2>
+            <SourcesLab />
           </section>
 
           <section id="arquitectura" className={styles.section}>

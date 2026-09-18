@@ -7,6 +7,7 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import { RADAR_QUESTIONS } from "@/lib/radar/questions";
 
 const CHROME =
   process.env.CHROME_PATH ?? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
@@ -51,6 +52,8 @@ const latencies = events
 const medianMs = latencies[Math.floor(latencies.length / 2)]!;
 const run = done.run;
 
+const fullRuns = ledger.filter((e) => /radar/.test(e.script ?? "") && e.calls >= 400).length;
+
 type Stage = { key: string; es: string; en: string; test: (e: LedgerEntry) => boolean };
 const STAGES: Stage[] = [
   {
@@ -72,9 +75,15 @@ const STAGES: Stage[] = [
     test: (e) => /chimba|eval-offers|curl/.test(e.script ?? ""),
   },
   {
+    key: "sources",
+    es: "Elegir fuentes: 8 bolsas comparadas",
+    en: "Choosing sources: 8 boards compared",
+    test: (e) => /probe-sources/.test(e.script ?? ""),
+  },
+  {
     key: "radar",
-    es: "Radar: 2 corridas de 500 ofertas y evals",
-    en: "Radar: two 500-listing runs and evals",
+    es: `Radar: ${fullRuns} corridas completas, revisiones y evals`,
+    en: `Radar: ${fullRuns} full runs, reviews and evals`,
     test: (e) => /radar/.test(e.script ?? ""),
   },
 ];
@@ -102,6 +111,7 @@ const num = (n: number, lang: Lang, digits = 0) =>
 const usd = (n: number, lang: Lang, digits = 2) =>
   lang === "es" ? `${num(n, lang, digits)} $` : `$${num(n, lang, digits)}`;
 
+const Q = Object.keys(RADAR_QUESTIONS).length;
 const perListing = run.costUsd / run.judged;
 const perDollar = Math.floor(1 / perListing);
 const seconds = run.ms / 1000;
@@ -127,9 +137,9 @@ function banner(lang: Lang) {
             `en ${num(seconds, lang)} segundos`,
             `por ${num(run.costUsd * 100, lang)} centavos.`,
           ],
-          sub: `Cada oferta recibe 8 preguntas en una sola llamada. Jev no escribe texto: responde con probabilidades que el código usa directamente.`,
+          sub: `Cada oferta recibe ${Q} preguntas y la cita de su evidencia en una sola llamada. Jev no escribe texto: responde con probabilidades que el código usa directamente.`,
           stats: [
-            [`${num(medianMs, lang)} ms`, "mediana por llamada, 8 preguntas"],
+            [`${num(medianMs, lang)} ms`, `mediana por llamada, ${Q} preguntas`],
             [num(perDollar, lang), "ofertas evaluadas por cada dólar"],
             [usd(0.042, lang, 3), "por millón de tokens de entrada; la salida es gratis"],
             [usd(total, lang), `costó construir todo el proyecto (${num(calls, lang)} llamadas)`],
@@ -143,9 +153,9 @@ function banner(lang: Lang) {
             `in ${num(seconds, lang)} seconds`,
             `for ${num(run.costUsd * 100, lang)} cents.`,
           ],
-          sub: `Each listing gets 8 questions in a single call. Jev does not write text: it answers with probabilities that code uses directly.`,
+          sub: `Each listing gets ${Q} questions and an evidence quote in a single call. Jev does not write text: it answers with probabilities that code uses directly.`,
           stats: [
-            [`${num(medianMs, lang)} ms`, "median per call, 8 questions"],
+            [`${num(medianMs, lang)} ms`, `median per call, ${Q} questions`],
             [num(perDollar, lang), "listings judged per dollar"],
             [usd(0.042, lang, 3), "per million input tokens; output is free"],
             [usd(total, lang), `to build the whole project (${num(calls, lang)} calls)`],

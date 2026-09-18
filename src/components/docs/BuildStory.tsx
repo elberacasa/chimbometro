@@ -1,5 +1,6 @@
 import evalData from "@/content/eval.json";
 import radar from "@/content/radar-lab.json";
+import sourcesLab from "@/content/sources-lab.json";
 import subreddit from "@/content/subreddit.json";
 import { formatInt, formatPercent, formatUsd } from "@/lib/format";
 import { costUsd } from "@/lib/jev/pricing";
@@ -66,6 +67,15 @@ export function BuildStory({ ledger }: { ledger: LedgerEntry[] }) {
             {firstRun &&
               ` La primera corrida completa leyó ${formatInt(firstRun.calls)} ofertas por ${formatUsd(firstRun.cost_usd)};`}{" "}
             las siguientes solo leen las ofertas nuevas, así que cuestan centavos.
+          </p>
+        </li>
+        <li>
+          <h3>Elegimos las fuentes con Jev</h3>
+          <p>
+            Jev leyó {formatInt(sourcesLab.judged)} ofertas de {sourcesLab.sources.length} bolsas
+            por {formatUsd(sourcesLab.costUsd)} y medimos cuánto cuesta encontrar un empleo útil en
+            cada una. Nos quedamos con cinco. Revisar dónde la bolsa y Jev no coincidían nos mostró
+            errores de los dos lados, y cada uno se volvió un caso de prueba.
           </p>
         </li>
       </ol>

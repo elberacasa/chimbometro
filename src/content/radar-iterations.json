@@ -1,0 +1,109 @@
+{
+  "note": "Every version of the radar's questions, what triggered it and what changed. Numbers are from real runs; eval cases are in src/lib/radar/eval-cases.ts.",
+  "versions": [
+    {
+      "version": 1,
+      "found": "Primera versión, sacada del experimento con 502 empleos.",
+      "problems": [],
+      "change": "Siete preguntas por oferta. Lo que la fuente dice en un campo lo decide el código.",
+      "cases": 0,
+      "title": "El primer radar"
+    },
+    {
+      "version": 2,
+      "found": "Un usuario filtró por «Junior» y le salió un empleo de seguros que exige licencia de EE. UU.",
+      "problems": [
+        {
+          "context": "Empleo de ventas de seguros en Get on Board",
+          "quote": "DO NOT APPLY IF YOU DO NOT HOLD A US PROPERTY & CASUALTY LICENSE",
+          "was": "aparecía como empleo junior que acepta Venezuela",
+          "now": "no es de tecnología y exige una licencia de EE. UU."
+        }
+      ],
+      "change": "Nueva pregunta: ¿es un rol de tecnología? La pregunta de exclusión ahora cubre licencias, permisos y credenciales de un país.",
+      "cases": 12,
+      "title": "Un usuario encontró un error"
+    },
+    {
+      "version": 3,
+      "found": "Leímos a mano cada oferta que el radar mostraba como aceptada, buscando lo que se le escapó a Jev.",
+      "problems": [
+        {
+          "context": "SerpApi, en Hacker News",
+          "quote": "We are looking for more Junior and Senior FullStack Engineers",
+          "was": "nivel sin definir, no contaba como junior",
+          "now": "acepta juniors"
+        },
+        {
+          "context": "StudyTurtle, en Hacker News",
+          "quote": "Open Roles (REMOTE, non US): Animators, Writers, Programming interns",
+          "was": "nivel sin definir, no contaba como junior",
+          "now": "acepta juniors"
+        },
+        {
+          "context": "LiveKit, en Hacker News",
+          "quote": "Product Engineer | NAMER, EMEA, APJ (Remote)",
+          "was": "aceptado, con confianza 0,49",
+          "now": "no acepta: esas regiones dejan fuera a Latinoamérica"
+        }
+      ],
+      "change": "Nueva pregunta: ¿al menos un rol acepta juniors o pasantes? Y la de ubicación ahora sabe que NAMER, EMEA y APJ no incluyen a Latinoamérica.",
+      "cases": 15,
+      "title": "Auditamos los 86 empleos aceptados"
+    },
+    {
+      "version": 4,
+      "found": "Revisamos uno por uno los 85 casos en que el campo de la bolsa y la lectura de Jev no coincidían.",
+      "problems": [
+        {
+          "context": "Tremendous, en Jobicy: «LATAM, Canada, USA» y ninguna restricción en el texto",
+          "quote": null,
+          "was": "exclusión 0,52, rechazado",
+          "now": "exclusión 0,12, acepta Venezuela"
+        },
+        {
+          "context": "Customer.io, en Jobicy: «LATAM, Canada, USA» y ninguna restricción en el texto",
+          "quote": null,
+          "was": "exclusión 0,69, rechazado",
+          "now": "exclusión 0,24, acepta Venezuela"
+        },
+        {
+          "context": "Twikey, en We Work Remotely: «Anywhere in the World» en el campo",
+          "quote": "You are based in a time zone within one hour of CET",
+          "was": "exclusión 0,51, rechazado por muy poco",
+          "now": "exclusión 0,96, rechazado con claridad"
+        },
+        {
+          "context": "Cloudbeds, en Jobicy: «LATAM, USA» en el campo",
+          "quote": "applicants must be currently authorized to work in the location where the position is located",
+          "was": "exclusión 0,76, rechazado",
+          "now": "exclusión 0,51, sigue rechazado por muy poco. Caso abierto"
+        }
+      ],
+      "change": "La pregunta de exclusión ahora dice que LATAM incluye a Venezuela, que la frase estándar de permiso de trabajo no excluye por sí sola, y que un horario que Venezuela (UTC-4) no puede cumplir sí excluye.",
+      "cases": 19,
+      "title": "Comparamos ocho bolsas"
+    },
+    {
+      "version": 5,
+      "found": "Con Himalayas y Jobicy el radar mostraba 15 empleos para juniors. Los leímos todos.",
+      "problems": [
+        {
+          "context": "micro1, en Himalayas: «Entry-level» en el campo",
+          "quote": "micro1 is engaging expert Senior Software Engineers",
+          "was": "aparecía como empleo para juniors",
+          "now": "no es para juniors: el texto contradice el campo"
+        },
+        {
+          "context": "Cobalt, en Jobicy: «Entry-Level, Junior» en el campo, para un rol de pentester con experiencia",
+          "quote": null,
+          "was": "aparecía como empleo para juniors",
+          "now": "no es para juniors"
+        }
+      ],
+      "change": "Ninguna pregunta cambió; cambió cómo se combinan. El nivel que dice la bolsa decide, salvo que Jev lea en el texto, con claridad (menos de 0,2), que no es para juniors. De 14 empleos marcados junior por su bolsa, Jev contradijo 5.",
+      "cases": 20,
+      "title": "Revisamos los juniors"
+    }
+  ]
+}
