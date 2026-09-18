@@ -26,8 +26,15 @@ export function TodayCounter({ stats }: { stats: Stats | null }) {
     <p className={styles.today}>
       <span className={styles.dot} aria-hidden="true" />
       Hoy se han medido <strong className="num">{formatInt(stats.measured)}</strong>{" "}
-      {stats.measured === 1 ? "oferta" : "ofertas"}, y a Jev le han costado{" "}
-      <strong className="num">{formatUsd(stats.costUsd)}</strong> en total.
+      {stats.measured === 1 ? "oferta" : "ofertas"}
+      {stats.costUsd > 0 ? (
+        <>
+          , y a Jev le han costado <strong className="num">{formatUsd(stats.costUsd)}</strong> en
+          total.
+        </>
+      ) : (
+        "."
+      )}
     </p>
   );
 }
