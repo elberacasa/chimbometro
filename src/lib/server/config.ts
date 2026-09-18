@@ -22,14 +22,15 @@ export function serverConfig(): ServerConfig {
     dailyBudgetUsd: positiveNumber(process.env.DAILY_BUDGET_USD) ?? DEFAULT_LIMITS.dailyBudgetUsd,
   };
 
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  // Vercel's Upstash integration names these KV_REST_API_*; a direct Upstash setup uses UPSTASH_*.
+  const url = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
   if (url && token) return { ok: true, apiKey, store: new UpstashStore(url, token), limits };
 
   // Fail closed: per-instance memory can't enforce limits on serverless, so production refuses
   // to call Jev until the shared store is configured.
   if (process.env.NODE_ENV === "production") {
-    return { ok: false, problem: "UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN are not set" };
+    return { ok: false, problem: "Upstash Redis REST URL/token are not set (UPSTASH_REDIS_REST_* or KV_REST_API_*)" };
   }
   memoryStore ??= new MemoryStore();
   return { ok: true, apiKey, store: memoryStore, limits };
