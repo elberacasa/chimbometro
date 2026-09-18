@@ -9,18 +9,18 @@ offers. Built for [r/dev_venezuela](https://www.reddit.com/r/dev_venezuela/) on 
 Live: [chimbometro.vercel.app](https://chimbometro.vercel.app)<br>
 How it was built: [the Laboratorio](https://chimbometro.vercel.app/docs)
 
-![The job radar: 342 of 760 remote tech jobs accept someone living in Venezuela](docs/images/radar.jpg)
+![The job radar: 318 of 765 remote tech jobs accept someone living in Venezuela](docs/images/radar.jpg)
 
 ## Why Jev
 
-![874 job listings read in 34 seconds for 11 cents](docs/images/jev-en.png)
+![873 job listings read in 36 seconds for 11 cents](docs/images/jev-en.png)
 
 Jev is a System One model: instead of writing text, it answers typed questions (yes or no, pick
 one, score on a scale) with probabilities. That changes what an AI feature costs and how it
 behaves:
 
 - **Fast enough to run in a request.** A radar call asks 9 questions about one listing and returns
-  in 275 ms (median of 874 calls). A Chimbómetro call asks 20 and still finishes in under a second.
+  in 268 ms (median of 873 calls). A Chimbómetro call asks 20 and still finishes in under a second.
 - **Cheap enough to run on everything.** At $0.042 per million input tokens and free output, one
   dollar judges about 8,000 job listings. The daily radar update costs a few cents.
 - **Easy to check.** Answers are numbers and choices, so code applies the thresholds and shows
@@ -52,7 +52,7 @@ shows its evidence and links to the original.
 Anyone can watch an update live: the page streams every URL the server requests and every
 listing Jev judges, with tokens and cost adding up in real time.
 
-![A replay of a real radar update: 874 listings fetched and judged in 34 seconds](docs/images/radar-live.gif)
+![A replay of a real radar update: 873 listings fetched and judged in 36 seconds](docs/images/radar-live.gif)
 
 ### How the sources were chosen
 
@@ -72,8 +72,8 @@ what each one costs to find.
 | Remotive | 9 | 1 | $0.00141 | dropped |
 | Remote OK | 34 | 5 | $0.00210 | dropped |
 
-The radar went from 86 of 434 tech jobs that accept Venezuela to 342 of 760, and from 2 jobs open
-to juniors to 12. Every board is fetched at most once per the interval its API terms ask for.
+The radar went from 86 of 434 tech jobs that accept Venezuela to 318 of 765, and from 2 jobs open
+to juniors to 10. Every board is fetched at most once per the interval its API terms ask for.
 
 ### How Jev gets better
 
@@ -92,9 +92,15 @@ everything with the new version.
 | 3 | Auditing the 86 accepted jobs | "Junior and Senior" posts counted as unclear; "NAMER, EMEA, APJ" read as worldwide | 15 |
 | 4 | Comparing boards | "LATAM, USA" and standard work-authorization text read as exclusions; CET-only hours barely caught | 19 |
 | 5 | Reviewing the juniors | Boards tagged "expert senior engineers wanted" as entry-level | 20 |
+| 6 | A user opening a link | Jev was shown the board's "Anywhere in the World" and believed it over "Remote - United States" in the text | 25 |
 
-All 20 cases pass. One is still open and documented: a "LATAM, USA" listing whose standard
-authorization line keeps it just over the exclusion threshold (0.51).
+Version 6 was our mistake, not the model's: for board-decided jobs we passed the board's field to
+Jev along with the text, so the independent check was not independent. Now Jev reads only the
+text, and a confident reading of it (US, Europe, on-site, a country list) overrules the field. 29
+jobs that did not accept Venezuela left the radar, almost all with the sentence that proves it.
+
+All 25 cases pass. One is still open and documented: a "LATAM, USA" listing whose standard
+authorization line keeps it over the exclusion threshold (0.62).
 
 ### Chimbómetro
 
@@ -125,7 +131,7 @@ protocol, security, latency and cost charts, and the mistakes made along the way
 
 ## What it cost to build
 
-![The whole project cost $0.44 in Jev](docs/images/cost-en.png)
+![The whole project cost $0.55 in Jev](docs/images/cost-en.png)
 
 Every Jev call made while building the project is recorded in
 [`ledger/jev-usage.jsonl`](ledger/jev-usage.jsonl): the research, every eval, every local test
@@ -134,11 +140,11 @@ the charts above from the ledger and the last radar run.
 
 | | |
 | --- | --- |
-| Total Jev spend | **$0.44** across 4,325 calls and 10.5M input tokens |
+| Total Jev spend | **$0.55** across 5,223 calls and 13.1M input tokens |
 | Reading 206 subreddit posts (research) | $0.014 |
 | Comparing eight job boards (518 listings) | $0.066 |
 | One Chimbómetro measurement | about $0.00015, 20 questions, under a second |
-| A full radar run (874 listings, five boards) | $0.107, 34 s |
+| A full radar run (873 listings, five boards) | $0.107, 36 s |
 | A daily radar update | only new listings are judged, so it costs cents |
 
 ## How it works
@@ -157,8 +163,8 @@ cron / visitor ──▶ /api/radar/refresh ──▶ 5 public job APIs and feed
 Decisions worth knowing:
 
 - **Structured data is decided in code, and checked by Jev.** When a board states the location or
-  the level in a field, code decides. Jev's exclusion question still applies, and a "junior" field
-  loses when the text clearly says otherwise: fields are sometimes just defaults.
+  the level in a field, code decides. Jev reads the text without the field, and a field saying
+  "anywhere" or "junior" loses when the text clearly says otherwise: fields are sometimes defaults.
 - **Select, don't generate.** Evidence is a choice among fragments that exist in the listing, so a
   citation cannot be invented.
 - **Uncertainty is shown.** Low-confidence location judgments are marked "Por confirmar".
@@ -182,9 +188,9 @@ Locally, rate limits use memory, so development never touches production data. S
 
 | Script | What it does |
 | --- | --- |
-| `npm run check` | Typecheck, lint and 88 unit tests |
+| `npm run check` | Typecheck, lint and 89 unit tests |
 | `npm run jev:eval` | Chimbómetro verdicts on example offers |
-| `npm run jev:eval-radar` | Radar judgments on 20 tricky listings, most of them real mistakes |
+| `npm run jev:eval-radar` | Radar judgments on 25 tricky listings, most of them real mistakes |
 | `npm run jev:sources` | Compare the candidate job boards with Jev |
 | `npm run radar:refresh` | A full radar update into memory, saved for review; `-- --publish` sends it live |
 | `npm run readme:art` | Redraw the README images from the ledger and the last run |

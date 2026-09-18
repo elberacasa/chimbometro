@@ -82,8 +82,8 @@ const STAGES: Stage[] = [
   },
   {
     key: "radar",
-    es: `Radar: ${fullRuns} corridas completas, revisiones y evals`,
-    en: `Radar: ${fullRuns} full runs, reviews and evals`,
+    es: `Radar: ${fullRuns} corridas, revisiones y evals`,
+    en: `Radar: ${fullRuns} runs, reviews and evals`,
     test: (e) => /radar/.test(e.script ?? ""),
   },
 ];
@@ -162,8 +162,12 @@ function banner(lang: Lang) {
           ],
           foot: `Measured on the radar run of ${run.startedAt.slice(0, 10)}, model ${run.model}.`,
         };
-  const bars = latencies
-    .filter((_, i) => i % 2 === 0)
+  // An even sample of the sorted latencies: enough bars to show the curve, few enough to fit.
+  const BARS = 120;
+  const bars = Array.from(
+    { length: BARS },
+    (_, i) => latencies[Math.floor((i / BARS) * latencies.length)]!,
+  )
     .map(
       (ms) => `<i style="height:${Math.max(4, Math.round((ms / latencies.at(-1)!) * 100))}%"></i>`,
     )
@@ -261,7 +265,7 @@ function shoot(name: string, html: string, height: number) {
 
 for (const lang of ["es", "en"] as const) {
   shoot(`jev-${lang}`, banner(lang), 800);
-  shoot(`cost-${lang}`, costChart(lang), 620);
+  shoot(`cost-${lang}`, costChart(lang), 250 + stages.length * 80 + 60);
 }
 console.log(
   `run: ${run.judged} listings, ${seconds.toFixed(1)} s, $${run.costUsd.toFixed(4)}, median ${medianMs} ms · ledger: $${total.toFixed(4)}, ${calls} calls`,

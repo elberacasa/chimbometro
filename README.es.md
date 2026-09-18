@@ -9,17 +9,17 @@ ofertas chimbas. Hecho para [r/dev_venezuela](https://www.reddit.com/r/dev_venez
 En vivo: [chimbometro.vercel.app](https://chimbometro.vercel.app)<br>
 Cómo se hizo: [el Laboratorio](https://chimbometro.vercel.app/docs)
 
-![El radar: 342 de 760 empleos remotos de tecnología aceptan a alguien que vive en Venezuela](docs/images/radar.jpg)
+![El radar: 318 de 765 empleos remotos de tecnología aceptan a alguien que vive en Venezuela](docs/images/radar.jpg)
 
 ## Por qué Jev
 
-![874 ofertas leídas en 34 segundos por 11 centavos](docs/images/jev-es.png)
+![873 ofertas leídas en 36 segundos por 11 centavos](docs/images/jev-es.png)
 
 Jev no escribe texto. Responde preguntas con tipo (sí o no, escoge una opción, puntúa en una
 escala) y devuelve probabilidades. Eso cambia cuánto cuesta y cómo se comporta una función con IA:
 
 - **Tan rápido que cabe en un request.** Una llamada del radar le hace 9 preguntas a una oferta y
-  responde en 275 ms (mediana de 874 llamadas). Una del Chimbómetro hace 20 y tarda menos de un
+  responde en 268 ms (mediana de 873 llamadas). Una del Chimbómetro hace 20 y tarda menos de un
   segundo.
 - **Tan barato que se puede correr sobre todo.** A 0,042 $ por millón de tokens de entrada, y con
   la salida gratis, un dólar alcanza para evaluar unas 8.000 ofertas. La actualización diaria del
@@ -53,7 +53,7 @@ muestra su evidencia y enlaza a la oferta original.
 Cualquiera puede ver una actualización en vivo: la página transmite cada URL que pide el servidor
 y cada oferta que Jev evalúa, con los tokens y el costo sumando en tiempo real.
 
-![Repetición de una actualización real: 874 ofertas traídas y evaluadas en 34 segundos](docs/images/radar-live.gif)
+![Repetición de una actualización real: 873 ofertas traídas y evaluadas en 36 segundos](docs/images/radar-live.gif)
 
 ### Cómo elegimos las fuentes
 
@@ -73,8 +73,8 @@ aceptan y cuánto cuesta encontrar cada uno.
 | Remotive | 9 | 1 | 0,00141 $ | descartada |
 | Remote OK | 34 | 5 | 0,00210 $ | descartada |
 
-El radar pasó de 86 de 434 empleos de tecnología que aceptan Venezuela a 342 de 760, y de 2
-empleos para juniors a 12. Cada bolsa se consulta como mucho una vez por el intervalo que piden los
+El radar pasó de 86 de 434 empleos de tecnología que aceptan Venezuela a 318 de 765, y de 2
+empleos para juniors a 10. Cada bolsa se consulta como mucho una vez por el intervalo que piden los
 términos de su API.
 
 ### Cómo mejora Jev sobre la marcha
@@ -95,9 +95,15 @@ leer todo con la versión nueva.
 | 3 | La revisión de los 86 aceptados | Posts de "Junior and Senior" quedaban sin nivel; "NAMER, EMEA, APJ" se leía como mundial | 15 |
 | 4 | La comparación de bolsas | "LATAM, USA" y la frase estándar de permiso de trabajo se leían como exclusión; el horario CET casi se escapaba | 19 |
 | 5 | La revisión de juniors | Bolsas que marcaban "expert senior engineers wanted" como entry-level | 20 |
+| 6 | Un usuario abriendo un enlace | A Jev le pasábamos el "Anywhere in the World" de la bolsa y le creía más que al "Remote - United States" del texto | 25 |
 
-Los 20 casos pasan. Uno sigue abierto y documentado: una oferta "LATAM, USA" cuya frase estándar de
-permiso de trabajo la deja apenas por encima del umbral de exclusión (0,51).
+La versión 6 fue un error nuestro, no del modelo: en los empleos que decide la bolsa le pasábamos a
+Jev el campo junto con el texto, así que la revisión independiente no era independiente. Ahora Jev
+lee solo el texto, y una lectura segura (EE. UU., Europa, presencial, una lista de países) anula el
+campo. Salieron 29 empleos que no aceptaban Venezuela, casi todos con la frase que lo prueba.
+
+Los 25 casos pasan. Uno sigue abierto y documentado: una oferta "LATAM, USA" cuya frase estándar de
+permiso de trabajo la deja por encima del umbral de exclusión (0,62).
 
 ### Chimbómetro
 
@@ -130,7 +136,7 @@ en el camino.
 
 ## Cuánto costó construirlo
 
-![Todo el proyecto costó 0,44 $ en Jev](docs/images/cost-es.png)
+![Todo el proyecto costó 0,55 $ en Jev](docs/images/cost-es.png)
 
 Cada llamada a Jev hecha durante el desarrollo está registrada en
 [`ledger/jev-usage.jsonl`](ledger/jev-usage.jsonl): la investigación, cada eval, cada prueba local
@@ -139,11 +145,11 @@ y cada corrida completa del radar. La página del Laboratorio muestra los mismos
 
 | | |
 | --- | --- |
-| Gasto total en Jev | **0,44 $** en 4.325 llamadas y 10,5 millones de tokens de entrada |
+| Gasto total en Jev | **0,55 $** en 5.223 llamadas y 13,1 millones de tokens de entrada |
 | Leer 206 posts del sub (investigación) | 0,014 $ |
 | Comparar ocho bolsas de empleo (518 ofertas) | 0,066 $ |
 | Una medición del Chimbómetro | unos 0,00015 $, 20 preguntas, menos de un segundo |
-| Una corrida completa del radar (874 ofertas, cinco bolsas) | 0,107 $, 34 s |
+| Una corrida completa del radar (873 ofertas, cinco bolsas) | 0,107 $, 36 s |
 | La actualización diaria del radar | solo se evalúan las ofertas nuevas, así que cuesta centavos |
 
 ## Cómo funciona
@@ -162,8 +168,8 @@ cron / visitante ──▶ /api/radar/refresh ──▶ 5 APIs y feeds públicos
 Decisiones que vale la pena conocer:
 
 - **Los datos estructurados los decide el código, y Jev los revisa.** Si la bolsa dice la
-  ubicación o el nivel en un campo, decide el código. La pregunta de exclusión de Jev igual se
-  aplica, y un campo "junior" pierde si el texto dice claramente lo contrario: a veces los campos
+  ubicación o el nivel en un campo, decide el código. Jev lee el texto sin el campo, y un campo que
+  dice "anywhere" o "junior" pierde si el texto dice claramente lo contrario: a veces los campos
   son solo un valor por defecto.
 - **Seleccionar, no generar.** La evidencia es una opción entre fragmentos que existen en la
   oferta, así que una cita no se puede inventar.
@@ -189,9 +195,9 @@ En local los límites usan memoria, así que el desarrollo nunca toca datos de p
 
 | Script | Qué hace |
 | --- | --- |
-| `npm run check` | Typecheck, lint y 88 pruebas unitarias |
+| `npm run check` | Typecheck, lint y 89 pruebas unitarias |
 | `npm run jev:eval` | Veredictos del Chimbómetro con ofertas de ejemplo |
-| `npm run jev:eval-radar` | Juicios del radar con 20 ofertas difíciles, casi todas errores reales |
+| `npm run jev:eval-radar` | Juicios del radar con 25 ofertas difíciles, casi todas errores reales |
 | `npm run jev:sources` | Compara las bolsas candidatas con Jev |
 | `npm run radar:refresh` | Una actualización completa en memoria, guardada para revisar; `-- --publish` la publica |
 | `npm run readme:art` | Vuelve a dibujar las imágenes del README desde el ledger y la última corrida |
