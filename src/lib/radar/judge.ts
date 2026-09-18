@@ -41,16 +41,25 @@ export function decideEligibility(
   };
 }
 
-/** Levels stated in a source field win; otherwise Jev's reading counts. */
+/**
+ * Below this, Jev's reading of the text overrules a source field that says "junior": boards tag
+ * "expert senior engineers wanted" as entry-level often enough to matter.
+ */
+const JUNIOR_FIELD_OVERRULED_BELOW = 0.2;
+
+/** Levels stated in a source field win unless the text clearly contradicts them. */
 export function decideLevel(
   listing: Pick<Listing, "levels">,
   j: Pick<Judgment, "seniority" | "junior_friendly">,
 ): { seniority: Seniority; juniorFriendly: boolean } {
   const levels = listing.levels ?? [];
   if (levels.length > 0) {
+    const contradicted = j.junior_friendly.noul < JUNIOR_FIELD_OVERRULED_BELOW;
+    const juniorFriendly = levels.includes("junior") && !contradicted;
+    const kept = juniorFriendly ? levels : levels.filter((l) => l !== "junior");
     return {
-      seniority: levels.length === 1 ? levels[0]! : (j.seniority.choice as Seniority),
-      juniorFriendly: levels.includes("junior"),
+      seniority: kept.length === 1 ? kept[0]! : (j.seniority.choice as Seniority),
+      juniorFriendly,
     };
   }
   const seniority = j.seniority.choice as Seniority;

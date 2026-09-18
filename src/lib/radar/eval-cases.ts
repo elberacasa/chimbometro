@@ -277,4 +277,21 @@ export const RADAR_CASES: RadarCase[] = [
     },
     expect: { techRole: true, eligible: false },
   },
+  {
+    id: "entry-level-field-expert-text",
+    why: "Himalayas tags it Entry-level; the text wants expert senior engineers (real, v4 showed it as junior).",
+    listing: {
+      ...base,
+      source: "himalayas",
+      location: "Worldwide",
+      structuredWhere: "anywhere",
+      levels: ["junior"],
+      title: "GitHub Contributor",
+      text:
+        "Role Type: Contractor (~15 hrs a week). Location: Remote. We are engaging expert Senior Software " +
+        "Engineers to support a customer's project: you'll apply your expertise to help train next-generation " +
+        "AI models by contributing to open-source repositories. 5+ years of professional experience required.",
+    },
+    expect: { techRole: true, eligible: true, juniorFriendly: false },
+  },
 ];

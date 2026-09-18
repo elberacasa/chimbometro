@@ -9,8 +9,10 @@ import type { Fragment } from "@/lib/chimba/evidence";
  * taught `where` that region codes such as NAMER, EMEA and APJ leave Latin America out. v4 came out
  * of comparing sources: Jev read "LATAM, USA" and the standard "must be authorized to work where the
  * position is located" line as exclusions, and missed that CET-only time zones leave Venezuela out.
+ * v5 changed no question but how answers combine: a source's "junior" field no longer wins when
+ * Jev reads the text as clearly not for juniors (see decideLevel), so stored judgments are redone.
  */
-export const RADAR_QUESTIONS_VERSION = 4;
+export const RADAR_QUESTIONS_VERSION = 5;
 
 /**
  * What Jev is asked about every job listing, in one request. Written after the Chamba Radar

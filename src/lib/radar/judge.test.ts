@@ -66,11 +66,18 @@ describe("decideLevel", () => {
   });
   it("uses the levels a source states over Jev's reading", async () => {
     const { decideLevel } = await import("./judge");
-    expect(decideLevel({ levels: ["junior", "mid"] }, jev("senior", 0.1) as never)).toEqual({
+    expect(decideLevel({ levels: ["junior", "mid"] }, jev("senior", 0.4) as never)).toEqual({
       seniority: "senior",
       juniorFriendly: true,
     });
     expect(decideLevel({ levels: ["senior"] }, jev("junior", 0.9) as never)).toEqual({
+      seniority: "senior",
+      juniorFriendly: false,
+    });
+  });
+  it("drops a source's junior label when the text clearly says otherwise", async () => {
+    const { decideLevel } = await import("./judge");
+    expect(decideLevel({ levels: ["junior"] }, jev("senior", 0.05) as never)).toEqual({
       seniority: "senior",
       juniorFriendly: false,
     });
