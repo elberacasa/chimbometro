@@ -253,10 +253,18 @@ export function radarImage(r: RadarCard) {
             Empleos remotos que sí aceptan a Venezuela
           </div>
           <div style={{ display: "flex", alignItems: "baseline", marginTop: 30 }}>
-            <div style={{ fontFamily: "Display", fontWeight: 800, fontSize: 86, color: "#4fd18b" }}>
+            <div
+              style={{
+                fontFamily: "Display",
+                fontWeight: 800,
+                fontSize: 86,
+                color: "#4fd18b",
+                flexShrink: 0,
+              }}
+            >
               {String(r.eligible)}
             </div>
-            <div style={{ fontSize: 34, fontWeight: 700, marginLeft: 16 }}>
+            <div style={{ fontSize: 34, fontWeight: 700, marginLeft: 18, flex: 1 }}>
               {`de ${r.total} ofertas de tecnología (${pct} %). Solo ${r.juniors} para juniors.`}
             </div>
           </div>

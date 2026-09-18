@@ -64,10 +64,6 @@ export function RadarScope({ jobs, fresh, sweeping, now }: Props) {
           return (
             <g key={ring.days}>
               <circle cx={C} cy={C} r={r} className={styles.ring} />
-              {/* On a sector edge, which no listing occupies. */}
-              <text x={C - r + 4} y={C - 4} className={styles.ringLabel}>
-                {ring.label}
-              </text>
             </g>
           );
         })}
@@ -121,6 +117,18 @@ export function RadarScope({ jobs, fresh, sweeping, now }: Props) {
           );
         })}
         <circle cx={C} cy={C} r={3} className={styles.center} />
+        {/* Drawn last, left of the top sector edge where dots are sparse, outlined to stay legible. */}
+        {RINGS.map((ring) => (
+          <text
+            key={ring.days}
+            x={C - 4}
+            y={C - radiusFor(ring.days) - 3}
+            textAnchor="end"
+            className={styles.ringLabel}
+          >
+            {ring.label}
+          </text>
+        ))}
       </svg>
       <figcaption className={styles.legend}>
         <span className={styles.keyHit}>acepta Venezuela</span>

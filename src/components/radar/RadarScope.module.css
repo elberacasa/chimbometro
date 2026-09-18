@@ -45,6 +45,13 @@
   fill: var(--scope-text);
 }
 
+.ringLabel {
+  paint-order: stroke;
+  stroke: var(--scope-bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
 .sourceLabel {
   font-size: 9.5px;
   fill: #b9c6da;
