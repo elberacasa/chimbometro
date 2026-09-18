@@ -14,7 +14,8 @@
     "check": "npm run typecheck && npm run lint && npm run test",
     "jev:check": "tsx --env-file=.env scripts/check-key.ts",
     "jev:eval": "tsx --env-file=.env scripts/eval-offers.ts",
-    "jev:eval-radar": "tsx --env-file=.env scripts/eval-radar.ts"
+    "jev:eval-radar": "tsx --env-file=.env scripts/eval-radar.ts",
+    "readme:art": "tsx scripts/readme-art.ts"
   },
   "engines": {
     "node": "24.x"

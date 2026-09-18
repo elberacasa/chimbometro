@@ -1,5 +1,7 @@
 # Chamba
 
+[Español](README.es.md) | **English**
+
 Remote tech jobs that actually accept people living in Venezuela, plus a meter for absurd job
 offers. Built for [r/dev_venezuela](https://www.reddit.com/r/dev_venezuela/) on top of
 [Jev](https://docs.typesafe.ai), TypeSafe's System One model.
@@ -9,7 +11,24 @@ How it was built: [the Laboratorio](https://chimbometro.vercel.app/docs)
 
 ![The job radar: 86 of 434 remote tech jobs accept someone living in Venezuela](docs/images/radar.jpg)
 
-## Why
+## Why Jev
+
+![500 job listings read in 21 seconds for 5 cents](docs/images/jev-en.png)
+
+Jev is a System One model: instead of writing text, it answers typed questions (yes or no, pick
+one, score on a scale) with probabilities. That changes what an AI feature costs and how it
+behaves:
+
+- **Fast enough to run in a request.** A radar call asks 8 questions about one listing and returns
+  in 265 ms (median of 500 calls). A Chimbómetro call asks 20 and still finishes in under a second.
+- **Cheap enough to run on everything.** At $0.042 per million input tokens and free output, one
+  dollar judges about 9,800 job listings. The daily radar update costs a few cents.
+- **Easy to check.** Answers are numbers and choices, so code applies the thresholds and shows
+  the uncertainty. Evidence is picked from sentences that exist in the listing, so a citation
+  cannot be invented. Judgments can still be wrong, which is why every one links to its source
+  and the tricky cases run as evals.
+
+## Why Chamba
 
 "Remote" rarely means remote from Venezuela. Most listings quietly require US work authorization,
 a local license, or residence in a short list of countries, and you only find out after reading
@@ -32,7 +51,7 @@ shows its evidence and links to the original.
 Anyone can watch an update live: the page streams every URL the server requests and every
 listing Jev judges, with tokens and cost adding up in real time.
 
-![A live radar update: the beam sweeps while Jev judges each listing](docs/images/radar-live.jpg)
+![A replay of a real radar update: 500 listings fetched and judged in 21 seconds](docs/images/radar-live.gif)
 
 ### Chimbómetro
 
@@ -63,18 +82,20 @@ protocol, security, latency and cost charts, and the mistakes made along the way
 
 ## What it cost to build
 
+![The whole project cost $0.16 in Jev](docs/images/cost-en.png)
+
 Every Jev call made while building the project is recorded in
-[`ledger/jev-usage.jsonl`](ledger/jev-usage.jsonl), and the docs page renders its totals.
+[`ledger/jev-usage.jsonl`](ledger/jev-usage.jsonl): the research, every eval, every local test
+and both full radar runs. The docs page renders the same totals, and `npm run readme:art` redraws
+the charts above from the ledger and the last radar run.
 
 | | |
 | --- | --- |
-| Total Jev spend so far | **$0.16** across 1,991 calls and 3.8M input tokens |
+| Total Jev spend | **$0.16** across 1,991 calls and 3.8M input tokens |
 | Reading 206 subreddit posts (research) | $0.014 |
-| One Chimbómetro measurement | about $0.00015, 20 questions, ~0.7 s |
-| A full radar run (500 listings) | about $0.05, ~20 s |
+| One Chimbómetro measurement | about $0.00015, 20 questions, under a second |
+| A full radar run (500 listings, 4,000 questions) | $0.051, 20.5 s |
 | A daily radar update | only new listings are judged, so it costs cents |
-
-Jev charges $0.042 per million input tokens; output tokens are free.
 
 ## How it works
 
@@ -119,6 +140,7 @@ Locally, rate limits use memory, so development never touches production data. S
 | `npm run check` | Typecheck, lint and 80 unit tests |
 | `npm run jev:eval` | Chimbómetro verdicts on example offers |
 | `npm run jev:eval-radar` | Radar judgments on 12 tricky listings |
+| `npm run readme:art` | Redraw the README images from the ledger and the last run |
 | `npm run build` | Production build |
 
 Every script that calls Jev appends its cost to the ledger.
