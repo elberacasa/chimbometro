@@ -3,28 +3,45 @@ import { analyzeOffer, MAX_OFFER_CHARS, MIN_OFFER_CHARS, MODEL } from "@/lib/chi
 import { JEV_ENDPOINT, type ChimbaEvent } from "@/lib/chimba/events";
 import { JevError } from "@/lib/jev/client";
 import { appendLedger } from "@/lib/ledger";
-import { RateLimiter } from "@/lib/rate-limit";
+import { serverConfig } from "@/lib/server/config";
+import { admit, clientIp, isSameOrigin, recordSpend } from "@/lib/server/guard";
 
 export const runtime = "nodejs";
 
-// Per instance. Enough to stop a loop from burning the key; put a shared store in front at scale.
-const limiter = new RateLimiter({ limit: 12, windowMs: 60_000 });
 const DEV_PURPOSE = "Probar el sitio en el servidor local";
+// 6,000 characters of offer, JSON-escaped, fit comfortably; anything larger is not a real offer.
+const MAX_BODY_BYTES = 32_000;
 
 export async function POST(req: Request) {
   const received = performance.now();
-  const apiKey = process.env.TYPESAFE_API_KEY;
-  if (!apiKey) return error(500, "El servidor no tiene configurada la API key de TypeSafe.");
 
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
-  const retryAfter = limiter.hit(ip);
-  if (retryAfter) {
-    return error(429, `Muchas ofertas seguidas. Prueba otra vez en ${retryAfter} s.`, {
-      "Retry-After": String(retryAfter),
+  const config = serverConfig();
+  if (!config.ok) {
+    console.error(JSON.stringify({ event: "chimba.misconfigured", problem: config.problem }));
+    return error(503, "El Chimbómetro no está disponible en este momento.");
+  }
+  const { apiKey, store, limits } = config;
+
+  if (!isSameOrigin(req.headers)) return error(403, "Solicitud rechazada.");
+
+  const raw = await readBody(req, MAX_BODY_BYTES);
+  if (raw === null) return error(413, "La oferta es demasiado grande.");
+
+  const ip = clientIp(req.headers);
+  const admission = await admit(store, ip, limits).catch((e: Error) => {
+    // If the limiter can't be checked, don't spend: fail closed.
+    console.error(JSON.stringify({ event: "guard.failed", message: e.message }));
+    return null;
+  });
+  if (!admission) return error(503, "El Chimbómetro no está disponible en este momento.");
+  if (!admission.ok) {
+    console.warn(JSON.stringify({ event: "chimba.limited", reason: admission.reason }));
+    return error(admission.status, admission.message, {
+      "Retry-After": String(admission.retryAfter),
     });
   }
 
-  const body = (await req.json().catch(() => null)) as { oferta?: unknown } | null;
+  const body = parseJson(raw) as { oferta?: unknown } | null;
   const offer = typeof body?.oferta === "string" ? body.oferta.trim() : "";
   if (offer.length < MIN_OFFER_CHARS) {
     return error(
@@ -62,6 +79,9 @@ export async function POST(req: Request) {
         emit({ type: "scored", t: t(), analysis });
 
         const { receipt, result } = analysis;
+        await recordSpend(store, receipt.costUsd).catch((e: Error) =>
+          console.error(JSON.stringify({ event: "budget.record_failed", message: e.message })),
+        );
         // One structured line per request: what Jev cost us in production. The offer text is not logged.
         console.log(
           JSON.stringify({
@@ -116,6 +136,35 @@ export async function POST(req: Request) {
   return new Response(stream, {
     headers: { "Content-Type": "application/x-ndjson; charset=utf-8", "Cache-Control": "no-store" },
   });
+}
+
+/** Reads the body as text, giving up (null) once it passes `maxBytes`. */
+async function readBody(req: Request, maxBytes: number): Promise<string | null> {
+  const declared = Number(req.headers.get("content-length"));
+  if (declared > maxBytes) return null;
+  if (!req.body) return "";
+  const reader = req.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+  for (;;) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    size += value.byteLength;
+    if (size > maxBytes) {
+      await reader.cancel();
+      return null;
+    }
+    chunks.push(value);
+  }
+  return Buffer.concat(chunks).toString("utf8");
+}
+
+function parseJson(raw: string): unknown {
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
 }
 
 function error(status: number, message: string, headers?: Record<string, string>) {

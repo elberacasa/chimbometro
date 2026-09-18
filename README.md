@@ -14,7 +14,7 @@ Typical request: ~1,450 input tokens, ~$0.00006, ~0.6 s.
 ## Run it
 
 ```sh
-cp .env.example .env        # add TYPESAFE_API_KEY from https://console.typesafe.ai
+cp .env.example .env        # add TYPESAFE_API_KEY; Upstash is optional locally, required in production
 npm install
 npm run jev:check           # verify the key with one tiny request
 npm run dev                 # http://localhost:3000
@@ -46,9 +46,17 @@ ledger/jev-usage.jsonl      every Jev call made while building, with tokens and 
 
 Decisions worth knowing:
 
-- **The API key never reaches the browser.** The route validates input, rate-limits per IP and
-  logs one structured line per request (tokens, cost, latency, score). Offer text is never logged
-  or stored.
+- **The API key never reaches the browser.** It is read only in `src/lib/server/config.ts`, which
+  imports `server-only`, so bundling it for the client fails the build.
+- **The endpoint is guarded before any Jev call** (`src/lib/server/guard.ts`), in this order:
+  same-origin check (403), 32 KB body cap (413), daily spend cap (503), 10 requests per minute and
+  100 per day per IP (429 with `Retry-After`), 600 requests per minute overall (503). The real cost
+  of each call is added to the day's spend afterwards. Counters live in Upstash Redis so they hold
+  across serverless instances; IPs are hashed before they become keys. The client IP comes from
+  the platform's header, never from client-supplied `x-forwarded-for` in production.
+- **It fails closed.** In production, missing Redis settings or an unreachable Redis means no Jev
+  calls. Every request logs one structured line (tokens, cost, latency, score, or the limit that
+  was hit); offer text is never logged or stored.
 - **Policy lives in code.** Jev supplies probabilities; `score.ts` owns weights and thresholds, so
   tuning the score never requires another model call. The formula is shown on the page.
 - **Every number on the page is measured.** Trace timestamps are server time since the request
