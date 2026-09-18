@@ -1,0 +1,269 @@
+.tool {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+  padding-block: clamp(1.5rem, 4vw, 3rem) clamp(2.5rem, 5vw, 4rem);
+}
+
+.title {
+  font-size: clamp(3.1rem, 7.4vw, 5.9rem);
+  line-height: 0.9;
+  max-width: 9ch;
+}
+
+.lede {
+  margin-top: 1.25rem;
+  max-width: 44ch;
+  font-size: var(--step-1);
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
+.form {
+  margin-top: 2rem;
+}
+
+.textarea {
+  display: block;
+  width: 100%;
+  min-height: 11.5rem;
+  resize: vertical;
+  padding: 1rem 1.1rem;
+  border: 1.5px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  line-height: 1.5;
+  transition: border-color 150ms;
+}
+
+.textarea::placeholder {
+  color: var(--ink-3);
+}
+
+.textarea:hover {
+  border-color: var(--ink-3);
+}
+
+.textarea:focus-visible {
+  outline: none;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 35%, transparent);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  margin-top: 0.9rem;
+}
+
+.submit {
+  appearance: none;
+  border: 0;
+  border-radius: var(--radius);
+  padding: 0.85rem 1.6rem;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 30;
+  font-weight: 700;
+  font-size: var(--step-1);
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition:
+    transform 120ms var(--ease-out),
+    opacity 150ms;
+}
+
+.submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.submit:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.hint {
+  font-size: var(--step--1);
+  color: var(--ink-3);
+}
+
+.error {
+  margin-top: 0.8rem;
+  padding: 0.7rem 0.9rem;
+  border-left: 3px solid var(--bad);
+  background: color-mix(in srgb, var(--bad) 8%, transparent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.examples {
+  margin-top: 2rem;
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+
+.examples ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.6rem 0 0;
+  padding: 0;
+}
+
+.examples button {
+  appearance: none;
+  border: 1px solid var(--rule-strong);
+  background: transparent;
+  border-radius: 999px;
+  padding: 0.38rem 0.85rem;
+  font-size: var(--step--1);
+  cursor: pointer;
+  transition:
+    background 150ms,
+    border-color 150ms;
+}
+
+.examples button:hover:not(:disabled) {
+  background: var(--surface);
+  border-color: var(--ink-3);
+}
+
+.examples button:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.dial {
+  display: grid;
+  gap: 1rem;
+  position: sticky;
+  top: 1.5rem;
+}
+
+.verdict {
+  text-align: center;
+  font-size: var(--step-1);
+  font-weight: 600;
+  min-height: 1.6em;
+  text-wrap: balance;
+}
+
+/* Results */
+
+.results {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(19rem, 24rem);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+  padding-block: clamp(2.5rem, 5vw, 3.5rem);
+  border-top: 1px solid var(--rule);
+}
+
+.detail {
+  min-width: 0;
+}
+
+.h2 {
+  font-size: var(--step-3);
+}
+
+.h2:not(:first-child) {
+  margin-top: 2.6rem;
+}
+
+.sub {
+  margin: 0.35rem 0 1rem;
+  color: var(--ink-3);
+  font-size: var(--step--1);
+}
+
+.facts {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0;
+}
+
+.facts > div {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 1rem;
+}
+
+.facts dt {
+  color: var(--ink-3);
+}
+
+.facts dd {
+  margin: 0;
+}
+
+.facts strong {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 800;
+  line-height: 1;
+  margin-right: 0.25rem;
+}
+
+.share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 0.8rem;
+  margin-top: 2.2rem;
+}
+
+.share button {
+  appearance: none;
+  border: 1.5px solid var(--ink);
+  background: transparent;
+  border-radius: var(--radius);
+  padding: 0.6rem 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 150ms,
+    color 150ms;
+}
+
+.share button:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.share p {
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+
+.cost {
+  margin-top: 1rem;
+  font-size: var(--step--1);
+  color: var(--ink-3);
+  max-width: 52ch;
+}
+
+.receipt {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .tool,
+  .results {
+    grid-template-columns: 1fr;
+  }
+  .dial {
+    position: static;
+  }
+  .title {
+    max-width: 11ch;
+  }
+}

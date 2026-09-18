@@ -1,0 +1,189 @@
+/* A terminal pane. It keeps its own dark palette in both themes because it is an instrument
+   readout, not page chrome. */
+
+.trace {
+  --t-bg: #0d1726;
+  --t-bar: #15233a;
+  --t-ink: #cfd9e8;
+  --t-dim: #7d8ca6;
+  --t-ok: #4fd18b;
+  --t-hot: #ffd166;
+  --t-bad: #ff6b61;
+  --t-track: #22324d;
+
+  background: var(--t-bg);
+  color: var(--t-ink);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  line-height: 1.6;
+  overflow: hidden;
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.04) inset;
+}
+
+.bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0.9rem;
+  background: var(--t-bar);
+  color: var(--t-dim);
+}
+
+.title {
+  color: var(--t-ink);
+}
+
+.log {
+  list-style: none;
+  margin: 0;
+  padding: 0.7rem 0.9rem 0.9rem;
+  min-height: 7.5rem;
+  max-height: 24rem;
+  overflow: auto;
+}
+
+.log > li {
+  display: grid;
+  grid-template-columns: 5.2rem 1fr;
+  gap: 0.6rem;
+  animation: line-in 160ms ease-out both;
+}
+
+.block > .answers {
+  grid-column: 2;
+}
+
+@keyframes line-in {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+}
+
+.time {
+  color: var(--t-dim);
+  text-align: right;
+}
+
+.dim {
+  color: var(--t-dim);
+}
+
+.ok {
+  color: var(--t-ok);
+}
+
+.hot {
+  color: var(--t-hot);
+}
+
+.err {
+  color: var(--t-bad);
+}
+
+.idle,
+.waiting {
+  color: var(--t-hot);
+}
+
+.cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 0.25em;
+  vertical-align: text-bottom;
+  background: currentColor;
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.answers {
+  margin: 0.25rem 0 0.35rem;
+}
+
+.note {
+  color: var(--t-dim);
+}
+
+.answers ul {
+  list-style: none;
+  margin: 0.15rem 0 0;
+  padding: 0;
+}
+
+.answers li {
+  display: grid;
+  grid-template-columns: 8.2rem 1fr 3.4rem;
+  align-items: center;
+  gap: 0.6rem;
+  /* Print-out effect: the lines were all in the response; they are revealed one after another. */
+  animation: line-in 140ms ease-out both;
+  animation-delay: calc(var(--i) * 32ms);
+}
+
+.answers li > .num:last-child {
+  text-align: right;
+}
+
+.qid {
+  color: var(--t-ink);
+}
+
+.meter {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--t-track);
+  overflow: hidden;
+}
+
+.meter > span {
+  display: block;
+  height: 100%;
+  background: var(--t-dim);
+  border-radius: 3px;
+  transform-origin: left;
+  animation: fill 420ms var(--ease-out) both;
+  animation-delay: calc(var(--i) * 32ms + 60ms);
+}
+
+.meterHot > span {
+  background: var(--t-bad);
+}
+
+.choice {
+  grid-column: 2 / -1;
+}
+
+@keyframes fill {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@media (max-width: 520px) {
+  .log > li {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .time {
+    text-align: left;
+  }
+  .block > .answers {
+    grid-column: 1;
+  }
+  .answers li {
+    grid-template-columns: 7rem 1fr 3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+  }
+}

@@ -1,0 +1,17 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# deps and build
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# research inputs (public Reddit/RemoteOK data, re-downloadable)
+research/data/*
+__pycache__/
+
+.DS_Store

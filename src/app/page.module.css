@@ -1,0 +1,47 @@
+.page {
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  padding-block: 1.4rem;
+}
+
+.home {
+  text-decoration: none;
+}
+
+.nav {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.6rem;
+  margin: 0;
+  padding: 0;
+  font-weight: 500;
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--ink-2);
+}
+
+.nav a:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
+.footer {
+  display: grid;
+  gap: 0.4rem;
+  padding-block: 2.5rem 3.5rem;
+  border-top: 1px solid var(--rule);
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}

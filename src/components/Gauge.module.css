@@ -1,0 +1,77 @@
+.gauge {
+  width: 100%;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.track {
+  fill: none;
+  stroke: var(--rule);
+  stroke-width: 1.5;
+}
+
+.minor {
+  stroke: var(--ink-3);
+  stroke-width: 1;
+}
+
+.major {
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+
+.scale {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 24;
+  font-weight: 600;
+  font-size: 17px;
+  fill: var(--ink-2);
+}
+
+.readout {
+  min-height: clamp(3.4rem, 9.4vw, 5.5rem);
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: -0.2rem 0 0;
+}
+
+.value {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 72;
+  font-weight: 800;
+  font-size: clamp(4rem, 11vw, 6.5rem);
+  line-height: 0.85;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.value:empty {
+  display: none;
+}
+
+.band {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 40;
+  font-weight: 700;
+  font-size: var(--step-3);
+  color: var(--ink-2);
+}
+
+.needle {
+  fill: var(--ink);
+}
+
+.hub {
+  fill: var(--ink);
+}
+
+.hubDot {
+  fill: var(--paper);
+}

@@ -1,0 +1,94 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--ink);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 40;
+  font-weight: 800;
+  font-size: 1.55rem;
+  line-height: 1;
+  letter-spacing: 0.005em;
+  /* Optical alignment with the dial's baseline. */
+  transform: translateY(0.06em);
+}
+
+.mark {
+  display: block;
+  overflow: visible;
+}
+
+.zone {
+  fill: none;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.needle {
+  transform-box: view-box;
+  transform-origin: 24px 27px;
+  /* Resting position: well into the red zone. */
+  transform: rotate(52deg);
+}
+
+.needle line {
+  stroke: var(--ink);
+  stroke-width: 3.2;
+  stroke-linecap: round;
+}
+
+.pivot {
+  fill: var(--ink);
+}
+
+/* Load sequence: zones draw in left to right, then the needle swings past the target and settles. */
+.animated .zone {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 420ms var(--ease-out) forwards;
+  animation-delay: calc(var(--i) * 110ms);
+}
+
+.animated .needle {
+  animation: swing 1100ms 380ms both;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes swing {
+  0% {
+    transform: rotate(-90deg);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.2, 1);
+  }
+  48% {
+    transform: rotate(74deg);
+    animation-timing-function: ease-in-out;
+  }
+  70% {
+    transform: rotate(44deg);
+    animation-timing-function: ease-in-out;
+  }
+  86% {
+    transform: rotate(56deg);
+  }
+  100% {
+    transform: rotate(52deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated .zone {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .animated .needle {
+    animation: none;
+  }
+}

@@ -1,0 +1,158 @@
+/* Chimbómetro design tokens.
+   Ink on cool paper; saturated color lives only on the gauge and the flags it drives. */
+
+:root {
+  --paper: #f2f3ef;
+  --surface: #ffffff;
+  --receipt: #fcfcf9;
+  --receipt-ink: #23262b;
+  --ink: #0f1b2d;
+  --ink-2: #45526a;
+  --ink-3: #6f7a8c;
+  --rule: #d6dad1;
+  --rule-strong: #b9bfb4;
+  --slot: #0f1b2d;
+
+  --good: #1e9e5a;
+  --warn: #e0a100;
+  --bad: #e3342f;
+  --focus: #2f6feb;
+
+  --font-display: var(--font-big-shoulders), "Arial Narrow", sans-serif;
+  --font-body: var(--font-hanken), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  /* Type scale: 1.25 ratio from 16px. */
+  --step--1: 0.8rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.563rem;
+  --step-3: 1.953rem;
+  --step-5: clamp(2.6rem, 6.5vw, 4.4rem);
+
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --measure: 68ch;
+  --radius-sm: 6px;
+  --radius: 10px;
+  --shadow-paper: 0 1px 0 rgb(15 27 45 / 0.04), 0 12px 32px -12px rgb(15 27 45 / 0.28);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0c1320;
+    --surface: #121b2b;
+    --ink: #e8ecf2;
+    --ink-2: #a7b2c4;
+    --ink-3: #7e8aa0;
+    --rule: #223047;
+    --rule-strong: #34445f;
+    --slot: #04080f;
+    --good: #22a463;
+    --warn: #d99a00;
+    --bad: #f0483f;
+    --focus: #7aa7ff;
+    --shadow-paper: 0 1px 0 rgb(0 0 0 / 0.3), 0 16px 40px -12px rgb(0 0 0 / 0.7);
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper: #0c1320;
+  --surface: #121b2b;
+  --ink: #e8ecf2;
+  --ink-2: #a7b2c4;
+  --ink-3: #7e8aa0;
+  --rule: #223047;
+  --rule-strong: #34445f;
+  --slot: #04080f;
+  --good: #22a463;
+  --warn: #d99a00;
+  --bad: #f0483f;
+  --focus: #7aa7ff;
+  --shadow-paper: 0 1px 0 rgb(0 0 0 / 0.3), 0 16px 40px -12px rgb(0 0 0 / 0.7);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light dark;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.55;
+  font-feature-settings:
+    "ss01",
+    "tnum" 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 72;
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.005em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+button,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

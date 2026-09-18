@@ -1,0 +1,151 @@
+/* A thermal printer: a dark slot the paper feeds out of. The receipt stays paper-colored in
+   dark mode because it is an object, not a surface. */
+
+.printer {
+  position: relative;
+  padding-top: 10px;
+}
+
+.slot {
+  position: absolute;
+  inset: 0 -10px auto;
+  height: 14px;
+  border-radius: 7px;
+  background: var(--slot);
+  z-index: 2;
+}
+
+.paper {
+  --edge: 7px;
+  position: relative;
+  margin: 0 4px;
+  padding: 1.6rem 1.25rem 2rem;
+  background: var(--receipt);
+  color: var(--receipt-ink);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  box-shadow: var(--shadow-paper);
+  /* Torn bottom edge. */
+  mask:
+    linear-gradient(#000 0 0) top / 100% calc(100% - var(--edge)) no-repeat,
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom /
+      calc(var(--edge) * 2) var(--edge) repeat-x;
+  animation: feed 700ms var(--ease-out) both;
+}
+
+@keyframes feed {
+  from {
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(-24px);
+  }
+  to {
+    clip-path: inset(0 0 -40px 0);
+    transform: none;
+  }
+}
+
+.empty {
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  color: #5d6470;
+  padding-block: 2.2rem;
+  animation: none;
+}
+
+.head {
+  text-align: center;
+}
+
+.brand {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.cut {
+  border: 0;
+  border-top: 1px dashed #9aa0a8;
+  margin: 0.9rem 0;
+}
+
+.lines {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.lines thead th {
+  font-weight: 400;
+  color: #6b717b;
+  text-align: left;
+  padding-bottom: 0.3rem;
+}
+
+.lines thead th:last-child,
+.lines td:last-child {
+  text-align: right;
+}
+
+.lines th[scope="row"] {
+  font-weight: 500;
+  text-align: left;
+}
+
+.lines th,
+.lines td {
+  padding: 0.12rem 0;
+  vertical-align: top;
+}
+
+.lines td:nth-child(2) {
+  color: #6b717b;
+  padding-inline: 0.6rem;
+}
+
+.totals {
+  margin: 0;
+}
+
+.totals > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.totals dd {
+  margin: 0;
+}
+
+.total {
+  margin-top: 0.4rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.footnote {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.json {
+  margin-top: 0.8rem;
+  border-top: 1px dashed #9aa0a8;
+  padding-top: 0.6rem;
+}
+
+.json summary {
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.json pre {
+  margin: 0.6rem 0 0;
+  max-height: 22rem;
+  overflow: auto;
+  font-size: 0.7rem;
+  line-height: 1.45;
+  white-space: pre;
+  background: #f1f2ec;
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+}
