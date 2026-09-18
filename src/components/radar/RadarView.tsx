@@ -107,9 +107,12 @@ export function RadarView({ initial, renderedAt }: Props) {
           {snapshot ? (
             <p className={styles.stat}>
               <strong className="num">{formatInt(eligible.length)}</strong> de{" "}
-              {formatInt(jobs.length)} ofertas remotas (
+              {formatInt(jobs.length)} ofertas remotas de tecnología (
               {formatPercent(eligible.length / Math.max(1, jobs.length))}) te dejan trabajar desde
-              Venezuela. {juniors > 0 && `${formatInt(juniors)} son para juniors.`}
+              Venezuela.{" "}
+              {juniors === 1
+                ? "Solo 1 es para juniors."
+                : `Solo ${formatInt(juniors)} son para juniors.`}
             </p>
           ) : (
             <p className={styles.stat}>

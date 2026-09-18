@@ -128,6 +128,14 @@ export function Lab({
       <h3 className={styles.h3}>Lo que aprendimos usando Jev</h3>
       <ul className={styles.lessons}>
         <li>
+          <strong>Un usuario encontró el error que nuestras pruebas no vieron.</strong> Con el
+          filtro «Junior» salió un empleo de seguros que exige licencia de EE. UU. La causa: no
+          preguntábamos si el empleo era de tecnología (11 de los 13 «juniors» eran de ventas o
+          soporte) y la pregunta de exclusión solo cubría ubicación, no licencias ni permisos de un
+          país. Agregamos una pregunta, ampliamos la otra, creamos 12 casos de prueba con esas
+          trampas y volvimos a leer las 500 ofertas.
+        </li>
+        <li>
           <strong>Lo que ya está en un campo, lo decide el código.</strong> Get on Board trae la
           modalidad remota como dato. Jev acertó casi siempre, pero en 14 casos no coincidió con el
           campo, que es la fuente exacta. Jev es para el texto libre.

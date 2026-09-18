@@ -2,6 +2,7 @@ import { costUsd } from "@/lib/jev/pricing";
 import type { CounterStore } from "@/lib/server/counter-store";
 import { recordSpend, spentToday } from "@/lib/server/guard";
 import { judgeListing } from "./judge";
+import { RADAR_QUESTIONS_VERSION } from "./questions";
 import { fetchAll } from "./sources";
 import type { Listing, RadarJob, RadarSnapshot, RunSummary, SourceReport } from "./types";
 
@@ -59,7 +60,10 @@ export async function refreshRadar({ apiKey, store, budgetUsd, trigger, onEvent 
 
   emit({ type: "start", t: 0, trigger });
   const previous = await store.getJson<RadarSnapshot>(SNAPSHOT_KEY);
-  const known = new Map(previous?.jobs.map((j) => [j.id, j]) ?? []);
+  // Judgments made with older questions are not reused.
+  const known = new Map(
+    previous?.jobs.filter((j) => j.version === RADAR_QUESTIONS_VERSION).map((j) => [j.id, j]) ?? [],
+  );
 
   const { reports, listings } = await fetchAll((report) =>
     emit({ type: "source", t: t(), report }),

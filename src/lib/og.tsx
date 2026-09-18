@@ -257,7 +257,7 @@ export function radarImage(r: RadarCard) {
               {String(r.eligible)}
             </div>
             <div style={{ fontSize: 34, fontWeight: 700, marginLeft: 16 }}>
-              {`de ${r.total} ofertas (${pct} %). ${r.juniors} para juniors.`}
+              {`de ${r.total} ofertas de tecnología (${pct} %). Solo ${r.juniors} para juniors.`}
             </div>
           </div>
         </div>

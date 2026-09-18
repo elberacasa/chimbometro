@@ -1,92 +1,152 @@
 # Chamba
 
-Empleos remotos que sí aceptan a Venezuela. Built for r/dev_venezuela with
-[Jev](https://docs.typesafe.ai), TypeSafe's System One model: it answers typed questions with
-calibrated probabilities instead of writing text.
+Remote tech jobs that actually accept people living in Venezuela, plus a meter for absurd job
+offers. Built for [r/dev_venezuela](https://www.reddit.com/r/dev_venezuela/) on top of
+[Jev](https://docs.typesafe.ai), TypeSafe's System One model.
 
-**Radar (`/`).** The server fetches ~500 listings from four public job boards (HN "Who is hiring?",
-Get on Board, We Work Remotely, Remotive). Structured source fields decide location in code;
-otherwise Jev reads each listing, answers 7 questions (is it a job, where can you work from, does it
-exclude Venezuela, USD, seniority, role, English) and picks the sentence that proves the location.
-Only new listings are judged: a full run is ~20 s and ~$0.05, a daily update costs cents. Visitors can
-watch an update live (at most one every 15 minutes) or replay the last one; every URL the server
-requested is listed on the page.
+Live: [chimbometro.vercel.app](https://chimbometro.vercel.app)<br>
+How it was built: [the Laboratorio](https://chimbometro.vercel.app/docs)
 
-**Chimbómetro (`/chimbometro`).** Paste a job offer; one request asks Jev 20 questions (9 red flags,
-unfairness, verdict, and per flag the fragment that proves it) and code turns the probabilities into a
-0–100 score. The page streams every step live and prints a receipt with tokens, cost and latency.
+![The job radar: 86 of 434 remote tech jobs accept someone living in Venezuela](docs/images/radar.jpg)
 
-**Laboratorio (`/docs`).** Architecture, every question as sent, a formula playground, security,
-latency and cost charts, and what we learned using Jev. Every Jev call made while building is in
-[`ledger/jev-usage.jsonl`](ledger/jev-usage.jsonl).
+## Why
 
-## Run it
+"Remote" rarely means remote from Venezuela. Most listings quietly require US work authorization,
+a local license, or residence in a short list of countries, and you only find out after reading
+the whole post. Before writing any code, Jev read 206 posts from r/dev_venezuela: finding work is
+the topic that hurts the most, and two of the six most upvoted posts ever are screenshots of
+absurd job offers. Chamba addresses both.
 
-```sh
-cp .env.example .env        # add TYPESAFE_API_KEY; Upstash is optional locally, required in production
-npm install
-npm run jev:check           # verify the key with one tiny request
-npm run dev                 # http://localhost:3000
-```
+## What it does
 
-| Script | What it does |
+### Job radar
+
+Every day, and whenever a visitor asks for it, the server fetches around 500 listings from four
+public job boards: Hacker News "Who is hiring?", Get on Board, We Work Remotely and Remotive. For
+each new listing Jev answers eight questions in a single request: is it a real job, is it a tech
+role, where can the hired person live, does it require something a person in Venezuela would not
+have (work authorization, a US license, a clearance), USD pay, seniority, role and English level.
+It also picks the sentence of the listing that proves where the job can be done, so every result
+shows its evidence and links to the original.
+
+Anyone can watch an update live: the page streams every URL the server requests and every
+listing Jev judges, with tokens and cost adding up in real time.
+
+![A live radar update: the beam sweeps while Jev judges each listing](docs/images/radar-live.jpg)
+
+### Chimbómetro
+
+Paste a job offer and get a 0 to 100 score in under a second. One request asks Jev 20 questions:
+nine red flags, overall unfairness, a verdict, and for each flag the fragment of the offer that
+triggered it. The score itself is plain, tunable code. Results can be shared as a link with a
+preview card; the offer text is never stored.
+
+![The Chimbómetro scoring an offer](docs/images/chimbometro.jpg)
+
+![Each red flag linked to the words that triggered it](docs/images/evidence.jpg)
+
+| Shared result card | Radar card |
 | --- | --- |
-| `npm run check` | Typecheck, lint and unit tests |
-| `npm run jev:eval` | Runs the example offers through Jev and checks each verdict; appends to the ledger |
-| `npm run build` | Production build (the cost section is rendered from the ledger at build time) |
+| ![Preview card of a shared result](docs/images/share-card.png) | ![Preview card of the radar](docs/images/radar-card.png) |
 
-Locally, rate limits use memory even if `.env.local` holds production's Redis (from
-`vercel env pull`), so development never spends production's budget. Set `CHIMBA_DEV_REDIS=1` to
-test against Redis on purpose.
+### Laboratorio
 
-## How it is put together
+A public write-up of how the project was built with Jev: the architecture, every question exactly
+as it is sent, a playground that re-scores saved answers with your own weights, the streaming
+protocol, security, latency and cost charts, and the mistakes made along the way.
+
+![The Laboratorio: how Chamba was built, step by step, with the cost of each step](docs/images/docs.jpg)
+
+### On a phone
+
+![Radar, Chimbómetro and a shared result at 390 px](docs/images/mobile.jpg)
+
+## What it cost to build
+
+Every Jev call made while building the project is recorded in
+[`ledger/jev-usage.jsonl`](ledger/jev-usage.jsonl), and the docs page renders its totals.
+
+| | |
+| --- | --- |
+| Total Jev spend so far | **$0.16** across 1,991 calls and 3.8M input tokens |
+| Reading 206 subreddit posts (research) | $0.014 |
+| One Chimbómetro measurement | about $0.00015, 20 questions, ~0.7 s |
+| A full radar run (500 listings) | about $0.05, ~20 s |
+| A daily radar update | only new listings are judged, so it costs cents |
+
+Jev charges $0.042 per million input tokens; output tokens are free.
+
+## How it works
 
 ```
-src/
-  app/api/chimba/route.ts   POST endpoint; streams NDJSON events as each step happens
-  app/api/stats/route.ts    today's measured offers and Jev spend (cached 10 s)
-  app/api/radar/            snapshot, live refresh (NDJSON; daily cron with CRON_SECRET), replay
-  lib/radar/                sources, questions, judge (eligibility rules), refresh orchestrator
-  app/docs/                 technical documentation page
-  lib/server/               guard (limits, budget, origin) and server-only config
-  lib/jev/                  typed HTTP client, pricing, wire types (no SDK dependency)
-  lib/chimba/
-    questions.ts            the judgment questions Jev is asked
-    evidence.ts             offer → fragments, and one evidence question per flag
-    score.ts                the scoring formula (code, not model)
-    extract.ts              salary and technologies read with plain code
-    analyze.ts              one offer → Jev → score, with timings
-    events.ts, request.ts   the streaming protocol and its browser client
-  components/               gauge, live trace, receipt, flags, logo
-scripts/                    key check and eval, both logged to the ledger
-research/                   the r/dev_venezuela analysis that led here (Python, stdlib only)
-ledger/jev-usage.jsonl      every Jev call made while building, with tokens and cost
+browser ──POST──▶ /api/chimba ──▶ guard (origin, size, budget, rate limits in Redis)
+                                 ──▶ Jev: 20 typed questions, one request
+                                 ──▶ score.ts: the formula, plain code
+        ◀── NDJSON stream: received, sent, answered, scored
+
+cron / visitor ──▶ /api/radar/refresh ──▶ 4 public job APIs and feeds
+                                        ──▶ Jev: 8 questions per new listing, 8 at a time
+                                        ──▶ snapshot in Redis ──▶ radar page (ISR, 60 s)
 ```
 
 Decisions worth knowing:
 
-- **The API key never reaches the browser.** It is read only in `src/lib/server/config.ts`, which
-  imports `server-only`, so bundling it for the client fails the build.
-- **The endpoint is guarded before any Jev call** (`src/lib/server/guard.ts`), in this order:
-  same-origin check (403), 32 KB body cap (413), daily spend cap (503), 10 requests per minute and
-  100 per day per IP (429 with `Retry-After`), 600 requests per minute overall (503). The real cost
-  of each call is added to the day's spend afterwards. Counters live in Upstash Redis so they hold
-  across serverless instances; IPs are hashed before they become keys. The client IP comes from
-  the platform's header, never from client-supplied `x-forwarded-for` in production.
-- **It fails closed.** In production, missing Redis settings or an unreachable Redis means no Jev
-  calls. Every request logs one structured line (tokens, cost, latency, score, or the limit that
-  was hit); offer text is never logged or stored.
-- **Policy lives in code.** Jev supplies probabilities; `score.ts` owns weights and thresholds, so
-  tuning the score never requires another model call. The formula is shown on the page.
-- **Every number on the page is measured.** Trace timestamps are server time since the request
-  arrived; the waiting counter runs on the browser clock. Jev returns all answers at once, and the
-  trace says so.
+- **Structured data is decided in code.** When a source states the location in a field (Get on
+  Board's remote modality, "Anywhere in the World"), code decides and Jev only judges free text.
+- **Select, don't generate.** Evidence is a choice among fragments that exist in the listing, so a
+  citation cannot be invented.
+- **Uncertainty is shown.** Low-confidence location judgments are marked "Por confirmar".
+- **Evals guard the questions.** `npm run jev:eval` and `npm run jev:eval-radar` run tricky cases
+  through the real model. The radar cases include every mistake found in production, such as a
+  "fully remote" insurance job that required a US license.
+- **The key never reaches the browser**, and the API fails closed: same-origin check, 32 KB body
+  cap, a daily spend cap, and per-IP and global rate limits in Upstash Redis. IPs are stored hashed.
 
-## Research
+## Run it locally
 
-[`research/README.md`](research/README.md) has the analysis of 206 posts that picked this idea:
-two of the six most upvoted posts in the sub's history are screenshots of absurd job offers.
+```sh
+cp .env.example .env    # TYPESAFE_API_KEY from console.typesafe.ai
+npm install
+npm run jev:check       # verify the key with one small request
+npm run dev             # http://localhost:3000
+```
 
----
+Locally, rate limits use memory, so development never touches production data. Set
+`CHIMBA_DEV_REDIS=1` to use the Redis credentials from `.env.local` on purpose.
 
-Hecho por [elberacasa](https://github.com/elberacasa). Not affiliated with TypeSafe AI.
+| Script | What it does |
+| --- | --- |
+| `npm run check` | Typecheck, lint and 80 unit tests |
+| `npm run jev:eval` | Chimbómetro verdicts on example offers |
+| `npm run jev:eval-radar` | Radar judgments on 12 tricky listings |
+| `npm run build` | Production build |
+
+Every script that calls Jev appends its cost to the ledger.
+
+## Project layout
+
+```
+src/
+  app/                    pages, API routes, preview images (Open Graph)
+  components/             radar, Chimbómetro, docs sections, brand
+  lib/radar/              sources, questions, judge, refresh, eval cases
+  lib/chimba/             questions, evidence, formula, sharing
+  lib/jev/                typed HTTP client and pricing (no SDK)
+  lib/server/             guard, Redis store, server-only config
+research/                 Python scripts that analyzed the subreddit and the job market
+ledger/jev-usage.jsonl    every Jev call made while building, with its cost
+```
+
+## Stack
+
+Next.js 16, React 19, TypeScript, CSS Modules, Upstash Redis, Vercel. No UI kit: the design
+system is a handful of tokens in `globals.css`, set in Big Shoulders, Hanken Grotesk and IBM Plex
+Mono.
+
+## Author
+
+Built by [elberacasa](https://github.com/elberacasa). Not affiliated with TypeSafe AI.
+
+## License
+
+[MIT](LICENSE)

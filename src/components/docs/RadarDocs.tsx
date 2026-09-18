@@ -19,6 +19,12 @@ export function RadarDocs() {
       </p>
       <ol className={styles.guards}>
         <li>
+          <strong>Solo empleos de tecnología.</strong> Las bolsas mezclan ventas, soporte y
+          administración con desarrollo. Jev decide si al menos uno de los roles es de software,
+          datos, infraestructura, QA, seguridad, diseño o producto técnico; los demás no se
+          muestran.
+        </li>
+        <li>
           <strong>Si la fuente lo dice en un campo, decide el código.</strong> Get on Board trae la
           modalidad remota como dato; We Work Remotely y Remotive marcan «Anywhere in the World» y
           «Worldwide». Ahí Jev no opina sobre la ubicación.

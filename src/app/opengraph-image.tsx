@@ -1,5 +1,6 @@
 import { SNAPSHOT_KEY } from "@/lib/radar/refresh";
 import type { RadarSnapshot } from "@/lib/radar/types";
+import { toPayload } from "@/lib/radar/view";
 import { OG_SIZE, radarImage } from "@/lib/og";
 import { serverConfig } from "@/lib/server/config";
 
@@ -17,7 +18,8 @@ export default async function Image() {
   const snapshot = config.ok
     ? await config.store.getJson<RadarSnapshot>(SNAPSHOT_KEY).catch(() => null)
     : null;
-  const jobs = snapshot?.jobs.filter((j) => j.isJob) ?? [];
+  // Same filter as the page: real job posts in technology roles.
+  const jobs = snapshot ? toPayload(snapshot).jobs : [];
   const eligible = jobs.filter((j) => j.eligible);
   return radarImage({
     eligible: eligible.length,

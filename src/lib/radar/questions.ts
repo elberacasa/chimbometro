@@ -2,6 +2,13 @@ import type { ChoiceQuestion, Question } from "@/lib/jev/types";
 import type { Fragment } from "@/lib/chimba/evidence";
 
 /**
+ * Bump when the questions change: stored judgments from an older version are re-judged on the next
+ * refresh instead of being reused. v2 added `tech_role` and broadened `excludes_venezuela` after a
+ * US-licensed insurance sales job showed up as a junior role open to Venezuela.
+ */
+export const RADAR_QUESTIONS_VERSION = 2;
+
+/**
  * What Jev is asked about every job listing, in one request. Written after the Chamba Radar
  * experiment (research/classify_jobs.py): "contractor OK" was dropped because listings rarely
  * say, so its probabilities carried no signal.
@@ -26,11 +33,21 @@ export const RADAR_QUESTIONS = {
       unclear: "The listing does not say where the person can be.",
     },
   },
+  tech_role: {
+    type: "noul",
+    instructions:
+      "Is at least one of the roles in `job` a technology role: software engineering, data or machine " +
+      "learning, DevOps or infrastructure, QA, security, UX/UI design, or technical product management? " +
+      "Sales, business development, customer support, marketing, recruiting and administrative roles are not.",
+  },
   excludes_venezuela: {
     type: "noul",
     instructions:
-      "Does `job` rule out a candidate living in Venezuela, for example by requiring work authorization in a " +
-      "specific country, excluding sanctioned countries, or listing allowed countries that do not include Venezuela?",
+      "Does `job` require something a person living in Venezuela would normally not have? For example: " +
+      "work authorization, citizenship or residency in a specific country; a professional license or " +
+      "certification issued by a specific country (such as a US insurance, real estate, nursing or CPA " +
+      "license); a security clearance; excluding sanctioned countries; or a list of allowed countries " +
+      "that does not include Venezuela.",
   },
   usd: { type: "noul", instructions: "Does `job` state pay in US dollars?" },
   seniority: {

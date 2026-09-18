@@ -36,7 +36,8 @@ export function toPayload(snapshot: RadarSnapshot): RadarPayload {
     sources: snapshot.sources,
     run: snapshot.run,
     jobs: snapshot.jobs
-      .filter((j) => j.isJob)
+      // A radar for developers: non-tech roles (sales, support, admin) are left out entirely.
+      .filter((j) => j.isJob && j.techRole)
       .map((j) => ({
         id: j.id,
         source: j.source,

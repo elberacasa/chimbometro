@@ -1,7 +1,7 @@
 import { fragmentState, splitFragments } from "@/lib/chimba/evidence";
 import { askJev } from "@/lib/jev/client";
 import type { ChoiceAnswer, NoulAnswer, ScoreAnswer } from "@/lib/jev/types";
-import { RADAR_QUESTIONS, whereEvidenceQuestion } from "./questions";
+import { RADAR_QUESTIONS, RADAR_QUESTIONS_VERSION, whereEvidenceQuestion } from "./questions";
 import type { Listing, RadarJob, Role, Seniority, Where } from "./types";
 
 const MODEL = "jev-latest";
@@ -14,6 +14,7 @@ export const LOW_CONFIDENCE = 0.6;
 
 export type Judgment = {
   is_job: NoulAnswer;
+  tech_role: NoulAnswer;
   where: ChoiceAnswer;
   excludes_venezuela: NoulAnswer;
   usd: NoulAnswer;
@@ -78,6 +79,7 @@ export async function judgeListing(apiKey: string, listing: Listing) {
     excerpt: excerpt(listing.text),
     salary: listing.salary,
     isJob: j.is_job.noul >= 0.5,
+    techRole: j.tech_role.noul >= 0.5,
     eligible,
     decidedBy,
     where: j.where.choice as Where,
@@ -90,6 +92,7 @@ export async function judgeListing(apiKey: string, listing: Listing) {
     quote,
     judgedAt: new Date().toISOString(),
     inputTokens: call.response.usage.input_tokens,
+    version: RADAR_QUESTIONS_VERSION,
   };
   return { job, latencyMs: call.latencyMs, usage: call.response.usage, model: call.response.model };
 }

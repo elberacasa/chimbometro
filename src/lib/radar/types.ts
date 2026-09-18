@@ -66,6 +66,8 @@ export type RadarJob = {
   excerpt: string;
   salary: { min: number; max: number } | null;
   isJob: boolean;
+  /** Software, data, infra, QA, security, design or technical product. The radar only shows these. */
+  techRole: boolean;
   eligible: boolean;
   /** How the eligibility was decided: a structured source field, or Jev reading the text. */
   decidedBy: "source" | "jev";
@@ -81,6 +83,8 @@ export type RadarJob = {
   quote: string | null;
   judgedAt: string;
   inputTokens: number;
+  /** RADAR_QUESTIONS_VERSION the listing was judged with. */
+  version: number;
 };
 
 export type RadarSnapshot = {

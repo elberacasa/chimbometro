@@ -13,6 +13,7 @@ const job = (over: Partial<RadarJob>): RadarJob => ({
   excerpt: "long text ".repeat(30),
   salary: null,
   isJob: true,
+  techRole: true,
   eligible: true,
   decidedBy: "jev",
   where: "anywhere",
@@ -25,6 +26,7 @@ const job = (over: Partial<RadarJob>): RadarJob => ({
   quote: "REMOTE (worldwide)",
   judgedAt: "2026-09-18T00:00:00Z",
   inputTokens: 2000,
+  version: 2,
   ...over,
 });
 
@@ -51,6 +53,11 @@ describe("toPayload", () => {
     expect(payload.jobs.map((j) => j.id)).toEqual(["hn-1"]);
     expect(payload.jobs[0]).not.toHaveProperty("excerpt");
     expect(payload.jobs[0]).not.toHaveProperty("inputTokens");
+  });
+
+  it("leaves out non-tech roles such as sales or support", () => {
+    const payload = toPayload(snapshot([job({}), job({ id: "gob-9", techRole: false })]));
+    expect(payload.jobs.map((j) => j.id)).toEqual(["hn-1"]);
   });
 
   it("clips long titles and quotes", () => {
