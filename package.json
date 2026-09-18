@@ -16,7 +16,7 @@
     "jev:eval": "tsx --env-file=.env scripts/eval-offers.ts"
   },
   "engines": {
-    "node": ">=22"
+    "node": "24.x"
   },
   "dependencies": {
     "next": "^16.3.5",
