@@ -1,10 +1,10 @@
 import { formatInt, formatUsd } from "@/lib/format";
 import { timeAgo } from "@/lib/radar/labels";
-import type { RadarSnapshot } from "@/lib/radar/types";
+import type { RadarPayload } from "@/lib/radar/view";
 import styles from "./SourcesPanel.module.css";
 
 /** Where every listing comes from: the exact URLs our server requested, and how that went. */
-export function SourcesPanel({ snapshot, now }: { snapshot: RadarSnapshot; now: number }) {
+export function SourcesPanel({ snapshot, now }: { snapshot: RadarPayload; now: number }) {
   const { run } = snapshot;
   return (
     <aside className={styles.panel} aria-labelledby="fuentes-titulo">
@@ -16,7 +16,7 @@ export function SourcesPanel({ snapshot, now }: { snapshot: RadarSnapshot; now: 
       </p>
       <ul className={styles.list}>
         {snapshot.sources.map((s) => {
-          const jobs = snapshot.jobs.filter((j) => j.source === s.id && j.isJob);
+          const jobs = snapshot.jobs.filter((j) => j.source === s.id);
           const ok = jobs.filter((j) => j.eligible).length;
           return (
             <li key={s.id}>

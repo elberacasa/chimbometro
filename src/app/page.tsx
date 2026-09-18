@@ -2,6 +2,7 @@ import { RadarView } from "@/components/radar/RadarView";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
 import { SNAPSHOT_KEY } from "@/lib/radar/refresh";
 import type { RadarSnapshot } from "@/lib/radar/types";
+import { toPayload } from "@/lib/radar/view";
 import { serverConfig } from "@/lib/server/config";
 import styles from "./page.module.css";
 
@@ -16,7 +17,7 @@ async function loadSnapshot() {
   const config = serverConfig();
   if (!config.ok) return { snapshot: null, renderedAt };
   const snapshot = await config.store.getJson<RadarSnapshot>(SNAPSHOT_KEY).catch(() => null);
-  return { snapshot, renderedAt };
+  return { snapshot: snapshot && toPayload(snapshot), renderedAt };
 }
 
 export default async function RadarPage() {

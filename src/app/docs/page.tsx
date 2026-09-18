@@ -3,6 +3,7 @@ import evalData from "@/content/eval.json";
 import subreddit from "@/content/subreddit.json";
 import { ArchitectureDiagram } from "@/components/docs/ArchitectureDiagram";
 import { CostBars, EvalRuns, LatencyHistogram } from "@/components/docs/Charts";
+import { BuildStory } from "@/components/docs/BuildStory";
 import { Lab } from "@/components/docs/Lab";
 import { RadarDocs } from "@/components/docs/RadarDocs";
 import { PolicyPlayground } from "@/components/docs/PolicyPlayground";
@@ -26,6 +27,7 @@ export const metadata: Metadata = {
 };
 
 const TOC = [
+  ["historia", "Cómo lo construimos"],
   ["radar", "El radar"],
   ["arquitectura", "Arquitectura del Chimbómetro"],
   ["preguntas", "Las preguntas"],
@@ -48,7 +50,8 @@ const evalMedian = median(evalData.runs.map((r) => r.jevMs));
 const TYPE_LABEL = { noul: "sí/no", score: "escala", choice: "elección" } as const;
 
 export default async function Docs() {
-  const ledger = groupLedger(await readLedger());
+  const entries = await readLedger();
+  const ledger = groupLedger(entries);
   const totals = ledgerTotals(ledger);
   const costRows = Object.values(
     ledger.reduce<Record<string, { purpose: string; calls: number; costUsd: number }>>((acc, e) => {
@@ -104,6 +107,11 @@ export default async function Docs() {
               </div>
             </dl>
           </header>
+
+          <section id="historia" className={styles.section}>
+            <h2>Cómo lo construimos con Jev</h2>
+            <BuildStory ledger={entries} />
+          </section>
 
           <section id="radar" className={styles.section}>
             <h2>El radar de empleos</h2>

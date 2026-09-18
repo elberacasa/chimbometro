@@ -1,7 +1,8 @@
 "use client";
 
 import { SOURCE_LABEL } from "@/lib/radar/labels";
-import type { RadarJob, SourceId } from "@/lib/radar/types";
+import type { SourceId } from "@/lib/radar/types";
+import type { JobView } from "@/lib/radar/view";
 import styles from "./RadarScope.module.css";
 
 /**
@@ -26,7 +27,7 @@ const RINGS = [
   { days: 30, label: "1 mes" },
 ];
 
-type Dot = Pick<RadarJob, "id" | "source" | "eligible" | "postedAt" | "title">;
+type Dot = Pick<JobView, "id" | "source" | "eligible" | "postedAt" | "title">;
 
 type Props = {
   jobs: Dot[];

@@ -1,0 +1,85 @@
+.main {
+  padding-block: clamp(3rem, 10vw, 7rem);
+  min-height: 60vh;
+}
+
+/* The one joke on the site: the number flickers like a failing bulb, then stays dim. */
+.code {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 72;
+  font-weight: 800;
+  font-size: clamp(7rem, 30vw, 16rem);
+  line-height: 0.8;
+  color: var(--ink);
+  opacity: 0.16;
+  animation: blackout 1.6s steps(1, end) both;
+}
+
+@keyframes blackout {
+  0% {
+    opacity: 1;
+  }
+  12% {
+    opacity: 0.1;
+  }
+  18% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0.1;
+  }
+  34% {
+    opacity: 0.8;
+  }
+  60% {
+    opacity: 1;
+  }
+  64%,
+  100% {
+    opacity: 0.16;
+  }
+}
+
+.title {
+  margin-top: 1rem;
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  max-width: 16ch;
+}
+
+.lede {
+  margin-top: 1rem;
+  max-width: 46ch;
+  color: var(--ink-2);
+  font-size: var(--step-1);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 2rem;
+}
+
+.primary,
+.secondary {
+  border-radius: var(--radius);
+  padding: 0.8rem 1.2rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.secondary {
+  border: 1.5px solid var(--ink);
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .code {
+    animation: none;
+  }
+}

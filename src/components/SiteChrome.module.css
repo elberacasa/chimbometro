@@ -58,3 +58,27 @@
   font-size: var(--step--1);
   color: var(--ink-2);
 }
+
+.short {
+  display: none;
+}
+
+/* Phones: brand and tabs on one row, tabs with short names. */
+@media (max-width: 560px) {
+  .header {
+    flex-wrap: nowrap;
+    gap: 1rem;
+    padding-block: 1rem;
+  }
+  .nav {
+    flex-wrap: nowrap;
+    gap: 1rem;
+    font-size: var(--step--1);
+  }
+  .full {
+    display: none;
+  }
+  .short {
+    display: inline;
+  }
+}

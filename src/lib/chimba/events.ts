@@ -24,7 +24,13 @@ export type ChimbaEvent =
       fragments: number;
     }
   | { type: "answered"; t: number; jevMs: number; response: SystemOneResponse<AllQuestions> }
-  | { type: "scored"; t: number; analysis: Analysis }
+  | {
+      type: "scored";
+      t: number;
+      analysis: Analysis;
+      /** Short id of the saved result, for sharing by link; null if saving failed. */
+      shareId: string | null;
+    }
   | { type: "error"; t: number; message: string };
 
 export const JEV_ENDPOINT = "api.typesafe.ai/v1/systemone";

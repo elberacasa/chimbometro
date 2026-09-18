@@ -116,6 +116,14 @@ describe("todayStats", () => {
     });
     expect((await todayStats(store, Date.UTC(2026, 8, 19, 1))).measured).toBe(0);
   });
+
+  it("does not count other spending, like radar updates, as measurement cost", async () => {
+    const { store } = setup();
+    await recordSpend(store, 0.05, T0);
+    await recordMeasurement(store, 0.00015, T0);
+    expect(await todayStats(store, T0)).toMatchObject({ measured: 1, costUsd: 0.00015 });
+    expect(await spentToday(store, T0)).toBeCloseTo(0.05015);
+  });
 });
 
 describe("clientIp", () => {

@@ -91,11 +91,16 @@ export async function recordSpend(store: CounterStore, costUsd: number, now = Da
   await store.increment(budgetKey(utcDay(now)), toMicros(costUsd), 2 * DAY);
 }
 
-/** Counts one successful measurement and records what it cost. */
+/**
+ * Counts one successful Chimbómetro measurement. Its cost goes to the shared daily budget and to
+ * a measurements-only total, so the public counter never includes radar updates.
+ */
 export async function recordMeasurement(store: CounterStore, costUsd: number, now = Date.now()) {
+  const day = utcDay(now);
   await Promise.all([
     recordSpend(store, costUsd, now),
-    store.increment(measuredKey(utcDay(now)), 1, 2 * DAY),
+    store.increment(measuredKey(day), 1, 2 * DAY),
+    store.increment(measuredCostKey(day), toMicros(costUsd), 2 * DAY),
   ]);
 }
 
@@ -105,7 +110,7 @@ export async function todayStats(store: CounterStore, now = Date.now()): Promise
   const day = utcDay(now);
   const [measured, micros] = await Promise.all([
     store.get(measuredKey(day)),
-    store.get(budgetKey(day)),
+    store.get(measuredCostKey(day)),
   ]);
   return { day, measured, costUsd: micros / 1_000_000 };
 }
@@ -152,6 +157,10 @@ function hashIp(ip: string) {
 
 function measuredKey(day: string) {
   return `stats:measured:${day}`;
+}
+
+function measuredCostKey(day: string) {
+  return `stats:measured-usd-micros:${day}`;
 }
 
 function budgetKey(day: string) {

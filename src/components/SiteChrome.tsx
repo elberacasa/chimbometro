@@ -2,10 +2,11 @@ import Link from "next/link";
 import { Brand } from "./Brand";
 import styles from "./SiteChrome.module.css";
 
+// `short` is what fits on one line of a phone header.
 const PRODUCTS = [
-  { id: "radar", href: "/", label: "Radar de empleos" },
-  { id: "chimbometro", href: "/chimbometro", label: "Chimbómetro" },
-  { id: "docs", href: "/docs", label: "Laboratorio" },
+  { id: "radar", href: "/", label: "Radar de empleos", short: "Radar" },
+  { id: "chimbometro", href: "/chimbometro", label: "Chimbómetro", short: "Chimbómetro" },
+  { id: "docs", href: "/docs", label: "Laboratorio", short: "Lab" },
 ] as const;
 
 export type ProductId = (typeof PRODUCTS)[number]["id"];
@@ -26,8 +27,15 @@ export function SiteHeader({
         <ul className={styles.nav}>
           {PRODUCTS.map((p) => (
             <li key={p.id}>
-              <Link href={p.href} aria-current={p.id === current ? "page" : undefined}>
-                {p.label}
+              <Link
+                href={p.href}
+                aria-current={p.id === current ? "page" : undefined}
+                aria-label={p.label}
+              >
+                <span className={styles.full}>{p.label}</span>
+                <span className={styles.short} aria-hidden="true">
+                  {p.short}
+                </span>
               </Link>
             </li>
           ))}

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { analyzeOffer, MAX_OFFER_CHARS, MIN_OFFER_CHARS, MODEL } from "@/lib/chimba/analyze";
 import { JEV_ENDPOINT, type ChimbaEvent } from "@/lib/chimba/events";
+import { newShareId, saveShared, toShared } from "@/lib/chimba/share";
 import { JevError } from "@/lib/jev/client";
 import { appendLedger } from "@/lib/ledger";
 import { serverConfig } from "@/lib/server/config";
@@ -82,7 +83,15 @@ export async function POST(req: Request) {
             }),
           onAnswer: (response, jevMs) => emit({ type: "answered", t: t(), jevMs, response }),
         });
-        emit({ type: "scored", t: t(), analysis });
+        const shareId = newShareId();
+        const saved = await saveShared(store, toShared(shareId, analysis)).then(
+          () => true,
+          (e: Error) => {
+            console.error(JSON.stringify({ event: "share.save_failed", message: e.message }));
+            return false;
+          },
+        );
+        emit({ type: "scored", t: t(), analysis, shareId: saved ? shareId : null });
 
         const { receipt, result } = analysis;
         await recordMeasurement(store, receipt.costUsd).catch((e: Error) =>

@@ -11,7 +11,8 @@ import {
   timeAgo,
   WHERE_LABEL,
 } from "@/lib/radar/labels";
-import type { RadarJob, Role, Seniority, SourceId } from "@/lib/radar/types";
+import type { Role, Seniority, SourceId } from "@/lib/radar/types";
+import type { JobView } from "@/lib/radar/view";
 import styles from "./JobList.module.css";
 
 const PAGE = 30;
@@ -56,14 +57,13 @@ const INITIAL: Filters = {
   query: "",
 };
 
-export function JobList({ jobs, now }: { jobs: RadarJob[]; now: number }) {
+export function JobList({ jobs, now }: { jobs: JobView[]; now: number }) {
   const [f, setF] = useState<Filters>(INITIAL);
   const [shown, setShown] = useState(PAGE);
 
-  const real = useMemo(() => jobs.filter((j) => j.isJob), [jobs]);
   const visible = useMemo(() => {
     const q = f.query.trim().toLowerCase();
-    return real
+    return jobs
       .filter(
         (j) =>
           (!f.onlyEligible || j.eligible) &&
@@ -72,10 +72,10 @@ export function JobList({ jobs, now }: { jobs: RadarJob[]; now: number }) {
           (f.roles.size === 0 || f.roles.has(j.role)) &&
           (f.sources.size === 0 || f.sources.has(j.source)) &&
           j.english <= f.englishMax &&
-          (!q || `${j.title} ${j.company} ${j.excerpt}`.toLowerCase().includes(q)),
+          (!q || `${j.title} ${j.quote ?? ""}`.toLowerCase().includes(q)),
       )
       .sort((a, b) => (b.postedAt ?? "").localeCompare(a.postedAt ?? ""));
-  }, [real, f]);
+  }, [jobs, f]);
 
   const update = (patch: Partial<Filters>) => {
     setF((prev) => ({ ...prev, ...patch }));
@@ -156,7 +156,7 @@ export function JobList({ jobs, now }: { jobs: RadarJob[]; now: number }) {
 
       <p className={styles.count} aria-live="polite">
         {formatInt(visible.length)} {visible.length === 1 ? "empleo" : "empleos"}
-        {visible.length !== real.length && <span> de {formatInt(real.length)}</span>}
+        {visible.length !== jobs.length && <span> de {formatInt(jobs.length)}</span>}
       </p>
 
       {visible.length === 0 ? (
@@ -180,7 +180,7 @@ export function JobList({ jobs, now }: { jobs: RadarJob[]; now: number }) {
   );
 }
 
-function JobRow({ job, now }: { job: RadarJob; now: number }) {
+function JobRow({ job, now }: { job: JobView; now: number }) {
   const confirm = needsConfirmation(job);
   return (
     <li className={styles.job}>
@@ -229,7 +229,7 @@ function JobRow({ job, now }: { job: RadarJob; now: number }) {
 }
 
 /** When the source decided, its field is the truth; otherwise Jev's reading of the text. */
-function whereLabel(job: RadarJob) {
+function whereLabel(job: JobView) {
   if (job.excludesVenezuela >= 0.5) return "El texto excluye a Venezuela";
   if (job.decidedBy === "source") {
     return job.eligible ? WHERE_LABEL.anywhere : "Solo residentes del país o presencial";

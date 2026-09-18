@@ -5,7 +5,7 @@ import type { Analysis } from "@/lib/chimba/analyze";
 import { EXAMPLES } from "@/lib/chimba/examples";
 import { requestMeasurement } from "@/lib/chimba/request";
 import { formatInt, formatUsd } from "@/lib/format";
-import { redditText, shareImage } from "@/lib/share";
+import { redditText } from "@/lib/share";
 import { EvidenceMap } from "./EvidenceMap";
 import { TodayCounter, useTodayStats } from "./TodayCounter";
 import { Gauge, type GaugeState } from "./Gauge";
@@ -17,7 +17,7 @@ const MIN = 40;
 const MAX = 6000;
 
 /** `offer` is the exact text that was measured, so edits in the textarea don't shift highlights. */
-type Result = { analysis: Analysis; at: string; offer: string };
+type Result = { analysis: Analysis; at: string; offer: string; shareId: string | null };
 
 export function Meter() {
   const [offer, setOffer] = useState("");
@@ -44,12 +44,12 @@ export function Meter() {
       dialRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
     try {
-      const { analysis, roundTripMs } = await requestMeasurement(text, (event) =>
+      const { analysis, roundTripMs, shareId } = await requestMeasurement(text, (event) =>
         setRun((r) => r && { ...r, events: [...r.events, event] }),
       );
       setRun((r) => r && { ...r, roundTripMs });
       setSession((s) => ({ runs: s.runs + 1, costUsd: s.costUsd + analysis.receipt.costUsd }));
-      setResult({ analysis, at: new Date().toISOString(), offer: text });
+      setResult({ analysis, at: new Date().toISOString(), offer: text, shareId });
       refreshToday();
       setState("done");
     } catch (e) {
@@ -73,27 +73,27 @@ export function Meter() {
     void measure(text);
   }
 
-  async function copyForReddit() {
-    if (!result) return;
-    await navigator.clipboard.writeText(redditText(result.analysis, window.location.origin));
-    setShareNote("Copiado. Pégalo en un comentario de Reddit.");
+  const shareUrl = result?.shareId ? `${window.location.origin}/r/${result.shareId}` : null;
+
+  /** The phone's share sheet when there is one (WhatsApp, Telegram, Reddit…), else copy the link. */
+  async function share() {
+    if (!result || !shareUrl) return;
+    const { score, band, verdict } = result.analysis.result;
+    const text = `Mi oferta sacó ${score}/100 en el Chimbómetro: ${band.label}. ${verdict.label}.`;
+    if (navigator.share) {
+      await navigator.share({ title: "Chimbómetro", text, url: shareUrl }).catch(() => {});
+      return;
+    }
+    await navigator.clipboard.writeText(shareUrl);
+    setShareNote("Enlace copiado.");
   }
 
-  async function downloadImage() {
+  async function copyForReddit() {
     if (!result) return;
-    const css = getComputedStyle(document.body);
-    const blob = await shareImage(result.analysis, {
-      display: css.getPropertyValue("--font-big-shoulders").trim(),
-      body: css.getPropertyValue("--font-hanken").trim(),
-    });
-    const url = URL.createObjectURL(blob);
-    const a = Object.assign(document.createElement("a"), {
-      href: url,
-      download: `chimbometro-${result.analysis.result.score}.png`,
-    });
-    a.click();
-    URL.revokeObjectURL(url);
-    setShareNote("Imagen descargada.");
+    await navigator.clipboard.writeText(
+      redditText(result.analysis, shareUrl ?? window.location.href),
+    );
+    setShareNote("Copiado. Pégalo en un comentario de Reddit.");
   }
 
   const analysis = result?.analysis ?? null;
@@ -221,11 +221,13 @@ export function Meter() {
               </dl>
 
               <div className={styles.share}>
+                {shareUrl && (
+                  <button type="button" className={styles.primaryShare} onClick={share}>
+                    Compartir resultado
+                  </button>
+                )}
                 <button type="button" onClick={copyForReddit}>
                   Copiar para Reddit
-                </button>
-                <button type="button" onClick={downloadImage}>
-                  Descargar imagen
                 </button>
                 <p aria-live="polite">{shareNote}</p>
               </div>

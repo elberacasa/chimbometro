@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { formatInt, formatPercent } from "@/lib/format";
 import { timeAgo } from "@/lib/radar/labels";
 import type { RadarEvent } from "@/lib/radar/refresh";
-import type { RadarSnapshot } from "@/lib/radar/types";
+import type { RadarPayload } from "@/lib/radar/view";
 import { readNdjson } from "@/lib/stream/ndjson";
 import { JobList } from "./JobList";
 import { RadarScope } from "./RadarScope";
@@ -12,7 +12,7 @@ import { RefreshConsole, type ConsoleMode } from "./RefreshConsole";
 import { SourcesPanel } from "./SourcesPanel";
 import styles from "./RadarView.module.css";
 
-type Props = { initial: RadarSnapshot | null; renderedAt: number };
+type Props = { initial: RadarPayload | null; renderedAt: number };
 
 export function RadarView({ initial, renderedAt }: Props) {
   const [snapshot, setSnapshot] = useState(initial);
@@ -34,7 +34,7 @@ export function RadarView({ initial, renderedAt }: Props) {
 
   async function reloadSnapshot() {
     const res = await fetch("/api/radar", { cache: "no-store" });
-    if (res.ok) setSnapshot((await res.json()) as RadarSnapshot);
+    if (res.ok) setSnapshot((await res.json()) as RadarPayload);
     setNow(Date.now());
   }
 
@@ -93,7 +93,7 @@ export function RadarView({ initial, renderedAt }: Props) {
     setMode("idle");
   }
 
-  const jobs = snapshot?.jobs.filter((j) => j.isJob) ?? [];
+  const jobs = snapshot?.jobs ?? [];
   const eligible = jobs.filter((j) => j.eligible);
   const juniors = eligible.filter((j) => j.seniority === "junior").length;
 

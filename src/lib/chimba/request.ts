@@ -1,7 +1,7 @@
 import type { Analysis } from "./analyze";
 import { readEvents, type ChimbaEvent } from "./events";
 
-export type Measurement = { analysis: Analysis; roundTripMs: number };
+export type Measurement = { analysis: Analysis; roundTripMs: number; shareId: string | null };
 
 /**
  * Calls /api/chimba from the browser and reports each streamed event as it arrives.
@@ -23,11 +23,15 @@ export async function requestMeasurement(
   }
 
   let analysis: Analysis | null = null;
+  let shareId: string | null = null;
   for await (const event of readEvents(res.body)) {
     onEvent(event);
     if (event.type === "error") throw new Error(event.message);
-    if (event.type === "scored") analysis = event.analysis;
+    if (event.type === "scored") {
+      analysis = event.analysis;
+      shareId = event.shareId;
+    }
   }
   if (!analysis) throw new Error("La respuesta llegó incompleta. Intenta de nuevo.");
-  return { analysis, roundTripMs: Math.round(performance.now() - started) };
+  return { analysis, roundTripMs: Math.round(performance.now() - started), shareId };
 }
