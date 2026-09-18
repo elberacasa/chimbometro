@@ -34,9 +34,47 @@ export const ROLE_LABEL: Record<Role, string> = {
 export const SOURCE_LABEL: Record<SourceId, string> = {
   hn: "Hacker News",
   getonbrd: "Get on Board",
+  himalayas: "Himalayas",
+  jobicy: "Jobicy",
   wwr: "We Work Remotely",
+  workingnomads: "Working Nomads",
+  remoteok: "Remote OK",
   remotive: "Remotive",
 };
+
+/**
+ * What a source's own field says about where the job can be done, for jobs it decided. Uses the
+ * field itself so "LATAM" is not presented as "any country".
+ */
+export function sourceWhere(job: Pick<RadarJob, "source" | "eligible" | "location">): {
+  tag: string;
+  claim: string;
+} {
+  if (!job.eligible) {
+    return {
+      tag: "Solo residentes de otros países o presencial",
+      claim: "solo residentes de otros países, o presencial",
+    };
+  }
+  const places = job.location
+    .split(",")
+    .map((p) => p.trim())
+    .filter(Boolean);
+  if (
+    job.source === "getonbrd" ||
+    places.length === 0 ||
+    /^(worldwide|anywhere.*|remote)$/i.test(job.location.trim())
+  ) {
+    return { tag: WHERE_LABEL.anywhere, claim: "remoto desde cualquier país" };
+  }
+  if (places.length > 3) {
+    return {
+      tag: "Ciertos países, incluida Venezuela",
+      claim: `${places.length} países, incluida Venezuela`,
+    };
+  }
+  return { tag: WHERE_LABEL.americas_or_latam, claim: job.location.trim() };
+}
 
 /** English required, from Jev's 0–3 score, in the words a candidate would use. */
 export function englishLabel(score: number) {

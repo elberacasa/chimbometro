@@ -15,6 +15,7 @@
     "jev:check": "tsx --env-file=.env scripts/check-key.ts",
     "jev:eval": "tsx --env-file=.env scripts/eval-offers.ts",
     "jev:eval-radar": "tsx --env-file=.env scripts/eval-radar.ts",
+    "jev:sources": "tsx --env-file=.env scripts/probe-sources.ts",
     "readme:art": "tsx scripts/readme-art.ts"
   },
   "engines": {

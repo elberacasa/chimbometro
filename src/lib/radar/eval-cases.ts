@@ -9,10 +9,10 @@ export type RadarCase = {
   id: string;
   why: string;
   listing: Omit<Listing, "id" | "url" | "postedAt" | "salary">;
-  expect: { techRole: boolean; eligible: boolean; seniority?: Seniority };
+  expect: { techRole: boolean; eligible: boolean; seniority?: Seniority; juniorFriendly?: boolean };
 };
 
-const base = { company: "", location: "", structuredWhere: null } as const;
+const base = { company: "", location: "", structuredWhere: null, levels: null } as const;
 
 export const RADAR_CASES: RadarCase[] = [
   {
@@ -55,7 +55,7 @@ export const RADAR_CASES: RadarCase[] = [
         "Acme | Senior Backend Engineer (Go) | REMOTE (Worldwide) | Full-time | $120k-160k\n" +
         "We build payment infrastructure. You will own services in Go and Postgres. We hire anywhere in the world.",
     },
-    expect: { techRole: true, eligible: true, seniority: "senior" },
+    expect: { techRole: true, eligible: true, seniority: "senior", juniorFriendly: false },
   },
   {
     id: "hn-us-only",
@@ -172,6 +172,109 @@ export const RADAR_CASES: RadarCase[] = [
         "Buscamos desarrollador frontend junior con React. 100% remoto desde cualquier país, equipo en español, " +
         "pago en USD.",
     },
-    expect: { techRole: true, eligible: true, seniority: "junior" },
+    expect: { techRole: true, eligible: true, seniority: "junior", juniorFriendly: true },
+  },
+  {
+    id: "junior-and-senior",
+    why: "One post hiring juniors and seniors (a real HN post the radar labeled 'unclear' in v2).",
+    listing: {
+      ...base,
+      source: "hn",
+      title:
+        "Zeta | Junior to Senior Fullstack Engineer, multiple positions | ONSITE or FULLY REMOTE | $150K-180K",
+      text:
+        "Zeta | Junior to Senior Fullstack Engineer, multiple positions | ONSITE or FULLY REMOTE | $150K-180K a " +
+        "year for US or local average + 20% for outside the US\nWe are looking for more Junior and Senior " +
+        "FullStack Engineers. Ruby on Rails, MongoDB and React.",
+    },
+    expect: { techRole: true, eligible: true, juniorFriendly: true },
+  },
+  {
+    id: "interns-non-us",
+    why: "Programming interns among animators and writers, remote outside the US (real HN post, v2 missed it).",
+    listing: {
+      ...base,
+      source: "hn",
+      title: "Hiring for several roles at Eta, an edutainment studio",
+      text:
+        "Hiring for several roles at Eta, an edutainment studio building learning videos for kids.\nOpen Roles " +
+        "(REMOTE, non US): Animators (2D/3D), Writers, Programming interns. Fully remote, async-friendly.",
+    },
+    expect: { techRole: true, eligible: true, juniorFriendly: true },
+  },
+  {
+    id: "region-codes",
+    why: "NAMER, EMEA and APJ leave Latin America out (real HN post that v2 accepted with 0.49 confidence).",
+    listing: {
+      ...base,
+      source: "hn",
+      title: "Theta | VoiceAI infrastructure | Remote | Full Time",
+      text:
+        "Theta | VoiceAI infrastructure | Remote | Full Time\nHiring:\n>> Product Engineer | NAMER, EMEA, APJ " +
+        "(Remote) or SF (Hybrid)\n>> Staff Security Engineer | NAMER, EMEA, APJ (Remote)\n>> Forward Deployed " +
+        "Engineer | United States (Remote)",
+    },
+    expect: { techRole: true, eligible: false },
+  },
+  {
+    id: "latam-field-boilerplate",
+    why: "Jobicy says 'LATAM, USA'; the only restriction is standard work-authorization text (real, v3 rejected it).",
+    listing: {
+      ...base,
+      source: "jobicy",
+      location: "LATAM,  USA",
+      structuredWhere: "anywhere",
+      title: "Senior Software Engineer - Workflow",
+      text:
+        "We are a completely remote team powering hotels in 150 countries. You will build workflow features " +
+        "in TypeScript and Go.\nWork Authorization: Please note that applicants must be currently authorized " +
+        "to work in the location where the position is located without requiring visa sponsorship.",
+    },
+    expect: { techRole: true, eligible: true },
+  },
+  {
+    id: "latam-field-plain",
+    why: "Jobicy says 'LATAM, Canada, USA' and the text says nothing more (real, v3 rejected it with 0.52).",
+    listing: {
+      ...base,
+      source: "jobicy",
+      location: "LATAM,  Canada,  USA",
+      structuredWhere: "anywhere",
+      title: "Senior Data Analyst",
+      text:
+        "We are a fully remote, high-documentation, low-meeting company. You will own dashboards and " +
+        "experiments in SQL, dbt and Python, and work with product and finance.",
+    },
+    expect: { techRole: true, eligible: true },
+  },
+  {
+    id: "cet-timezone",
+    why: "We Work Remotely says 'Anywhere in the World', the text asks for CET within one hour (real).",
+    listing: {
+      ...base,
+      source: "wwr",
+      location: "Anywhere in the World",
+      structuredWhere: "anywhere",
+      title: "Java Developer",
+      text:
+        "Belgian fintech. You develop the back end of our platform in Java.\nYou are based in a time zone " +
+        "within one hour of CET, so your working day overlaps with the team's for the daily stand-ups.",
+    },
+    expect: { techRole: true, eligible: false },
+  },
+  {
+    id: "anywhere-field-us-text",
+    why: "'Anywhere in the World' in the field, 'anywhere within the United States' in the text (real).",
+    listing: {
+      ...base,
+      source: "wwr",
+      location: "Anywhere in the World",
+      structuredWhere: "anywhere",
+      title: "Senior Full-Stack Software Engineer",
+      text:
+        "This is a fully remote role: you can work from anywhere within the United States. React, Node.js " +
+        "and PostgreSQL.",
+    },
+    expect: { techRole: true, eligible: false },
   },
 ];

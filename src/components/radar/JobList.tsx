@@ -8,6 +8,7 @@ import {
   ROLE_LABEL,
   SENIORITY_LABEL,
   SOURCE_LABEL,
+  sourceWhere,
   timeAgo,
   WHERE_LABEL,
 } from "@/lib/radar/labels";
@@ -29,7 +30,6 @@ const ROLES: Role[] = [
   "product",
   "other",
 ];
-const SOURCES: SourceId[] = ["hn", "getonbrd", "wwr", "remotive"];
 const ENGLISH_MAX = [
   { value: 3, label: "Cualquier nivel" },
   { value: 2.49, label: "Hasta profesional" },
@@ -60,6 +60,10 @@ const INITIAL: Filters = {
 export function JobList({ jobs, now }: { jobs: JobView[]; now: number }) {
   const [f, setF] = useState<Filters>(INITIAL);
   const [shown, setShown] = useState(PAGE);
+  const sources = useMemo(
+    () => (Object.keys(SOURCE_LABEL) as SourceId[]).filter((s) => jobs.some((j) => j.source === s)),
+    [jobs],
+  );
 
   const visible = useMemo(() => {
     const q = f.query.trim().toLowerCase();
@@ -68,7 +72,9 @@ export function JobList({ jobs, now }: { jobs: JobView[]; now: number }) {
         (j) =>
           (!f.onlyEligible || j.eligible) &&
           (!f.usd || j.usd >= 0.5 || j.salary) &&
-          (f.seniority.size === 0 || f.seniority.has(j.seniority)) &&
+          (f.seniority.size === 0 ||
+            f.seniority.has(j.seniority) ||
+            (f.seniority.has("junior") && j.juniorFriendly)) &&
           (f.roles.size === 0 || f.roles.has(j.role)) &&
           (f.sources.size === 0 || f.sources.has(j.source)) &&
           j.english <= f.englishMax &&
@@ -147,7 +153,7 @@ export function JobList({ jobs, now }: { jobs: JobView[]; now: number }) {
         />
         <Chips
           label="Fuente"
-          options={SOURCES}
+          options={sources}
           selected={f.sources}
           labels={SOURCE_LABEL}
           onToggle={(v) => update({ sources: toggle(f.sources, v) })}
@@ -199,6 +205,7 @@ function JobRow({ job, now }: { job: JobView; now: number }) {
         </li>
         <li>{whereLabel(job)}</li>
         {job.seniority !== "unclear" && <li>{SENIORITY_LABEL[job.seniority]}</li>}
+        {job.juniorFriendly && job.seniority !== "junior" && <li>Acepta juniors</li>}
         <li>{ROLE_LABEL[job.role]}</li>
         <li>{englishLabel(job.english)}</li>
         {job.salary && (
@@ -211,8 +218,7 @@ function JobRow({ job, now }: { job: JobView; now: number }) {
       {job.decidedBy === "source" ? (
         <p className={`${styles.quote} ${styles.fromSource}`}>
           <span className={styles.claim}>
-            Según {SOURCE_LABEL[job.source]}:{" "}
-            {job.eligible ? "remoto desde cualquier país" : "solo residentes del país o presencial"}
+            Según {SOURCE_LABEL[job.source]}: {sourceWhere(job).claim}
           </span>
           <span>Dato estructurado de la fuente, no una lectura de Jev</span>
         </p>
@@ -231,9 +237,7 @@ function JobRow({ job, now }: { job: JobView; now: number }) {
 /** When the source decided, its field is the truth; otherwise Jev's reading of the text. */
 function whereLabel(job: JobView) {
   if (job.excludesVenezuela >= 0.5) return "El texto excluye a Venezuela";
-  if (job.decidedBy === "source") {
-    return job.eligible ? WHERE_LABEL.anywhere : "Solo residentes del país o presencial";
-  }
+  if (job.decidedBy === "source") return sourceWhere(job).tag;
   return WHERE_LABEL[job.where];
 }
 

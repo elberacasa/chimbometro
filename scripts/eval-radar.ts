@@ -29,11 +29,14 @@ for (const { c, r } of runs) {
     j.techRole !== c.expect.techRole && `techRole=${j.techRole}`,
     j.eligible !== c.expect.eligible && `eligible=${j.eligible}`,
     c.expect.seniority && j.seniority !== c.expect.seniority && `seniority=${j.seniority}`,
+    c.expect.juniorFriendly !== undefined &&
+      j.juniorFriendly !== c.expect.juniorFriendly &&
+      `juniorFriendly=${j.juniorFriendly}`,
   ].filter(Boolean);
   if (misses.length === 0) passed++;
   console.log(
     `${misses.length ? "✗" : "✓"} ${c.id.padEnd(20)} tech=${j.techRole} eligible=${j.eligible} ` +
-      `excl=${j.excludesVenezuela.toFixed(2)} ${j.seniority}${misses.length ? `  MISS: ${misses.join(", ")}` : ""}`,
+      `excl=${j.excludesVenezuela.toFixed(2)} ${j.seniority} junior=${j.juniorFriendly}${misses.length ? `  MISS: ${misses.join(", ")}` : ""}`,
   );
 }
 

@@ -1,6 +1,7 @@
 import { RADAR_QUESTIONS } from "@/lib/radar/questions";
 import { CONFIRM_BELOW } from "@/lib/radar/labels";
-import { formatDecimal } from "@/lib/format";
+import { countWord, formatDecimal } from "@/lib/format";
+import { LIVE_SOURCES } from "@/lib/radar/live";
 import styles from "./Docs.module.css";
 
 const TYPE_LABEL = { noul: "sí/no", score: "escala", choice: "elección" } as const;
@@ -12,10 +13,10 @@ export function RadarDocs() {
     <>
       <p>
         Una vez al día, y cuando un visitante lo pide (como mucho cada 15 minutos), el servidor
-        descarga las ofertas de cuatro bolsas públicas. Las que ya fueron evaluadas se reusan; solo
-        las nuevas van a Jev, una por request, ocho a la vez. Cada request lleva {questions.length}{" "}
-        preguntas más una de evidencia: cuál fragmento de la oferta dice desde dónde se puede
-        trabajar.
+        descarga las ofertas de {countWord(LIVE_SOURCES.length)} bolsas públicas. Las que ya fueron
+        evaluadas se reusan; solo las nuevas van a Jev, una por request, ocho a la vez. Cada request
+        lleva {questions.length} preguntas más una de evidencia: cuál fragmento de la oferta dice
+        desde dónde se puede trabajar.
       </p>
       <ol className={styles.guards}>
         <li>

@@ -16,9 +16,12 @@ export type Listing = {
    * code; Jev only judges listings without it.
    */
   structuredWhere: "anywhere" | "country_only" | "onsite" | null;
+  /** Seniority levels the source states in a field (Get on Board, Himalayas, Jobicy), or null. */
+  levels: Seniority[] | null;
 };
 
-export type SourceId = "hn" | "getonbrd" | "wwr" | "remotive";
+export type SourceId =
+  "hn" | "getonbrd" | "wwr" | "remotive" | "himalayas" | "jobicy" | "workingnomads" | "remoteok";
 
 export type SourceReport = {
   id: SourceId;
@@ -26,7 +29,8 @@ export type SourceReport = {
   homepage: string;
   /** The exact URL(s) our server requested. */
   requested: string[];
-  status: "ok" | "failed";
+  /** "recent": fetched less than an hour ago, so this run keeps its listings from the snapshot. */
+  status: "ok" | "failed" | "recent";
   listings: number;
   ms: number;
   error?: string;
@@ -76,6 +80,8 @@ export type RadarJob = {
   excludesVenezuela: number;
   usd: number;
   seniority: Seniority;
+  /** At least one tech role takes juniors, interns or entry-level people. */
+  juniorFriendly: boolean;
   role: Role;
   /** 0 (none) to 3 (native). */
   english: number;

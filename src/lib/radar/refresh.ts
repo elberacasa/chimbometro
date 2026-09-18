@@ -16,7 +16,7 @@ export const LAST_RUN_KEY = "radar:last-run";
 const SNAPSHOT_TTL = 30 * 86_400;
 const CONCURRENCY = 8;
 /** Keeps a single run's spend bounded even if a source suddenly returns thousands of listings. */
-const MAX_JUDGED_PER_RUN = 700;
+const MAX_JUDGED_PER_RUN = 1200;
 /** Conservative per-listing cost used to check the budget before spending. */
 const ESTIMATED_USD_PER_LISTING = 0.0001;
 
@@ -67,17 +67,22 @@ export async function refreshRadar({ apiKey, store, budgetUsd, trigger, onEvent 
     previous?.jobs.filter((j) => j.version === RADAR_QUESTIONS_VERSION).map((j) => [j.id, j]) ?? [],
   );
 
-  const { reports, listings } = await fetchAll((report) =>
-    emit({ type: "source", t: t(), report }),
-  );
-  const unique = [...new Map(listings.map((l) => [l.id, l])).values()];
+  const { reports, listings } = await fetchAll({
+    // Each source is fetched at most once per its interval, whoever triggers the refresh.
+    isDue: (s) => store.claim(`radar:fetched:${s.id}`, s.minIntervalHours * 3600),
+    onSource: (report) => emit({ type: "source", t: t(), report }),
+  });
+  const unique = dedupe(listings);
   const reused = unique.filter((l) => known.has(l.id));
   const fresh = unique.filter((l) => !known.has(l.id)).slice(0, MAX_JUDGED_PER_RUN);
+  // Sources skipped because they were fetched recently keep the jobs they had.
+  const recent = new Set(reports.filter((r) => r.status === "recent").map((r) => r.id));
+  const kept = [...known.values()].filter((j) => recent.has(j.source));
   emit({
     type: "plan",
     t: t(),
     fetched: unique.length,
-    reused: reused.length,
+    reused: reused.length + kept.length,
     toJudge: fresh.length,
   });
 
@@ -123,7 +128,7 @@ export async function refreshRadar({ apiKey, store, budgetUsd, trigger, onEvent 
   await recordSpend(store, cost);
 
   // Listings that disappeared from their source are dropped; judged ones keep their judgment.
-  const jobs = [...reused.map((l) => known.get(l.id)!), ...judged];
+  const jobs = [...kept, ...reused.map((l) => known.get(l.id)!), ...judged];
   const run: RunSummary = {
     startedAt,
     ms: t(),
@@ -137,7 +142,11 @@ export async function refreshRadar({ apiKey, store, budgetUsd, trigger, onEvent 
   };
   const snapshot: RadarSnapshot = {
     updatedAt: new Date().toISOString(),
-    sources: reports,
+    // A source skipped as recent keeps the URLs and counts of its last real fetch.
+    sources: reports.map((r) => {
+      const last = previous?.sources.find((p) => p.id === r.id);
+      return r.status === "recent" && last ? { ...last, status: "recent" } : r;
+    }),
     jobs,
     run,
   };
@@ -153,6 +162,30 @@ export async function refreshRadar({ apiKey, store, budgetUsd, trigger, onEvent 
   });
   await store.setJson(LAST_RUN_KEY, events, SNAPSHOT_TTL);
   return { snapshot, events };
+}
+
+/**
+ * One listing per id, and one per company and title across sources: the same job is often posted
+ * on several boards. The first source in the list wins.
+ */
+export function dedupe(listings: Listing[]) {
+  const byId = new Map<string, Listing>();
+  const seen = new Set<string>();
+  for (const l of listings) {
+    const key = l.company ? `${norm(l.company)}|${norm(l.title)}` : null;
+    if (byId.has(l.id) || (key && seen.has(key))) continue;
+    byId.set(l.id, l);
+    if (key) seen.add(key);
+  }
+  return [...byId.values()];
+}
+
+function norm(s: string) {
+  return s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
 }
 
 /** Runs `task` over `items` with at most `limit` in flight. */

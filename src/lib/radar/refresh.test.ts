@@ -8,7 +8,7 @@ const fetched: { listings: Listing[]; reports: SourceReport[] } = { listings: []
 const judgedIds: string[] = [];
 
 vi.mock("./sources", () => ({
-  fetchAll: async (onSource: (r: SourceReport) => void) => {
+  fetchAll: async ({ onSource }: { onSource: (r: SourceReport) => void }) => {
     fetched.reports.forEach(onSource);
     return fetched;
   },
@@ -20,6 +20,7 @@ vi.mock("./judge", () => ({
     return {
       job: {
         id: l.id,
+        source: l.source,
         title: l.title,
         isJob: true,
         eligible: l.id.endsWith("ok"),
@@ -35,7 +36,7 @@ vi.mock("./judge", () => ({
   },
 }));
 
-const { refreshRadar, SNAPSHOT_KEY } = await import("./refresh");
+const { dedupe, refreshRadar, SNAPSHOT_KEY } = await import("./refresh");
 
 const listing = (id: string): Listing => ({
   id,
@@ -48,6 +49,7 @@ const listing = (id: string): Listing => ({
   postedAt: null,
   salary: null,
   structuredWhere: null,
+  levels: null,
 });
 const report: SourceReport = {
   id: "hn",
@@ -127,5 +129,32 @@ describe("refreshRadar", () => {
     const { snapshot } = await refreshRadar({ apiKey: "k", store, budgetUsd: 5, trigger: "cron" });
     expect(snapshot!.sources.map((s) => s.status)).toEqual(["ok", "failed"]);
     expect(snapshot!.jobs).toHaveLength(1);
+  });
+
+  it("keeps the jobs of a source skipped because it was fetched recently", async () => {
+    const store = new MemoryStore();
+    fetched.listings = [listing("a-ok")];
+    await refreshRadar({ apiKey: "k", store, budgetUsd: 5, trigger: "script" });
+
+    judgedIds.length = 0;
+    fetched.reports = [{ ...report, status: "recent", requested: [] }];
+    fetched.listings = [];
+    const { snapshot } = await refreshRadar({
+      apiKey: "k",
+      store,
+      budgetUsd: 5,
+      trigger: "script",
+    });
+    expect(judgedIds).toEqual([]);
+    expect(snapshot!.jobs.map((j) => j.id)).toEqual(["a-ok"]);
+  });
+});
+
+describe("dedupe", () => {
+  it("keeps one listing per company and title across sources, the first one seen", () => {
+    const a = { ...listing("himalayas-1"), company: "Lemon.io", title: "Senior Data Scientist" };
+    const b = { ...listing("remotive-9"), company: "Lemon.io ", title: "Senior data scientist" };
+    const c = { ...listing("hn-5"), company: "", title: "Senior Data Scientist" };
+    expect(dedupe([a, b, c, a]).map((l) => l.id)).toEqual(["himalayas-1", "hn-5"]);
   });
 });

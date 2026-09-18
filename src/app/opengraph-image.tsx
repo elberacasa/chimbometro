@@ -24,7 +24,7 @@ export default async function Image() {
   return radarImage({
     eligible: eligible.length,
     total: jobs.length,
-    juniors: eligible.filter((j) => j.seniority === "junior").length,
+    juniors: eligible.filter((j) => j.juniorFriendly).length,
     footer: "Jev leyó cada oferta y citó la frase que lo demuestra",
   });
 }

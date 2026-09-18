@@ -1,0 +1,932 @@
+{
+  "at": "2026-09-18T20:33:33.168Z",
+  "model": "jev-1.13.0",
+  "questionsVersion": 3,
+  "sample": 80,
+  "judged": 518,
+  "inputTokens": 1562522,
+  "costUsd": 0.065625924,
+  "sources": [
+    {
+      "id": "hn",
+      "name": "Hacker News: Who is hiring?",
+      "homepage": "https://news.ycombinator.com/submitted?id=whoishiring",
+      "status": "ok",
+      "requests": 2,
+      "fetched": 260,
+      "duplicates": 0,
+      "sampled": 80,
+      "tech": 74,
+      "eligible": 11,
+      "juniors": 1,
+      "structuredWhere": 0,
+      "structuredLevels": 0,
+      "costUsd": 0.008049510000000001,
+      "costPerEligible": 0.0007317736363636365,
+      "medianMs": 275,
+      "disagreements": []
+    },
+    {
+      "id": "getonbrd",
+      "name": "Get on Board",
+      "homepage": "https://www.getonbrd.com",
+      "status": "ok",
+      "requests": 4,
+      "fetched": 200,
+      "duplicates": 0,
+      "sampled": 80,
+      "tech": 59,
+      "eligible": 15,
+      "juniors": 0,
+      "structuredWhere": 80,
+      "structuredLevels": 80,
+      "costUsd": 0.009303252,
+      "costPerEligible": 0.0006202168,
+      "medianMs": 276,
+      "disagreements": [
+        {
+          "title": "Senior Full-Stack Engineer",
+          "url": "https://www.getonbrd.com/jobs/senior-full-stack-engineer-we-built-it-remote",
+          "field": "anywhere",
+          "location": "Remote",
+          "jevWhere": "unclear",
+          "excludesVenezuela": 0.09,
+          "quote": "Remote"
+        },
+        {
+          "title": "AI Back-end Engineer",
+          "url": "https://www.getonbrd.com/jobs/ai-backend-engineer-improving-remote",
+          "field": "country_only",
+          "location": "Remote",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.12,
+          "quote": "Remote"
+        },
+        {
+          "title": "US Licensed Insurance Agent. Living Outside US",
+          "url": "https://www.getonbrd.com/jobs/insurance-producer-ipb-insurance-remote",
+          "field": "anywhere",
+          "location": "Remote",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.92,
+          "quote": "Living Outside US"
+        },
+        {
+          "title": "AI Engineer",
+          "url": "https://www.getonbrd.com/jobs/ai-engineer-bci-santiago",
+          "field": "onsite",
+          "location": "Chile",
+          "jevWhere": "americas_or_latam",
+          "excludesVenezuela": 0.43,
+          "quote": "Chile"
+        },
+        {
+          "title": "Scrum Master Senior",
+          "url": "https://www.getonbrd.com/jobs/scrum-master-senior-bc-tecnologia-santiago-b2d7",
+          "field": "onsite",
+          "location": "Chile",
+          "jevWhere": "americas_or_latam",
+          "excludesVenezuela": 0.34,
+          "quote": "Chile"
+        },
+        {
+          "title": "Full-Stack Developer Senior",
+          "url": "https://www.getonbrd.com/jobs/full-stack-developer-senior-witi-remote-afcb",
+          "field": "anywhere",
+          "location": "Remote",
+          "jevWhere": "unclear",
+          "excludesVenezuela": 0.08,
+          "quote": "Remote"
+        },
+        {
+          "title": "Web & App Developer (Python/Flutter)",
+          "url": "https://www.getonbrd.com/jobs/web-app-developer-python-flutter-routed-labs-inc-remote",
+          "field": "anywhere",
+          "location": "Remote",
+          "jevWhere": "unclear",
+          "excludesVenezuela": 0.06,
+          "quote": "Remote"
+        },
+        {
+          "title": "Appointment Setter",
+          "url": "https://www.getonbrd.com/jobs/appointment-setter-hma-remote",
+          "field": "anywhere",
+          "location": "Remote",
+          "jevWhere": "unclear",
+          "excludesVenezuela": 0.18,
+          "quote": "Remote"
+        },
+        {
+          "title": "Analista Desarrollador .NET+",
+          "url": "https://www.getonbrd.com/jobs/analista-desarrollador-net-bc-tecnologia-santiago",
+          "field": "onsite",
+          "location": "Chile",
+          "jevWhere": "americas_or_latam",
+          "excludesVenezuela": 0.47,
+          "quote": "Chile"
+        },
+        {
+          "title": "Flutter Mobile Developer",
+          "url": "https://www.getonbrd.com/jobs/flutter-engineer-forest-santiago-3308",
+          "field": "onsite",
+          "location": "Chile",
+          "jevWhere": "americas_or_latam",
+          "excludesVenezuela": 0.49,
+          "quote": "Chile"
+        },
+        {
+          "title": "Senior Full-Stack Developer",
+          "url": "https://www.getonbrd.com/jobs/senior-full-stack-developer-roadway-moving-remote",
+          "field": "anywhere",
+          "location": "Remote",
+          "jevWhere": "unclear",
+          "excludesVenezuela": 0.25,
+          "quote": "Remote"
+        },
+        {
+          "title": "Healthcare Sales Representative",
+          "url": "https://www.getonbrd.com/jobs/sales-representative-niuro-remote",
+          "field": "country_only",
+          "location": "Remote",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.21,
+          "quote": "Remote"
+        },
+        {
+          "title": "ML Engineer (Forecasting & Applied Data Science)",
+          "url": "https://www.getonbrd.com/jobs/ml-engineer-forecasting-applied-data-science-niuro-remote",
+          "field": "country_only",
+          "location": "Remote",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.1,
+          "quote": "Remote"
+        },
+        {
+          "title": "Senior AI Engineer",
+          "url": "https://www.getonbrd.com/jobs/senior-ai-engineer-niuro-remote-42c5",
+          "field": "country_only",
+          "location": "Remote",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.12,
+          "quote": "Remote"
+        },
+        {
+          "title": "AI & Marketing Analytics Specialist",
+          "url": "https://www.getonbrd.com/jobs/ai-marketing-analytics-specialist-niuro-remote",
+          "field": "country_only",
+          "location": "Remote",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.14,
+          "quote": "Remote"
+        },
+        {
+          "title": "Senior Back-end Technical Lead",
+          "url": "https://www.getonbrd.com/jobs/senior-backend-technical-lead-factor-it-santiago",
+          "field": "onsite",
+          "location": "Chile",
+          "jevWhere": "americas_or_latam",
+          "excludesVenezuela": 0.46,
+          "quote": "Chile"
+        },
+        {
+          "title": "Founding Senior AI Engineer",
+          "url": "https://www.getonbrd.com/jobs/founding-senior-ai-engineer-niuro-remote-2d03",
+          "field": "country_only",
+          "location": "Remote",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.12,
+          "quote": "Niuro supports a 100% remote work model, allowing flexibility in work location globally."
+        },
+        {
+          "title": "Business Ops & Growth Lead",
+          "url": "https://www.getonbrd.com/jobs/business-leader-client-growth-niuro-remote",
+          "field": "country_only",
+          "location": "Remote",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.12,
+          "quote": "Remote"
+        },
+        {
+          "title": "Full-Stack Developer – Python / Fastapi / React",
+          "url": "https://www.getonbrd.com/jobs/fullstack-developer-python-fastapi-react-bc-tecnologia-remote",
+          "field": "anywhere",
+          "location": "Remote",
+          "jevWhere": "unclear",
+          "excludesVenezuela": 0.06,
+          "quote": "Remote"
+        },
+        {
+          "title": "Data Engineer (AI Agents)",
+          "url": "https://www.getonbrd.com/jobs/data-engineer-ai-agents-sigmatic-remote",
+          "field": "anywhere",
+          "location": "Remote",
+          "jevWhere": "unclear",
+          "excludesVenezuela": 0.13,
+          "quote": "Remote"
+        },
+        {
+          "title": "Business Development Representative",
+          "url": "https://www.getonbrd.com/jobs/business-development-representative-great-lakes-transport-solutions-remote",
+          "field": "anywhere",
+          "location": "Remote",
+          "jevWhere": "unclear",
+          "excludesVenezuela": 0.61,
+          "quote": "Remote"
+        },
+        {
+          "title": "Marketing Manager",
+          "url": "https://www.getonbrd.com/jobs/marketing-manager-acadelite-remote",
+          "field": "country_only",
+          "location": "Remote",
+          "jevWhere": "americas_or_latam",
+          "excludesVenezuela": 0.21,
+          "quote": "Remote"
+        },
+        {
+          "title": "Outsystems Front-end / UI Developer",
+          "url": "https://www.getonbrd.com/jobs/outsystems-frontend-ui-developer-i2b-technologies-remote",
+          "field": "anywhere",
+          "location": "Remote",
+          "jevWhere": "unclear",
+          "excludesVenezuela": 0.07,
+          "quote": "Remote"
+        },
+        {
+          "title": "Developer – Dynamics 365 & Integraciones",
+          "url": "https://www.getonbrd.com/jobs/senior-backend-developer-dynamics-365-i-bc-tecnologia-remote",
+          "field": "anywhere",
+          "location": "Remote",
+          "jevWhere": "unclear",
+          "excludesVenezuela": 0.08,
+          "quote": "Remote"
+        },
+        {
+          "title": "Desarrollador C#/.NET y Angular Mexico",
+          "url": "https://www.getonbrd.com/jobs/desarrollador-c-net-y-angular-mexico-bc-tecnologia-mexicali",
+          "field": "onsite",
+          "location": "Mexico",
+          "jevWhere": "americas_or_latam",
+          "excludesVenezuela": 0.43,
+          "quote": "Mexico"
+        },
+        {
+          "title": "Business Development Representative",
+          "url": "https://www.getonbrd.com/jobs/business-development-representative-jolly-tech-remote",
+          "field": "anywhere",
+          "location": "Remote",
+          "jevWhere": "unclear",
+          "excludesVenezuela": 0.14,
+          "quote": "Remote"
+        },
+        {
+          "title": "Desarrollador Integraciones con Dynamics 365",
+          "url": "https://www.getonbrd.com/jobs/desarrollador-integraciones-con-dynamics-365-bc-tecnologia-remote",
+          "field": "anywhere",
+          "location": "Remote",
+          "jevWhere": "unclear",
+          "excludesVenezuela": 0.07,
+          "quote": "Remote"
+        },
+        {
+          "title": "Software Engineer Senior (Track Finanzas)",
+          "url": "https://www.getonbrd.com/jobs/software-engineer-senior-track-finanzas-factor-it-remote",
+          "field": "anywhere",
+          "location": "Remote",
+          "jevWhere": "unclear",
+          "excludesVenezuela": 0.07,
+          "quote": "Remote"
+        },
+        {
+          "title": "Desarrollador Full-Stack",
+          "url": "https://www.getonbrd.com/jobs/desarrollador-full-stack-lisit-santiago-f0dd",
+          "field": "onsite",
+          "location": "Chile",
+          "jevWhere": "americas_or_latam",
+          "excludesVenezuela": 0.41,
+          "quote": "Chile"
+        },
+        {
+          "title": "Forward Deployed Engineer",
+          "url": "https://www.getonbrd.com/jobs/forward-deployed-engineer-diverse-programmers-remote",
+          "field": "country_only",
+          "location": "Remote",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.13,
+          "quote": "Remote"
+        },
+        {
+          "title": "Platform Engineering Lead",
+          "url": "https://www.getonbrd.com/jobs/platform-engineering-lead-niuro-remote",
+          "field": "country_only",
+          "location": "Remote",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.17,
+          "quote": "Remote"
+        },
+        {
+          "title": "Senior Android Engineer",
+          "url": "https://www.getonbrd.com/jobs/senior-android-engineer-niuro-remote",
+          "field": "country_only",
+          "location": "Remote",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.11,
+          "quote": "Remote"
+        },
+        {
+          "title": "Full-Stack Developer – Node.js / TypeScript / React / AWS",
+          "url": "https://www.getonbrd.com/jobs/fullstack-developer-node-js-typescript-react-aws-bc-tecnologia-remote",
+          "field": "anywhere",
+          "location": "Remote",
+          "jevWhere": "unclear",
+          "excludesVenezuela": 0.08,
+          "quote": "Remote"
+        },
+        {
+          "title": "PR & Events Team: Partnership Coordinator",
+          "url": "https://www.getonbrd.com/jobs/pr-events-team-partnership-coordinator-penji-remote",
+          "field": "anywhere",
+          "location": "Remote",
+          "jevWhere": "unclear",
+          "excludesVenezuela": 0.1,
+          "quote": "Remote"
+        },
+        {
+          "title": "QA & Support Engineer",
+          "url": "https://www.getonbrd.com/jobs/qa-support-engineer-niuro-remote",
+          "field": "country_only",
+          "location": "Remote",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.16,
+          "quote": "Remote"
+        },
+        {
+          "title": "Paid Media Creative Specialist — Direct Response Advertising",
+          "url": "https://www.getonbrd.com/jobs/ad-creative-designer-image-short-video-leadsengine-remote",
+          "field": "country_only",
+          "location": "Remote",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.13,
+          "quote": "Remote"
+        },
+        {
+          "title": "Mid Level Full-Stack Developer",
+          "url": "https://www.getonbrd.com/jobs/full-stack-developer-niuro-remote-0f51",
+          "field": "country_only",
+          "location": "Remote",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.11,
+          "quote": "Remote"
+        },
+        {
+          "title": "Full-Stack Engineer — Node.js / React / AI",
+          "url": "https://www.getonbrd.com/jobs/full-stack-engineer-node-js-react-ai-niuro-remote",
+          "field": "country_only",
+          "location": "Remote",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.1,
+          "quote": "Remote"
+        },
+        {
+          "title": "E-commerce Developer",
+          "url": "https://www.getonbrd.com/jobs/e-commerce-developer-fullkom-santiago",
+          "field": "onsite",
+          "location": "Chile",
+          "jevWhere": "americas_or_latam",
+          "excludesVenezuela": 0.49,
+          "quote": "Chile"
+        }
+      ]
+    },
+    {
+      "id": "himalayas",
+      "name": "Himalayas",
+      "homepage": "https://himalayas.app",
+      "status": "ok",
+      "requests": 8,
+      "fetched": 100,
+      "duplicates": 0,
+      "sampled": 80,
+      "tech": 67,
+      "eligible": 64,
+      "juniors": 3,
+      "structuredWhere": 80,
+      "structuredLevels": 80,
+      "costUsd": 0.010409868000000001,
+      "costPerEligible": 0.00016265418750000001,
+      "medianMs": 291,
+      "disagreements": [
+        {
+          "title": "Building Consultant/General Contractor",
+          "url": "https://himalayas.app/companies/keystone-experts-and-engineers/jobs/building-consultant-general-contractor",
+          "field": "anywhere",
+          "location": "Worldwide",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.69,
+          "quote": "Worldwide"
+        },
+        {
+          "title": ".NET Back-end Engineer",
+          "url": "https://himalayas.app/companies/linkfire/jobs/net-back-end-engineer",
+          "field": "anywhere",
+          "location": "Worldwide",
+          "jevWhere": "europe",
+          "excludesVenezuela": 0.87,
+          "quote": "Worldwide"
+        },
+        {
+          "title": "Senior Clinical Application Specialist",
+          "url": "https://himalayas.app/companies/deephealth/jobs/senior-clinical-application-specialist",
+          "field": "anywhere",
+          "location": "Worldwide",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.84,
+          "quote": "Worldwide"
+        },
+        {
+          "title": "Solutions Consultant",
+          "url": "https://himalayas.app/companies/wellspring/jobs/solutions-consultant",
+          "field": "anywhere",
+          "location": "Worldwide",
+          "jevWhere": "europe",
+          "excludesVenezuela": 0.91,
+          "quote": "Worldwide"
+        },
+        {
+          "title": "Lead PHP Developer",
+          "url": "https://himalayas.app/companies/whitetech/jobs/lead-php-developer",
+          "field": "anywhere",
+          "location": "Worldwide",
+          "jevWhere": "europe",
+          "excludesVenezuela": 0.85,
+          "quote": "We are a remote-first technology company and welcome applications from candidates across Europe, including the EEA, the UK, Switzerland, and other non-EEA European countries such as Ukraine, Moldova, "
+        },
+        {
+          "title": "Senior ML Solutions Architect - Token Factory",
+          "url": "https://himalayas.app/companies/nebius/jobs/senior-ml-solutions-architect-token-factory-2533928425",
+          "field": "anywhere",
+          "location": "Worldwide",
+          "jevWhere": "europe",
+          "excludesVenezuela": 0.88,
+          "quote": "You’re welcome to work remotely from Europe ."
+        }
+      ]
+    },
+    {
+      "id": "jobicy",
+      "name": "Jobicy",
+      "homepage": "https://jobicy.com",
+      "status": "ok",
+      "requests": 4,
+      "fetched": 157,
+      "duplicates": 1,
+      "sampled": 80,
+      "tech": 75,
+      "eligible": 45,
+      "juniors": 2,
+      "structuredWhere": 80,
+      "structuredLevels": 61,
+      "costUsd": 0.011209128,
+      "costPerEligible": 0.00024909173333333335,
+      "medianMs": 280,
+      "disagreements": [
+        {
+          "title": "Senior Software Engineer - Workflow",
+          "url": "https://jobicy.com/jobs/153534-senior-software-engineer-workflow",
+          "field": "anywhere",
+          "location": "LATAM,  USA",
+          "jevWhere": "americas_or_latam",
+          "excludesVenezuela": 0.76,
+          "quote": "LATAM,  USA"
+        },
+        {
+          "title": "Senior Software Architect (C#/Angular/AI First) - GovTech SaaS company",
+          "url": "https://jobicy.com/jobs/153535-senior-software-architect-c-angular-ai-first-govtech-saas-company",
+          "field": "country_only",
+          "location": "Mexico",
+          "jevWhere": "americas_or_latam",
+          "excludesVenezuela": 0.38,
+          "quote": "Mexico"
+        },
+        {
+          "title": "Senior Software Engineer",
+          "url": "https://jobicy.com/jobs/153532-senior-software-engineer-9",
+          "field": "anywhere",
+          "location": "LATAM,  Europe,  USA",
+          "jevWhere": "specific_countries",
+          "excludesVenezuela": 0.64,
+          "quote": "LATAM,  Europe,  USA"
+        },
+        {
+          "title": "Contract IT Specialist",
+          "url": "https://jobicy.com/jobs/153515-contract-it-specialist",
+          "field": "anywhere",
+          "location": "LATAM,  Canada,  USA",
+          "jevWhere": "americas_or_latam",
+          "excludesVenezuela": 0.69,
+          "quote": "LATAM,  Canada,  USA"
+        },
+        {
+          "title": "Circinus - Audio Contributor English Southern American (US)",
+          "url": "https://jobicy.com/jobs/153445-circinus-audio-contributor-english-southern-american-us",
+          "field": "anywhere",
+          "location": "Anywhere",
+          "jevWhere": "us_or_canada",
+          "excludesVenezuela": 0.89,
+          "quote": "Remote (United States)"
+        },
+        {
+          "title": "Software Engineer - Python - Container Images",
+          "url": "https://jobicy.com/jobs/150364-software-engineer-python-container-images",
+          "field": "anywhere",
+          "location": "APAC,  EMEA,  LATAM,  Canada,  USA",
+          "jevWhere": "specific_countries",
+          "excludesVenezuela": 0.25,
+          "quote": "APAC,  EMEA,  LATAM,  Canada,  USA"
+        },
+        {
+          "title": "Senior Data Analyst",
+          "url": "https://jobicy.com/jobs/152859-senior-data-analyst",
+          "field": "anywhere",
+          "location": "LATAM,  Canada,  USA",
+          "jevWhere": "americas_or_latam",
+          "excludesVenezuela": 0.52,
+          "quote": "LATAM,  Canada,  USA"
+        },
+        {
+          "title": "Engineering Manager - Linux Hardware Enablement",
+          "url": "https://jobicy.com/jobs/148702-engineering-manager-linux-hardware-enablement",
+          "field": "anywhere",
+          "location": "APAC,  EMEA,  LATAM,  Canada,  USA",
+          "jevWhere": "specific_countries",
+          "excludesVenezuela": 0.25,
+          "quote": "APAC,  EMEA,  LATAM,  Canada,  USA"
+        },
+        {
+          "title": "FBS Product Analyst Customer Retention",
+          "url": "https://jobicy.com/jobs/150290-fbs-product-analyst-customer-retention",
+          "field": "country_only",
+          "location": "Mexico",
+          "jevWhere": "americas_or_latam",
+          "excludesVenezuela": 0.43,
+          "quote": "Mexico"
+        },
+        {
+          "title": "Devices & IOT Field Engineering Manager",
+          "url": "https://jobicy.com/jobs/150274-devices-iot-field-engineering-manager-americas",
+          "field": "anywhere",
+          "location": "Anywhere",
+          "jevWhere": "specific_countries",
+          "excludesVenezuela": 0.27,
+          "quote": "This is a globally remote role, running a team in one of three Geos, Americas, EMEA or APAC."
+        },
+        {
+          "title": "Senior Software Engineer, Frontend",
+          "url": "https://jobicy.com/jobs/152539-senior-software-engineer-frontend",
+          "field": "anywhere",
+          "location": "LATAM,  Canada,  Europe,  USA",
+          "jevWhere": "specific_countries",
+          "excludesVenezuela": 0.42,
+          "quote": "LATAM,  Canada,  Europe,  USA"
+        },
+        {
+          "title": "Senior Software Engineer - MAAS",
+          "url": "https://jobicy.com/jobs/150127-senior-software-engineer-maas",
+          "field": "anywhere",
+          "location": "EMEA,  LATAM,  Canada,  USA",
+          "jevWhere": "specific_countries",
+          "excludesVenezuela": 0.43,
+          "quote": "EMEA,  LATAM,  Canada,  USA"
+        },
+        {
+          "title": "QA Tester (Future Roles)",
+          "url": "https://jobicy.com/jobs/152401-qa-tester-future-roles",
+          "field": "anywhere",
+          "location": "Anywhere",
+          "jevWhere": "specific_countries",
+          "excludesVenezuela": 0.87,
+          "quote": "Countries we are considering consist of Argentina, Brazil, Canada, the Czech Republic, Estonia, India, Ireland, Mexico, Poland, Portugal, Romania, Spain, Ukraine, the United Kingdom, or the United Sta"
+        },
+        {
+          "title": "Engineering Manager- Ceph & Distributed Storage",
+          "url": "https://jobicy.com/jobs/149970-engineering-manager-ceph-distributed-storage",
+          "field": "anywhere",
+          "location": "EMEA,  LATAM,  Canada,  USA",
+          "jevWhere": "specific_countries",
+          "excludesVenezuela": 0.31,
+          "quote": "EMEA,  LATAM,  Canada,  USA"
+        },
+        {
+          "title": "Engineering Manager - Public Cloud, Python, Golang",
+          "url": "https://jobicy.com/jobs/149985-engineering-manager-public-cloud-python-golang",
+          "field": "anywhere",
+          "location": "EMEA,  LATAM,  Canada,  USA",
+          "jevWhere": "specific_countries",
+          "excludesVenezuela": 0.34,
+          "quote": "EMEA,  LATAM,  Canada,  USA"
+        },
+        {
+          "title": "Software Engineer - Cloud Images",
+          "url": "https://jobicy.com/jobs/149978-software-engineer-cloud-images",
+          "field": "anywhere",
+          "location": "EMEA,  LATAM,  Canada,  USA",
+          "jevWhere": "specific_countries",
+          "excludesVenezuela": 0.47,
+          "quote": "EMEA,  LATAM,  Canada,  USA"
+        }
+      ]
+    },
+    {
+      "id": "wwr",
+      "name": "We Work Remotely",
+      "homepage": "https://weworkremotely.com",
+      "status": "ok",
+      "requests": 5,
+      "fetched": 101,
+      "duplicates": 1,
+      "sampled": 80,
+      "tech": 62,
+      "eligible": 42,
+      "juniors": 1,
+      "structuredWhere": 76,
+      "structuredLevels": 0,
+      "costUsd": 0.011249784000000002,
+      "costPerEligible": 0.00026785200000000006,
+      "medianMs": 283,
+      "disagreements": [
+        {
+          "title": "CPS Account Program Manager",
+          "url": "https://weworkremotely.com/remote-jobs/collibra-cps-account-program-manager",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "us_or_canada",
+          "excludesVenezuela": 0.98,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Senior Software Engineer",
+          "url": "https://weworkremotely.com/remote-jobs/acculynx-senior-software-engineer",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "us_or_canada",
+          "excludesVenezuela": 0.95,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Java Developer",
+          "url": "https://weworkremotely.com/remote-jobs/twikey-java-developer",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.51,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Senior Backend Developer (Python)",
+          "url": "https://weworkremotely.com/remote-jobs/proxify-ab-senior-backend-developer-python-10",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "europe",
+          "excludesVenezuela": 0.6,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Senior Backend Developer (Node.js / Nest.js)",
+          "url": "https://weworkremotely.com/remote-jobs/proxify-ab-senior-backend-developer-node-js-nest-js-3",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "europe",
+          "excludesVenezuela": 0.71,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Bilingual Channel Account Manager, Arabic (MEA) - UK",
+          "url": "https://weworkremotely.com/remote-jobs/keeper-security-bilingual-channel-account-manager-arabic-mea-uk",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "europe",
+          "excludesVenezuela": 0.96,
+          "quote": "Qualified candidates must permanently reside in the UK (London)."
+        },
+        {
+          "title": "Solutions Architect -Spanish Speaking",
+          "url": "https://weworkremotely.com/remote-jobs/fin-solutions-architect-spanish-speaking",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.95,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Data Scientist II, ML Infrastructure",
+          "url": "https://weworkremotely.com/remote-jobs/pinterest-data-scientist-ii-ml-infrastructure",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "us_or_canada",
+          "excludesVenezuela": 0.96,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Data Scientist II, Infrastructure",
+          "url": "https://weworkremotely.com/remote-jobs/pinterest-data-scientist-ii-infrastructure",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "us_or_canada",
+          "excludesVenezuela": 0.95,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Commercial Account Manager",
+          "url": "https://weworkremotely.com/remote-jobs/salesloft-commercial-account-manager",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "us_or_canada",
+          "excludesVenezuela": 0.86,
+          "quote": "This is a fully remote opportunity and can be worked from any location in the United States."
+        },
+        {
+          "title": "Professional Services DevOps Engineer",
+          "url": "https://weworkremotely.com/remote-jobs/jfrog-professional-services-devops-engineer",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "us_or_canada",
+          "excludesVenezuela": 0.78,
+          "quote": "** Open to remote within the East Coast only**"
+        },
+        {
+          "title": "Senior Professional Services DevOps Engineer",
+          "url": "https://weworkremotely.com/remote-jobs/jfrog-senior-professional-services-devops-engineer",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "us_or_canada",
+          "excludesVenezuela": 0.67,
+          "quote": "** Open to remote within the East Coast only**"
+        },
+        {
+          "title": "Billing Systems Architect",
+          "url": "https://weworkremotely.com/remote-jobs/platform-sh-billing-systems-architect",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "specific_countries",
+          "excludesVenezuela": 0.89,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Senior Java & React Developer",
+          "url": "https://weworkremotely.com/remote-jobs/lemon-io-senior-java-react-developer",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "specific_countries",
+          "excludesVenezuela": 0.45,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Lead Developer — Rebuild, Modernize, & Scale (Social Good SaaS, Remote)",
+          "url": "https://weworkremotely.com/remote-jobs/track-it-forward-lead-developer-rebuild-modernize-scale-social-good-saas-remote",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "us_or_canada",
+          "excludesVenezuela": 0.98,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Senior React Native Developer",
+          "url": "https://weworkremotely.com/remote-jobs/lemon-io-senior-react-native-developer-1",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.54,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Senior Solutions Engineer- LATAM",
+          "url": "https://weworkremotely.com/remote-jobs/fin-senior-solutions-engineer-latam",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.95,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Senior Data Scientist, Guest & Host",
+          "url": "https://weworkremotely.com/remote-jobs/airbnb-senior-data-scientist-guest-host",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "us_or_canada",
+          "excludesVenezuela": 0.85,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Smartsheet Expert for Integrated Project Planning",
+          "url": "https://weworkremotely.com/remote-jobs/toptal-smartsheet-expert-for-integrated-project-planning",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "us_or_canada",
+          "excludesVenezuela": 0.93,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Managed SIEM Detection Engineer",
+          "url": "https://weworkremotely.com/remote-jobs/expel-managed-siem-detection-engineer",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "us_or_canada",
+          "excludesVenezuela": 0.97,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Senior Full-Stack Software Engineer",
+          "url": "https://weworkremotely.com/remote-jobs/evident-change-senior-full-stack-software-engineer",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "us_or_canada",
+          "excludesVenezuela": 0.85,
+          "quote": "work from anywhere within the United States"
+        },
+        {
+          "title": "Senior React Full-stack Developer",
+          "url": "https://weworkremotely.com/remote-jobs/lemon-io-senior-react-full-stack-developer-6",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "specific_countries",
+          "excludesVenezuela": 0.56,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Senior DevOps Engineer",
+          "url": "https://weworkremotely.com/remote-jobs/lemon-io-senior-devops-engineer-3",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.62,
+          "quote": "Anywhere in the World"
+        },
+        {
+          "title": "Medical Licensing Specialist (Contract)",
+          "url": "https://weworkremotely.com/remote-jobs/galileo-medical-licensing-specialist-contract",
+          "field": "anywhere",
+          "location": "Anywhere in the World",
+          "jevWhere": "anywhere",
+          "excludesVenezuela": 0.57,
+          "quote": "Anywhere in the World"
+        }
+      ]
+    },
+    {
+      "id": "workingnomads",
+      "name": "Working Nomads",
+      "homepage": "https://www.workingnomads.com",
+      "status": "ok",
+      "requests": 1,
+      "fetched": 27,
+      "duplicates": 4,
+      "sampled": 27,
+      "tech": 26,
+      "eligible": 3,
+      "juniors": 0,
+      "structuredWhere": 0,
+      "structuredLevels": 0,
+      "costUsd": 0.0035164920000000004,
+      "costPerEligible": 0.001172164,
+      "medianMs": 271,
+      "disagreements": []
+    },
+    {
+      "id": "remoteok",
+      "name": "Remote OK",
+      "homepage": "https://remoteok.com",
+      "status": "ok",
+      "requests": 1,
+      "fetched": 99,
+      "duplicates": 1,
+      "sampled": 80,
+      "tech": 34,
+      "eligible": 5,
+      "juniors": 1,
+      "structuredWhere": 0,
+      "structuredLevels": 0,
+      "costUsd": 0.010478118,
+      "costPerEligible": 0.0020956236,
+      "medianMs": 279,
+      "disagreements": []
+    },
+    {
+      "id": "remotive",
+      "name": "Remotive",
+      "homepage": "https://remotive.com",
+      "status": "ok",
+      "requests": 1,
+      "fetched": 11,
+      "duplicates": 5,
+      "sampled": 11,
+      "tech": 9,
+      "eligible": 1,
+      "juniors": 0,
+      "structuredWhere": 1,
+      "structuredLevels": 0,
+      "costUsd": 0.001409772,
+      "costPerEligible": 0.001409772,
+      "medianMs": 282,
+      "disagreements": []
+    }
+  ]
+}

@@ -8,6 +8,13 @@ const decimal2 = new Intl.NumberFormat(LOCALE, {
   maximumFractionDigits: 2,
 });
 
+const COUNT_WORDS = ["cero", "una", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho"];
+
+/** "cinco" for 5, digits past eight. Feminine, as in "cinco bolsas". */
+export function countWord(n: number): string {
+  return COUNT_WORDS[n] ?? formatInt(n);
+}
+
 export function formatInt(n: number): string {
   return integer.format(n);
 }

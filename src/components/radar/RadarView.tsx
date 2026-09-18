@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { formatInt, formatPercent } from "@/lib/format";
+import { countWord, formatInt, formatPercent } from "@/lib/format";
+import { LIVE_SOURCES } from "@/lib/radar/live";
 import { timeAgo } from "@/lib/radar/labels";
 import type { RadarEvent } from "@/lib/radar/refresh";
 import type { RadarPayload } from "@/lib/radar/view";
@@ -96,7 +97,7 @@ export function RadarView({ initial, renderedAt }: Props) {
   const jobs = snapshot?.jobs ?? [];
   const techIds = new Set(jobs.map((j) => j.id));
   const eligible = jobs.filter((j) => j.eligible);
-  const juniors = eligible.filter((j) => j.seniority === "junior").length;
+  const juniors = eligible.filter((j) => j.juniorFriendly).length;
 
   return (
     <>
@@ -121,9 +122,9 @@ export function RadarView({ initial, renderedAt }: Props) {
             </p>
           )}
           <p className={styles.lede}>
-            Revisamos cuatro bolsas de empleo públicas. Jev lee cada oferta, decide si alguien que
-            vive en Venezuela puede aplicar y cita la frase que lo demuestra. Cada oferta enlaza a
-            la original.
+            Revisamos {countWord(LIVE_SOURCES.length)} bolsas de empleo públicas. Jev lee cada
+            oferta, decide si alguien que vive en Venezuela puede aplicar y cita la frase que lo
+            demuestra. Cada oferta enlaza a la original.
           </p>
           {snapshot && (
             <p className={styles.updated}>

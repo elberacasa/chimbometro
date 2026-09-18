@@ -17,6 +17,7 @@ export type Judgment = {
   tech_role: NoulAnswer;
   where: ChoiceAnswer;
   excludes_venezuela: NoulAnswer;
+  junior_friendly: NoulAnswer;
   usd: NoulAnswer;
   seniority: ChoiceAnswer;
   role: ChoiceAnswer;
@@ -38,6 +39,22 @@ export function decideEligibility(
     eligible: (where === "anywhere" || where === "americas_or_latam") && !excluded,
     decidedBy: "jev",
   };
+}
+
+/** Levels stated in a source field win; otherwise Jev's reading counts. */
+export function decideLevel(
+  listing: Pick<Listing, "levels">,
+  j: Pick<Judgment, "seniority" | "junior_friendly">,
+): { seniority: Seniority; juniorFriendly: boolean } {
+  const levels = listing.levels ?? [];
+  if (levels.length > 0) {
+    return {
+      seniority: levels.length === 1 ? levels[0]! : (j.seniority.choice as Seniority),
+      juniorFriendly: levels.includes("junior"),
+    };
+  }
+  const seniority = j.seniority.choice as Seniority;
+  return { seniority, juniorFriendly: seniority === "junior" || j.junior_friendly.noul >= 0.5 };
 }
 
 export async function judgeListing(apiKey: string, listing: Listing) {
@@ -62,6 +79,7 @@ export async function judgeListing(apiKey: string, listing: Listing) {
   });
   const j = call.response.answers as unknown as Judgment;
   const { eligible, decidedBy } = decideEligibility(listing, j);
+  const { seniority, juniorFriendly } = decideLevel(listing, j);
   const quoteId = j.evidencia_where.choice;
   const quote =
     quoteId !== "ninguno" && (j.evidencia_where.probabilities[quoteId] ?? 0) >= 0.35
@@ -86,7 +104,8 @@ export async function judgeListing(apiKey: string, listing: Listing) {
     whereConfidence: round(j.where.confidence),
     excludesVenezuela: round(j.excludes_venezuela.noul),
     usd: round(j.usd.noul),
-    seniority: j.seniority.choice as Seniority,
+    seniority,
+    juniorFriendly,
     role: j.role.choice as Role,
     english: round(j.english.score),
     quote,

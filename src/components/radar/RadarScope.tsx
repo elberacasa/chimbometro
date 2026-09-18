@@ -6,22 +6,19 @@ import type { JobView } from "@/lib/radar/view";
 import styles from "./RadarScope.module.css";
 
 /**
- * The radar as a chart: one dot per listing. The quadrant is the source, the distance from the
- * center is the listing's age (newest in the middle), and green means it accepts someone living in
- * Venezuela. During a live update the beam sweeps and freshly judged listings ping.
+ * The radar as a chart: one dot per listing. Each source gets a sector, named along the rim; the
+ * distance from the center is the listing's age (newest in the middle), and green means it accepts
+ * someone living in Venezuela. During a live update the beam sweeps and freshly judged listings ping.
  */
 
 const C = 160;
 const R = 138;
 const INNER = 18;
 const MAX_AGE_DAYS = 45;
-const QUADRANT: Record<SourceId, number> = { hn: -90, getonbrd: 0, wwr: 90, remotive: 180 };
-const CORNER: Record<SourceId, [number, number, "start" | "end"]> = {
-  hn: [320, 6, "end"],
-  getonbrd: [320, 318, "end"],
-  wwr: [0, 318, "start"],
-  remotive: [0, 6, "start"],
-};
+/** Dots keep this many degrees away from sector edges, so sectors read as groups. */
+const EDGE = 4;
+/** Every source in a fixed order, so a source keeps its sector as others come and go. */
+const ORDER = Object.keys(SOURCE_LABEL) as SourceId[];
 const RINGS = [
   { days: 7, label: "1 semana" },
   { days: 30, label: "1 mes" },
@@ -39,10 +36,13 @@ type Props = {
 
 export function RadarScope({ jobs, fresh, sweeping, now }: Props) {
   const eligible = jobs.filter((j) => j.eligible).length;
+  const sources = ORDER.filter((s) => jobs.some((j) => j.source === s));
+  const step = 360 / Math.max(1, sources.length);
+  const startOf = (s: SourceId) => -90 + sources.indexOf(s) * step;
   return (
     <figure className={styles.figure}>
       <svg
-        viewBox="-6 -6 332 332"
+        viewBox="-16 -16 352 352"
         className={`${styles.svg} ${sweeping ? styles.sweeping : ""}`}
         role="img"
         aria-label={`Radar: ${jobs.length} empleos, ${eligible} aceptan a alguien en Venezuela.`}
@@ -64,23 +64,36 @@ export function RadarScope({ jobs, fresh, sweeping, now }: Props) {
           return (
             <g key={ring.days}>
               <circle cx={C} cy={C} r={r} className={styles.ring} />
-              {/* On the left axis, which no listing occupies. */}
+              {/* On a sector edge, which no listing occupies. */}
               <text x={C - r + 4} y={C - 4} className={styles.ringLabel}>
                 {ring.label}
               </text>
             </g>
           );
         })}
-        <line x1={C - R} y1={C} x2={C + R} y2={C} className={styles.axis} />
-        <line x1={C} y1={C - R} x2={C} y2={C + R} className={styles.axis} />
-
-        {(Object.keys(QUADRANT) as SourceId[]).map((s) => {
-          // Each source is named in the corner of its quadrant, outside the scope.
-          const [x, y, anchor] = CORNER[s];
+        {sources.map((s) => {
+          const start = startOf(s);
+          const [ex, ey] = polar(start, R);
+          // Names read left to right: arcs on the lower half run the other way, a bit further out.
+          const mid = start + step / 2;
+          const lower = mid > 0 && mid < 180;
+          const r = lower ? R + 12 : R + 5;
+          const [ax, ay] = polar(lower ? start + step : start, r);
+          const [bx, by] = polar(lower ? start : start + step, r);
           return (
-            <text key={s} x={x} y={y} className={styles.sourceLabel} textAnchor={anchor}>
-              {SOURCE_LABEL[s]}
-            </text>
+            <g key={s}>
+              <line x1={C} y1={C} x2={ex} y2={ey} className={styles.axis} />
+              <path
+                id={`sector-${s}`}
+                d={`M ${ax} ${ay} A ${r} ${r} 0 0 ${lower ? 0 : 1} ${bx} ${by}`}
+                fill="none"
+              />
+              <text className={styles.sourceLabel}>
+                <textPath href={`#sector-${s}`} startOffset="50%" textAnchor="middle">
+                  {SOURCE_LABEL[s]}
+                </textPath>
+              </text>
+            </g>
           );
         })}
 
@@ -93,7 +106,7 @@ export function RadarScope({ jobs, fresh, sweeping, now }: Props) {
         </g>
 
         {jobs.map((j) => {
-          const [x, y] = position(j, now);
+          const [x, y] = position(j, now, startOf(j.source), step);
           const isFresh = fresh.has(j.id);
           return (
             <circle
@@ -118,9 +131,10 @@ export function RadarScope({ jobs, fresh, sweeping, now }: Props) {
   );
 }
 
-function position(j: Dot, now: number): [number, number] {
+function position(j: Dot, now: number, start: number, step: number): [number, number] {
   const h = hash(j.id);
-  const angle = QUADRANT[j.source] + 5 + (h % 800) / 10;
+  const span = Math.max(1, step - 2 * EDGE);
+  const angle = start + EDGE + ((h % 1000) / 1000) * span;
   const age = j.postedAt ? (now - new Date(j.postedAt).getTime()) / 86_400_000 : 20 + (h % 20);
   // Small jitter so listings posted the same day don't stack.
   const r = radiusFor(Math.max(0, age)) + ((h >> 8) % 7) - 3;

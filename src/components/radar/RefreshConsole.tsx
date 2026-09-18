@@ -1,5 +1,6 @@
 "use client";
 
+import { LIVE_SOURCES } from "@/lib/radar/live";
 import { useEffect, useRef } from "react";
 import { costUsd } from "@/lib/jev/pricing";
 import { formatInt, formatUsd } from "@/lib/format";
@@ -85,7 +86,8 @@ export function RefreshConsole({
         <div>
           <dt>fuentes</dt>
           <dd className="num">
-            {sources.filter((s) => s.type === "source" && s.report.status === "ok").length}/4
+            {sources.filter((s) => s.type === "source" && s.report.status !== "failed").length}/
+            {LIVE_SOURCES.length}
           </dd>
         </div>
         <div>
@@ -163,6 +165,19 @@ function Line({ e, techIds }: { e: RadarEvent; techIds: Set<string> }) {
         </li>
       );
     case "source":
+      if (e.report.status === "recent") {
+        return (
+          <li>
+            {t}
+            <span>
+              <span className={styles.dim}>reciente</span> {e.report.name}{" "}
+              <span className={styles.dim}>
+                se consultó hace menos de una hora; se reusan sus ofertas
+              </span>
+            </span>
+          </li>
+        );
+      }
       return (
         <li>
           {t}

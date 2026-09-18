@@ -25,7 +25,7 @@ const plexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: "Chamba: empleos remotos que sí aceptan a Venezuela",
   description:
-    "Un radar de empleos remotos para devs en Venezuela: Jev lee cada oferta de cuatro bolsas públicas y cita la frase que dice si puedes aplicar. Incluye el Chimbómetro para medir ofertas.",
+    "Un radar de empleos remotos para devs en Venezuela: Jev lee cada oferta de cinco bolsas públicas y cita la frase que dice si puedes aplicar. Incluye el Chimbómetro para medir ofertas.",
   authors: [{ name: "elberacasa", url: "https://github.com/elberacasa" }],
   openGraph: {
     title: "Chamba",

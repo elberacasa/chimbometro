@@ -19,6 +19,8 @@ export type JobView = Pick<
   | "excludesVenezuela"
   | "usd"
   | "seniority"
+  | "juniorFriendly"
+  | "location"
   | "role"
   | "english"
   | "quote"
@@ -52,6 +54,9 @@ export function toPayload(snapshot: RadarSnapshot): RadarPayload {
         excludesVenezuela: j.excludesVenezuela,
         usd: j.usd,
         seniority: j.seniority,
+        // Judgments stored before v3 had no junior question.
+        juniorFriendly: j.juniorFriendly ?? j.seniority === "junior",
+        location: clip(j.location),
         role: j.role,
         english: j.english,
         quote: j.quote && clip(j.quote),

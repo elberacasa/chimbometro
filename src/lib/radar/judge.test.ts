@@ -58,3 +58,26 @@ describe("decideEligibility", () => {
     });
   });
 });
+
+describe("decideLevel", () => {
+  const jev = (seniority: string, junior: number) => ({
+    seniority: { choice: seniority, confidence: 1, probabilities: {} },
+    junior_friendly: { noul: junior },
+  });
+  it("uses the levels a source states over Jev's reading", async () => {
+    const { decideLevel } = await import("./judge");
+    expect(decideLevel({ levels: ["junior", "mid"] }, jev("senior", 0.1) as never)).toEqual({
+      seniority: "senior",
+      juniorFriendly: true,
+    });
+    expect(decideLevel({ levels: ["senior"] }, jev("junior", 0.9) as never)).toEqual({
+      seniority: "senior",
+      juniorFriendly: false,
+    });
+  });
+  it("otherwise counts a post as junior-friendly when Jev says so", async () => {
+    const { decideLevel } = await import("./judge");
+    expect(decideLevel({ levels: null }, jev("unclear", 0.8) as never).juniorFriendly).toBe(true);
+    expect(decideLevel({ levels: null }, jev("senior", 0.2) as never).juniorFriendly).toBe(false);
+  });
+});

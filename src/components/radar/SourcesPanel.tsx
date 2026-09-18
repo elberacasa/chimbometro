@@ -22,8 +22,12 @@ export function SourcesPanel({ snapshot, now }: { snapshot: RadarPayload; now: n
             <li key={s.id}>
               <div className={styles.head}>
                 <a href={s.homepage}>{s.name}</a>
-                <span className={s.status === "ok" ? styles.ok : styles.failed}>
-                  {s.status === "ok" ? `${formatInt(s.ms)} ms` : "falló"}
+                <span className={s.status === "failed" ? styles.failed : styles.ok}>
+                  {s.status === "ok"
+                    ? `${formatInt(s.ms)} ms`
+                    : s.status === "recent"
+                      ? "reciente"
+                      : "falló"}
                 </span>
               </div>
               <p className={styles.numbers}>

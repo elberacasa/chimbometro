@@ -21,6 +21,7 @@ const job = (over: Partial<RadarJob>): RadarJob => ({
   excludesVenezuela: 0.1,
   usd: 0.9,
   seniority: "senior",
+  juniorFriendly: false,
   role: "backend",
   english: 2,
   quote: "REMOTE (worldwide)",
