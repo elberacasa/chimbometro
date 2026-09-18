@@ -1,0 +1,7 @@
+# Never upload secrets or local artifacts; Vercel gets env vars from project settings.
+.env
+.env.*
+!.env.example
+node_modules
+.next
+research/data
