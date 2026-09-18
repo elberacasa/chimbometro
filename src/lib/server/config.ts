@@ -30,7 +30,10 @@ export function serverConfig(): ServerConfig {
   // Fail closed: per-instance memory can't enforce limits on serverless, so production refuses
   // to call Jev until the shared store is configured.
   if (process.env.NODE_ENV === "production") {
-    return { ok: false, problem: "Upstash Redis REST URL/token are not set (UPSTASH_REDIS_REST_* or KV_REST_API_*)" };
+    return {
+      ok: false,
+      problem: "Upstash Redis REST URL/token are not set (UPSTASH_REDIS_REST_* or KV_REST_API_*)",
+    };
   }
   memoryStore ??= new MemoryStore();
   return { ok: true, apiKey, store: memoryStore, limits };
