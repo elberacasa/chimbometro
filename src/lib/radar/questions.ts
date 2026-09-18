@@ -11,8 +11,10 @@ import type { Fragment } from "@/lib/chimba/evidence";
  * position is located" line as exclusions, and missed that CET-only time zones leave Venezuela out.
  * v5 changed no question but how answers combine: a source's "junior" field no longer wins when
  * Jev reads the text as clearly not for juniors (see decideLevel), so stored judgments are redone.
+ * v6: when a board field decides, Jev no longer sees the field, and a confident reading of the text
+ * as US, Europe, on-site or a country list overrules "Anywhere in the World" (see decideEligibility).
  */
-export const RADAR_QUESTIONS_VERSION = 5;
+export const RADAR_QUESTIONS_VERSION = 6;
 
 /**
  * What Jev is asked about every job listing, in one request. Written after the Chamba Radar

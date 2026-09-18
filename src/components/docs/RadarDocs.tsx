@@ -1,6 +1,7 @@
 import { RADAR_QUESTIONS } from "@/lib/radar/questions";
 import { CONFIRM_BELOW } from "@/lib/radar/labels";
 import { countWord, formatDecimal } from "@/lib/format";
+import { FIELD_OVERRULED_FROM } from "@/lib/radar/judge";
 import { LIVE_SOURCES } from "@/lib/radar/live";
 import styles from "./Docs.module.css";
 
@@ -27,8 +28,11 @@ export function RadarDocs() {
         </li>
         <li>
           <strong>Si la fuente lo dice en un campo, decide el código.</strong> Get on Board trae la
-          modalidad remota como dato; We Work Remotely y Remotive marcan «Anywhere in the World» y
-          «Worldwide». Ahí Jev no opina sobre la ubicación.
+          modalidad remota, Himalayas y Jobicy la lista de países o regiones, y We Work Remotely
+          marca «Anywhere in the World». Pero ese campo a veces es solo un valor por defecto: Jev
+          lee el texto sin ver el campo, y si concluye con claridad (
+          {formatDecimal(FIELD_OVERRULED_FROM)} o más) que el empleo es solo para EE. UU., Europa,
+          presencial o ciertos países, el campo pierde.
         </li>
         <li>
           <strong>Si no, decide Jev leyendo el texto.</strong> Acepta Venezuela si el empleo es

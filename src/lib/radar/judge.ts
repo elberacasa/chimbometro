@@ -25,16 +25,34 @@ export type Judgment = {
   evidencia_where: ChoiceAnswer;
 };
 
-/** Code decides from a structured field when the source has one; otherwise Jev's reading counts. */
+/** Readings of the text that leave Venezuela out. */
+const RESTRICTED: ReadonlySet<Where> = new Set([
+  "specific_countries",
+  "us_or_canada",
+  "europe",
+  "onsite_or_hybrid",
+]);
+/** How sure Jev must be that the text restricts the job before it overrules a board's field. */
+export const FIELD_OVERRULED_FROM = 0.6;
+
+/**
+ * Code decides from a structured field when the source has one, but a field saying "anywhere" is
+ * often just the board's default: Jev, reading the text without the field, can overrule it.
+ * Otherwise Jev's reading counts.
+ */
 export function decideEligibility(
   listing: Pick<Listing, "structuredWhere">,
   j: Pick<Judgment, "where" | "excludes_venezuela">,
 ): { eligible: boolean; decidedBy: RadarJob["decidedBy"] } {
   const excluded = j.excludes_venezuela.noul >= 0.5;
-  if (listing.structuredWhere) {
-    return { eligible: listing.structuredWhere === "anywhere" && !excluded, decidedBy: "source" };
-  }
   const where = j.where.choice as Where;
+  if (listing.structuredWhere) {
+    const textRestricts = RESTRICTED.has(where) && j.where.confidence >= FIELD_OVERRULED_FROM;
+    return {
+      eligible: listing.structuredWhere === "anywhere" && !excluded && !textRestricts,
+      decidedBy: "source",
+    };
+  }
   return {
     eligible: (where === "anywhere" || where === "americas_or_latam") && !excluded,
     decidedBy: "jev",
@@ -67,7 +85,10 @@ export function decideLevel(
 }
 
 export async function judgeListing(apiKey: string, listing: Listing) {
-  const source = [listing.title, listing.location && `Location: ${listing.location}`, listing.text]
+  // When a board field decides, Jev reads the text without it: shown "Anywhere in the World", Jev
+  // believed it over "Headquarters: Remote - United States" in the text.
+  const location = listing.structuredWhere ? "" : listing.location;
+  const source = [listing.title, location && `Location: ${location}`, listing.text]
     .filter(Boolean)
     .join("\n")
     .slice(0, MAX_TEXT);
@@ -79,7 +100,7 @@ export async function judgeListing(apiKey: string, listing: Listing) {
       job: {
         title: listing.title,
         company: listing.company,
-        location: listing.location,
+        location,
         text: source,
       },
       fragmentos: fragmentState(fragments),

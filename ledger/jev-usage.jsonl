@@ -28,3 +28,5 @@
 {"model":"jev-1.13.0","at":"2026-09-18T20:53:28.838Z","purpose":"Revisar 14 empleos que la fuente marca como junior","script":"scripts/refresh-radar.ts (revisión)","calls":14,"input_tokens":15758,"cost_usd":0.00066184,"exact":true}
 {"model":"jev-1.13.0","at":"2026-09-18T20:53:58.027Z","purpose":"Evaluar el radar con 20 casos difíciles (20/20 correctos)","script":"scripts/eval-radar.ts","calls":20,"input_tokens":30630,"cost_usd":0.00128646,"exact":true}
 {"model":"jev-1.13.0","at":"2026-09-18T20:54:57.658Z","purpose":"Actualizar Chamba Radar desde la terminal (874 ofertas, preguntas v4)","script":"scripts/refresh-radar.ts","calls":874,"input_tokens":2546323,"cost_usd":0.10694557,"exact":true}
+{"model":"jev-1.13.0","at":"2026-09-18T21:36:52.139Z","purpose":"Evaluar el radar con 25 casos difíciles (25/25 correctos)","script":"scripts/eval-radar.ts","calls":25,"input_tokens":37778,"cost_usd":0.00158668,"exact":true}
+{"model":"jev-1.13.0","at":"2026-09-18T21:37:22.771Z","purpose":"Actualizar Chamba Radar desde la terminal (873 ofertas, preguntas v6)","script":"scripts/refresh-radar.ts","calls":873,"input_tokens":2542163,"cost_usd":0.10677085,"exact":true}

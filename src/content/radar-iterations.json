@@ -77,7 +77,7 @@
           "context": "Cloudbeds, en Jobicy: «LATAM, USA» en el campo",
           "quote": "applicants must be currently authorized to work in the location where the position is located",
           "was": "exclusión 0,76, rechazado",
-          "now": "exclusión 0,51, sigue rechazado por muy poco. Caso abierto"
+          "now": "exclusión 0,62 en la versión 6, sigue rechazado. Caso abierto"
         }
       ],
       "change": "La pregunta de exclusión ahora dice que LATAM incluye a Venezuela, que la frase estándar de permiso de trabajo no excluye por sí sola, y que un horario que Venezuela (UTC-4) no puede cumplir sí excluye.",
@@ -104,6 +104,33 @@
       "change": "Ninguna pregunta cambió; cambió cómo se combinan. El nivel que dice la bolsa decide, salvo que Jev lea en el texto, con claridad (menos de 0,2), que no es para juniors. De 14 empleos marcados junior por su bolsa, Jev contradijo 5.",
       "cases": 20,
       "title": "Revisamos los juniors"
+    },
+    {
+      "version": 6,
+      "title": "Un usuario abrió un enlace",
+      "found": "Revisando el primer empleo que abrió un usuario, leímos todos los empleos de We Work Remotely que el radar aceptaba. El campo decía «Anywhere in the World» y el texto decía otra cosa.",
+      "problems": [
+        {
+          "context": "Reddit, en We Work Remotely",
+          "quote": "Headquarters: Remote - United States",
+          "was": "Jev lo leyó como «desde cualquier país» con 0,98 de confianza, porque también le pasábamos el campo",
+          "now": "solo EE. UU., exclusión 0,90"
+        },
+        {
+          "context": "Temporal, en We Work Remotely",
+          "quote": "United States or Canada - Remote Opportunity",
+          "was": "aceptado",
+          "now": "solo EE. UU. o Canadá, exclusión 0,91"
+        },
+        {
+          "context": "Princeton University, en We Work Remotely",
+          "quote": "A remote work arrangement within the US may be considered",
+          "was": "aceptado",
+          "now": "solo EE. UU., exclusión 0,79"
+        }
+      ],
+      "change": "El error era nuestro: le pasábamos a Jev el campo de la bolsa y Jev le creía. Ahora, cuando decide el campo, Jev lee solo el texto, y una lectura segura (0,6 o más) de EE. UU., Europa, presencial o lista de países anula el «Anywhere». Salieron 29 empleos que no aceptaban Venezuela, casi todos con la frase que lo prueba, y entraron 2 de empresas latinoamericanas.",
+      "cases": 25
     }
   ]
 }

@@ -29,6 +29,18 @@ describe("decideEligibility", () => {
     ).toBe(true);
   });
 
+  it("lets a confident reading of the text overrule an 'anywhere' field", () => {
+    // "Anywhere in the World" on the board, "Headquarters: Remote - United States" in the text.
+    const reading = (confidence: number) => ({ ...where("us_or_canada"), confidence });
+    const decide = (confidence: number) =>
+      decideEligibility(
+        { structuredWhere: "anywhere" },
+        { where: reading(confidence), excludes_venezuela: excl(0.2) },
+      ).eligible;
+    expect(decide(0.9)).toBe(false);
+    expect(decide(0.4)).toBe(true);
+  });
+
   it("still honors an explicit exclusion in the text of a worldwide listing", () => {
     expect(
       decideEligibility(

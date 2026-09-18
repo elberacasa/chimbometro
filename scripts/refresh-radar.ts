@@ -11,6 +11,7 @@
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { appendLedger } from "@/lib/ledger";
+import { RADAR_QUESTIONS_VERSION } from "@/lib/radar/questions";
 import { LAST_RUN_KEY, refreshRadar, SNAPSHOT_KEY, type RadarEvent } from "@/lib/radar/refresh";
 import type { RadarSnapshot } from "@/lib/radar/types";
 import { MemoryStore, UpstashStore } from "@/lib/server/counter-store";
@@ -64,7 +65,7 @@ if (process.argv.includes("--publish")) {
     await appendLedger({
       model: run.model,
       at: run.startedAt,
-      purpose: `Actualizar Chamba Radar desde la terminal (${run.judged} ofertas, preguntas v4)`,
+      purpose: `Actualizar Chamba Radar desde la terminal (${run.judged} ofertas, preguntas v${RADAR_QUESTIONS_VERSION})`,
       script: "scripts/refresh-radar.ts",
       calls: run.judged,
       input_tokens: run.inputTokens,

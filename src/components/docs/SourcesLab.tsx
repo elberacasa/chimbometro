@@ -111,9 +111,9 @@ export function SourcesLab() {
         experimento también le pedimos a Jev que leyera el texto por su cuenta y guardamos cada
         desacuerdo: {formatInt(disagreements)} en total. Los revisamos uno por uno. A veces se
         equivocaba la bolsa: «Anywhere in the World» en el campo y «any location in the United
-        States» o «within one hour of CET» en el texto. Por eso la pregunta de exclusión de Jev
-        siempre se aplica, aunque el campo diga que el empleo es para todo el mundo. Otras veces se
-        equivocaba Jev, y eso cambió las preguntas.
+        States» o «within one hour of CET» en el texto. Por eso Jev siempre revisa el texto, aunque
+        el campo diga que el empleo es para todo el mundo. Otras veces se equivocaba Jev, y eso
+        cambió las preguntas.
       </p>
 
       <h3 className={styles.h3}>Cómo mejora Jev sobre la marcha</h3>

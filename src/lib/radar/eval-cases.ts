@@ -294,4 +294,84 @@ export const RADAR_CASES: RadarCase[] = [
     },
     expect: { techRole: true, eligible: true, juniorFriendly: false },
   },
+  {
+    id: "anywhere-field-us-headquarters",
+    why: "'Anywhere in the World' on We Work Remotely; the text says Remote - United States (real, v5 accepted it).",
+    listing: {
+      ...base,
+      source: "wwr",
+      location: "Anywhere in the World",
+      structuredWhere: "anywhere",
+      company: "Reddit",
+      title: "Backend Engineer, IAM",
+      text:
+        "Headquarters: Remote - United States. Reddit is a community of communities. You will build identity " +
+        "and access management services in Go and Python.",
+    },
+    expect: { techRole: true, eligible: false },
+  },
+  {
+    id: "anywhere-field-us-canada",
+    why: "'Anywhere in the World' on We Work Remotely; the text says United States or Canada (real, v5 accepted it).",
+    listing: {
+      ...base,
+      source: "wwr",
+      location: "Anywhere in the World",
+      structuredWhere: "anywhere",
+      company: "Temporal Technologies",
+      title: "Senior Application Security Engineer",
+      text:
+        "Headquarters: United States or Canada - Remote Opportunity. Temporal is an open source programming " +
+        "model. The estimated pay range for this role is $180,000 - $225,000.",
+    },
+    expect: { techRole: true, eligible: false },
+  },
+  {
+    id: "anywhere-field-ireland",
+    why: "'Anywhere in the World' on We Work Remotely; the text says Location: Remote Ireland (real, v5 accepted it).",
+    listing: {
+      ...base,
+      source: "wwr",
+      location: "Anywhere in the World",
+      structuredWhere: "anywhere",
+      company: "Huntress",
+      title: "Manager, Security Operations Center - EMEA",
+      text:
+        "Headquarters: Remote Ireland. Reports to: Director, Security Operations Center. Location: Remote " +
+        "Ireland. Compensation Range: EUR 115,200 to 133,000 base plus bonus and equity.",
+    },
+    expect: { techRole: true, eligible: false },
+  },
+  {
+    id: "anywhere-field-utc-window",
+    why: "'Anywhere in the World' with a UTC-4 to UTC+4 window, which includes Venezuela (real, must stay open).",
+    listing: {
+      ...base,
+      source: "wwr",
+      location: "Anywhere in the World",
+      structuredWhere: "anywhere",
+      company: "Toggl",
+      title: "Senior Full Stack",
+      text:
+        "Headquarters: Tallinn, Estonia. We are looking for a Senior Full Stack Engineer. You can work from " +
+        "anywhere in the world as long as your main location is between UTC-4 and UTC+4.",
+    },
+    expect: { techRole: true, eligible: true },
+  },
+  {
+    id: "anywhere-field-americas-europe",
+    why: "'Anywhere in the World' with 'Remote | Americas, Europe' in the text (real, must stay open).",
+    listing: {
+      ...base,
+      source: "wwr",
+      location: "Anywhere in the World",
+      structuredWhere: "anywhere",
+      company: "A.Team",
+      title: "Senior Independent AI Engineer / Architect",
+      text:
+        "Headquarters: NYC and TLV. Senior Independent AI Engineer / Architect. Remote | Americas, Europe. " +
+        "A.Team is an invite-only network of senior AI engineers working on production AI systems.",
+    },
+    expect: { techRole: true, eligible: true },
+  },
 ];
