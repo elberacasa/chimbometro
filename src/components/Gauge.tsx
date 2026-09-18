@@ -45,7 +45,8 @@ export function Gauge({ value, state, label }: Props) {
       needleRef.current?.setAttribute("transform", `rotate(${needleRotation(pos)} ${CX} ${CY})`);
       if (readoutRef.current) {
         const { state: s } = target.current;
-        readoutRef.current.textContent = s === "idle" ? "" : String(Math.round(Math.max(0, pos)));
+        readoutRef.current.textContent =
+          s === "idle" ? "" : String(Math.round(Math.min(100, Math.max(0, pos))));
       }
     };
 

@@ -5,6 +5,7 @@ import type { ChimbaEvent } from "@/lib/chimba/events";
 import type { ChoiceAnswer, NoulAnswer, ScoreAnswer } from "@/lib/jev/types";
 import { costUsd } from "@/lib/jev/pricing";
 import { formatDecimal, formatInt, formatPercent, formatUsd } from "@/lib/format";
+import { Pipeline } from "./Pipeline";
 import styles from "./Trace.module.css";
 
 type Answer = NoulAnswer | ChoiceAnswer | ScoreAnswer;
@@ -40,6 +41,8 @@ export function Trace({ run, running, session }: Props) {
         </span>
       </div>
 
+      <Pipeline events={events} running={running} />
+
       <ol className={styles.log} aria-live="polite">
         {!run && (
           <li className={styles.idle}>
@@ -58,7 +61,11 @@ export function Trace({ run, running, session }: Props) {
                 <li key="received">
                   <Time t={e.t} />
                   <span>
-                    POST /api/chimba <Dim>{formatInt(e.chars)} caracteres</Dim>
+                    POST /api/chimba{" "}
+                    <Dim>
+                      {formatInt(e.chars)} caracteres, límites verificados en {formatInt(e.guardMs)}{" "}
+                      ms
+                    </Dim>
                   </span>
                 </li>
               );
@@ -69,7 +76,7 @@ export function Trace({ run, running, session }: Props) {
                   <span>
                     → {e.endpoint}{" "}
                     <Dim>
-                      {e.model}, {e.questions} preguntas en un solo request
+                      {e.model}, {e.questionIds.length} preguntas sobre {e.fragments} fragmentos
                     </Dim>
                   </span>
                 </li>
@@ -85,7 +92,10 @@ export function Trace({ run, running, session }: Props) {
                       {formatUsd(costUsd(e.response.usage))}
                     </Dim>
                   </span>
-                  <Answers answers={e.response.answers as Record<string, Answer>} />
+                  <Answers
+                    answers={e.response.answers as Record<string, Answer>}
+                    evidence={scored?.analysis.evidence.length ?? null}
+                  />
                 </li>
               );
             case "scored":
@@ -124,11 +134,19 @@ export function Trace({ run, running, session }: Props) {
   );
 }
 
-function Answers({ answers }: { answers: Record<string, Answer> }) {
-  const entries = Object.entries(answers);
+function Answers({
+  answers,
+  evidence,
+}: {
+  answers: Record<string, Answer>;
+  evidence: number | null;
+}) {
+  const all = Object.entries(answers);
+  const entries = all.filter(([id]) => !id.startsWith("evidencia_"));
+  const evidenceCount = all.length - entries.length;
   return (
     <div className={styles.answers}>
-      <p className={styles.note}>{entries.length} respuestas, llegaron juntas:</p>
+      <p className={styles.note}>{all.length} respuestas, llegaron juntas:</p>
       <ul>
         {entries.map(([id, a], i) => (
           <li key={id} style={{ ["--i" as string]: i }}>
@@ -137,6 +155,12 @@ function Answers({ answers }: { answers: Record<string, Answer> }) {
           </li>
         ))}
       </ul>
+      {evidenceCount > 0 && (
+        <p className={styles.note}>
+          + {evidenceCount} de evidencia:{" "}
+          {evidence === null ? "leyendo…" : `${evidence} citas del texto, abajo`}
+        </p>
+      )}
     </div>
   );
 }

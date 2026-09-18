@@ -6,7 +6,8 @@ import { EXAMPLES } from "@/lib/chimba/examples";
 import { requestMeasurement } from "@/lib/chimba/request";
 import { formatInt, formatUsd } from "@/lib/format";
 import { redditText, shareImage } from "@/lib/share";
-import { Flags } from "./Flags";
+import { EvidenceMap } from "./EvidenceMap";
+import { TodayCounter, useTodayStats } from "./TodayCounter";
 import { Gauge, type GaugeState } from "./Gauge";
 import { Receipt } from "./Receipt";
 import { Trace, type TraceRun } from "./Trace";
@@ -15,7 +16,8 @@ import styles from "./Meter.module.css";
 const MIN = 40;
 const MAX = 6000;
 
-type Result = { analysis: Analysis; at: string };
+/** `offer` is the exact text that was measured, so edits in the textarea don't shift highlights. */
+type Result = { analysis: Analysis; at: string; offer: string };
 
 export function Meter() {
   const [offer, setOffer] = useState("");
@@ -27,6 +29,7 @@ export function Meter() {
   const [session, setSession] = useState({ runs: 0, costUsd: 0 });
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const dialRef = useRef<HTMLDivElement>(null);
+  const [today, refreshToday] = useTodayStats();
 
   const chars = offer.trim().length;
   const tooShort = chars < MIN;
@@ -46,7 +49,8 @@ export function Meter() {
       );
       setRun((r) => r && { ...r, roundTripMs });
       setSession((s) => ({ runs: s.runs + 1, costUsd: s.costUsd + analysis.receipt.costUsd }));
-      setResult({ analysis, at: new Date().toISOString() });
+      setResult({ analysis, at: new Date().toISOString(), offer: text });
+      refreshToday();
       setState("done");
     } catch (e) {
       setError(e instanceof Error ? e.message : "No pudimos medir la oferta.");
@@ -105,6 +109,8 @@ export function Meter() {
             Pega una oferta de trabajo. Jev la lee en menos de un segundo, busca nueve banderas
             rojas y te dice qué tan mala es, con cada probabilidad a la vista.
           </p>
+
+          <TodayCounter stats={today} />
 
           <form className={styles.form} onSubmit={onSubmit}>
             <label htmlFor="oferta" className="visually-hidden">
@@ -174,12 +180,18 @@ export function Meter() {
         </div>
       </section>
 
+      <section className={styles.evidence} aria-label="Evidencia">
+        <EvidenceMap analysis={analysis} offer={result?.offer ?? null} />
+      </section>
+
       <section className={styles.results} aria-label="Resultado">
         <div className={styles.detail}>
-          <h2 className={styles.h2}>Banderas rojas</h2>
-          <p className={styles.sub}>Probabilidad de que cada una aplique, según Jev.</p>
-          <Flags flags={analysis?.result.flags ?? null} />
-
+          {!analysis && (
+            <p className={styles.sub}>
+              Cuando midas una oferta, aquí verás lo que el código leyó sin modelo y cómo compartir
+              el resultado.
+            </p>
+          )}
           {analysis && (
             <>
               <h2 className={styles.h2}>Lo que dice el texto</h2>

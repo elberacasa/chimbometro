@@ -4,13 +4,17 @@ import { JEV_ENDPOINT, type ChimbaEvent } from "@/lib/chimba/events";
 import { JevError } from "@/lib/jev/client";
 import { appendLedger } from "@/lib/ledger";
 import { serverConfig } from "@/lib/server/config";
-import { admit, clientIp, isSameOrigin, recordSpend } from "@/lib/server/guard";
+import {
+  admit,
+  clientIp,
+  isSameOrigin,
+  MAX_BODY_BYTES,
+  recordMeasurement,
+} from "@/lib/server/guard";
 
 export const runtime = "nodejs";
 
 const DEV_PURPOSE = "Probar el sitio en el servidor local";
-// 6,000 characters of offer, JSON-escaped, fit comfortably; anything larger is not a real offer.
-const MAX_BODY_BYTES = 32_000;
 
 export async function POST(req: Request) {
   const received = performance.now();
@@ -41,6 +45,7 @@ export async function POST(req: Request) {
     });
   }
 
+  const guardMs = Math.round(performance.now() - received);
   const body = parseJson(raw) as { oferta?: unknown } | null;
   const offer = typeof body?.oferta === "string" ? body.oferta.trim() : "";
   if (offer.length < MIN_OFFER_CHARS) {
@@ -63,23 +68,24 @@ export async function POST(req: Request) {
       const emit = (event: ChimbaEvent) =>
         controller.enqueue(encoder.encode(JSON.stringify(event) + "\n"));
 
-      emit({ type: "received", t: t(), chars: offer.length });
+      emit({ type: "received", t: t(), chars: offer.length, guardMs });
       try {
         const analysis = await analyzeOffer(apiKey, offer, {
-          onSend: (request) =>
+          onSend: (request, fragments) =>
             emit({
               type: "sent",
               t: t(),
               model: MODEL,
-              questions: Object.keys(request.questions).length,
               endpoint: JEV_ENDPOINT,
+              questionIds: Object.keys(request.questions),
+              fragments: fragments.length,
             }),
           onAnswer: (response, jevMs) => emit({ type: "answered", t: t(), jevMs, response }),
         });
         emit({ type: "scored", t: t(), analysis });
 
         const { receipt, result } = analysis;
-        await recordSpend(store, receipt.costUsd).catch((e: Error) =>
+        await recordMeasurement(store, receipt.costUsd).catch((e: Error) =>
           console.error(JSON.stringify({ event: "budget.record_failed", message: e.message })),
         );
         // One structured line per request: what Jev cost us in production. The offer text is not logged.

@@ -5,6 +5,7 @@
 import { analyzeOffer } from "@/lib/chimba/analyze";
 import { EXAMPLES } from "@/lib/chimba/examples";
 import { costUsd } from "@/lib/jev/pricing";
+import { writeFile } from "node:fs/promises";
 import { appendLedger } from "@/lib/ledger";
 import { requireKey } from "./env";
 
@@ -26,6 +27,10 @@ for (const { ex, a } of runs) {
       `${a.result.verdict.id} (${a.result.verdict.confidence.toFixed(2)}) | ${top} | ` +
       `${a.receipt.usage.input_tokens} tok ${a.receipt.jevMs}ms`,
   );
+  for (const e of a.evidence) {
+    const fragment = a.fragments.find((f) => f.id === e.fragmentId);
+    console.log(`    ${e.flag.padEnd(16)} ${e.probability.toFixed(2)}  «${fragment?.text}»`);
+  }
 }
 
 const inputTokens = runs.reduce((n, r) => n + r.a.receipt.usage.input_tokens, 0);
@@ -47,5 +52,34 @@ await appendLedger({
   cost_usd: Number(cost.toFixed(8)),
   exact: true,
 });
+
+// The docs page charts the latest eval: timings, tokens, and the raw probabilities per offer.
+await writeFile(
+  "src/content/eval.json",
+  JSON.stringify(
+    {
+      at: new Date().toISOString(),
+      model: runs[0]!.a.receipt.model,
+      passed,
+      total: runs.length,
+      runs: runs.map(({ ex, a }) => ({
+        id: ex.id,
+        label: ex.label,
+        accepted: ex.accepted,
+        chars: ex.text.length,
+        fragments: a.fragments.length,
+        questions: a.receipt.questionCount,
+        inputTokens: a.receipt.usage.input_tokens,
+        jevMs: a.receipt.jevMs,
+        costUsd: a.receipt.costUsd,
+        score: a.result.score,
+        verdict: a.result.verdict,
+        answers: a.receipt.response.answers,
+      })),
+    },
+    null,
+    2,
+  ) + "\n",
+);
 
 process.exitCode = passed === runs.length ? 0 : 1;

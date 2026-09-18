@@ -25,7 +25,12 @@ export function serverConfig(): ServerConfig {
   // Vercel's Upstash integration names these KV_REST_API_*; a direct Upstash setup uses UPSTASH_*.
   const url = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
-  if (url && token) return { ok: true, apiKey, store: new UpstashStore(url, token), limits };
+  // `vercel env pull` puts production's Redis in .env.local; local traffic must not spend
+  // production's budget, so development only uses it when asked to.
+  const useRedis = process.env.NODE_ENV === "production" || process.env.CHIMBA_DEV_REDIS === "1";
+  if (url && token && useRedis) {
+    return { ok: true, apiKey, store: new UpstashStore(url, token), limits };
+  }
 
   // Fail closed: per-instance memory can't enforce limits on serverless, so production refuses
   // to call Jev until the shared store is configured.

@@ -1,6 +1,15 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { MemoryStore, UpstashStore } from "./counter-store";
-import { admit, clientIp, isSameOrigin, recordSpend, spentToday, type Limits } from "./guard";
+import {
+  admit,
+  clientIp,
+  isSameOrigin,
+  recordMeasurement,
+  recordSpend,
+  spentToday,
+  todayStats,
+  type Limits,
+} from "./guard";
 
 const T0 = Date.UTC(2026, 8, 18, 12, 0, 10); // 12:00:10 UTC
 const limits: Limits = {
@@ -77,6 +86,20 @@ describe("admit", () => {
     await admit(store, "1.1.1.1", limits, T0);
     await recordSpend(store, -1, T0); // budget "reset" for the test
     expect((await admit(store, "1.1.1.1", limits, T0)).ok).toBe(true);
+  });
+});
+
+describe("todayStats", () => {
+  it("counts measurements and their cost for the current UTC day only", async () => {
+    const { store } = setup();
+    await recordMeasurement(store, 0.00015, T0);
+    await recordMeasurement(store, 0.00015, T0);
+    expect(await todayStats(store, T0)).toEqual({
+      day: "2026-09-18",
+      measured: 2,
+      costUsd: 0.0003,
+    });
+    expect((await todayStats(store, Date.UTC(2026, 8, 19, 1))).measured).toBe(0);
   });
 });
 

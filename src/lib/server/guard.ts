@@ -18,7 +18,7 @@ export const DEFAULT_LIMITS: Limits = {
   perIpPerDay: 100,
   // TypeSafe allows 1,200 requests/min per key; stay well under it.
   globalPerMinute: 600,
-  // ≈ 80,000 measurements at ~$0.00006 each.
+  // ≈ 33,000 measurements at ~$0.00015 each.
   dailyBudgetUsd: 5,
 };
 
@@ -31,6 +31,9 @@ export type Admission =
       message: string;
       retryAfter: number;
     };
+
+/** 6,000 characters of offer, JSON-escaped, fit comfortably; anything larger is not a real offer. */
+export const MAX_BODY_BYTES = 32_000;
 
 const MINUTE = 60;
 const DAY = 86_400;
@@ -88,6 +91,25 @@ export async function recordSpend(store: CounterStore, costUsd: number, now = Da
   await store.increment(budgetKey(utcDay(now)), toMicros(costUsd), 2 * DAY);
 }
 
+/** Counts one successful measurement and records what it cost. */
+export async function recordMeasurement(store: CounterStore, costUsd: number, now = Date.now()) {
+  await Promise.all([
+    recordSpend(store, costUsd, now),
+    store.increment(measuredKey(utcDay(now)), 1, 2 * DAY),
+  ]);
+}
+
+export type TodayStats = { day: string; measured: number; costUsd: number };
+
+export async function todayStats(store: CounterStore, now = Date.now()): Promise<TodayStats> {
+  const day = utcDay(now);
+  const [measured, micros] = await Promise.all([
+    store.get(measuredKey(day)),
+    store.get(budgetKey(day)),
+  ]);
+  return { day, measured, costUsd: micros / 1_000_000 };
+}
+
 export async function spentToday(store: CounterStore, now = Date.now()) {
   return (await store.get(budgetKey(utcDay(now)))) / 1_000_000;
 }
@@ -126,6 +148,10 @@ export function isSameOrigin(headers: Headers): boolean {
 /** IPs are hashed before they become keys, so the store never holds a raw address. */
 function hashIp(ip: string) {
   return createHash("sha256").update(ip).digest("base64url").slice(0, 22);
+}
+
+function measuredKey(day: string) {
+  return `stats:measured:${day}`;
 }
 
 function budgetKey(day: string) {

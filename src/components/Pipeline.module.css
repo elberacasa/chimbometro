@@ -1,0 +1,194 @@
+/* Lives inside the terminal pane, so it uses the pane's --t-* palette. */
+
+.figure {
+  margin: 0;
+  padding: 0.9rem 0.9rem 0.2rem;
+  border-bottom: 1px solid var(--t-track);
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.node {
+  fill: var(--t-bar);
+  stroke: var(--t-track);
+  stroke-width: 1.5;
+  transition:
+    stroke 250ms,
+    fill 250ms;
+}
+
+.nodeTitle,
+.nodeSub,
+.nodeMetric,
+.nodeSmall,
+.scoreValue,
+.caption {
+  text-anchor: middle;
+  font-family: var(--font-mono);
+}
+
+.nodeTitle {
+  font-size: 15px;
+  font-weight: 600;
+  fill: var(--t-ink);
+}
+
+.nodeSub,
+.caption {
+  font-size: 10.5px;
+  fill: var(--t-dim);
+}
+
+.nodeMetric {
+  font-size: 13px;
+  fill: var(--t-hot);
+  font-variant-numeric: tabular-nums;
+}
+
+.nodeSmall {
+  font-size: 11px;
+  fill: var(--t-dim);
+}
+
+.lane {
+  fill: none;
+  stroke: var(--t-track);
+  stroke-width: 1.4;
+  transition: stroke 260ms ease-out;
+  transition-delay: calc(var(--i) * 14ms);
+}
+
+.link {
+  fill: none;
+  stroke: var(--t-track);
+  stroke-width: 2;
+}
+
+.score {
+  fill: var(--t-bar);
+  stroke: var(--t-track);
+  stroke-width: 2;
+  transition: stroke 300ms;
+}
+
+.scoreValue {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 48;
+  font-weight: 800;
+  font-size: 24px;
+  fill: var(--t-ink);
+}
+
+/* Waiting: particles flow along every lane toward Jev, and Jev's node pulses. */
+[data-phase="waiting"] .lane {
+  stroke: var(--t-dim);
+  stroke-dasharray: 3 9;
+  animation: flow 520ms linear infinite;
+  animation-delay: calc(var(--i) * -37ms);
+}
+
+[data-phase="waiting"] .jev .node {
+  stroke: var(--t-hot);
+  animation: pulse 900ms ease-in-out infinite;
+}
+
+@keyframes flow {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    stroke-opacity: 0.35;
+  }
+}
+
+/* Answered: every lane takes the color of its answer. */
+.bad {
+  stroke: var(--t-bad);
+  stroke-width: 1.8;
+}
+
+.ok {
+  stroke: var(--t-ok);
+  stroke-width: 1.8;
+}
+
+.dim {
+  stroke: var(--t-track);
+}
+
+.neutral {
+  stroke: var(--t-ink);
+}
+
+[data-phase="answered"] .jev .node,
+[data-phase="scored"] .jev .node {
+  stroke: var(--t-ok);
+}
+
+[data-phase="scored"] .link,
+[data-phase="scored"] .formula .node {
+  stroke: var(--t-ink);
+}
+
+.decente {
+  stroke: var(--t-ok);
+}
+
+.sospechosa {
+  stroke: var(--t-hot);
+}
+
+.chimba,
+.chimbisima {
+  stroke: var(--t-bad);
+}
+
+[data-phase="error"] .jev .node {
+  stroke: var(--t-bad);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1.1rem;
+  padding: 0.45rem 0 0.55rem;
+  font-size: 0.7rem;
+  color: var(--t-dim);
+}
+
+.legend span::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+  background: currentColor;
+}
+
+.keyBad::before {
+  color: var(--t-bad);
+}
+
+.keyOk::before {
+  color: var(--t-ok);
+}
+
+.keyDim::before {
+  color: var(--t-track);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-phase="waiting"] .lane,
+  [data-phase="waiting"] .jev .node {
+    animation: none;
+  }
+}

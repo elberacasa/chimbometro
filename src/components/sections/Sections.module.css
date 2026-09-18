@@ -252,6 +252,18 @@
   font-weight: 700;
 }
 
+.more {
+  margin-top: 3rem;
+  max-width: var(--measure);
+  font-size: var(--step-1);
+  color: var(--ink-2);
+}
+
+.more a {
+  color: var(--ink);
+  font-weight: 650;
+}
+
 .footnote {
   margin-top: 0.9rem;
   font-size: var(--step--1);

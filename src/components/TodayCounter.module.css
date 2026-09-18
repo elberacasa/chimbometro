@@ -1,0 +1,22 @@
+.today {
+  margin-top: 1.1rem;
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+
+.today strong {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+/* A steady "live" indicator: it marks real-time data without animating for attention. */
+.dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  background: var(--good);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--good) 22%, transparent);
+  vertical-align: 0.05em;
+}

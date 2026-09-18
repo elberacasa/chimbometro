@@ -1,0 +1,1081 @@
+{
+  "at": "2026-09-18T17:53:21.922Z",
+  "model": "jev-1.13.0",
+  "passed": 5,
+  "total": 5,
+  "runs": [
+    {
+      "id": "unicornio",
+      "label": "El junior que sabe todo",
+      "accepted": ["departamento_it", "explotacion"],
+      "chars": 363,
+      "fragments": 11,
+      "questions": 20,
+      "inputTokens": 4446,
+      "jevMs": 665,
+      "costUsd": 0.000186732,
+      "score": 99,
+      "verdict": {
+        "id": "explotacion",
+        "label": "Trabajo real, condiciones de explotación",
+        "confidence": 0.44
+      },
+      "answers": {
+        "unicornio": {
+          "type": "noul",
+          "noul": 0.97
+        },
+        "multirol": {
+          "type": "noul",
+          "noul": 0.37
+        },
+        "sueldo_bajo": {
+          "type": "noul",
+          "noul": 0.94
+        },
+        "sin_sueldo": {
+          "type": "noul",
+          "noul": 0.02
+        },
+        "trabajo_gratis": {
+          "type": "noul",
+          "noul": 0.04
+        },
+        "pago_bolivares": {
+          "type": "noul",
+          "noul": 0.04
+        },
+        "camiseta": {
+          "type": "noul",
+          "noul": 0.05
+        },
+        "horario_abusivo": {
+          "type": "noul",
+          "noul": 0.85
+        },
+        "estafa": {
+          "type": "noul",
+          "noul": 0.17
+        },
+        "absurdo": {
+          "type": "score",
+          "score": 2.99,
+          "confidence": 0.99,
+          "legend": {
+            "0": "Fair: pay, requirements and conditions are reasonable for the role.",
+            "1": "Some issues: one or two weak points, but a developer could reasonably accept it.",
+            "2": "Bad: several unfair conditions; most experienced developers would decline.",
+            "3": "Absurd: the demands and the pay or conditions are so mismatched it reads like a joke."
+          },
+          "probabilities": {
+            "0": 0,
+            "1": 0,
+            "2": 0.01,
+            "3": 0.99
+          }
+        },
+        "veredicto": {
+          "type": "choice",
+          "choice": "explotacion",
+          "confidence": 0.44,
+          "probabilities": {
+            "estafa": 0.05,
+            "gratis": 0,
+            "departamento_it": 0.41,
+            "sin_info": 0,
+            "explotacion": 0.54,
+            "decente": 0
+          }
+        },
+        "evidencia_unicornio": {
+          "type": "choice",
+          "choice": "f3",
+          "confidence": 0.41,
+          "probabilities": {
+            "f4": 0,
+            "f11": 0,
+            "f3": 0.47000000000000003,
+            "f9": 0,
+            "f1": 0.01,
+            "f6": 0.09,
+            "f10": 0.11,
+            "f5": 0.23,
+            "f7": 0.09,
+            "f8": 0,
+            "ninguno": 0,
+            "f2": 0
+          }
+        },
+        "evidencia_multirol": {
+          "type": "choice",
+          "choice": "f3",
+          "confidence": 0.83,
+          "probabilities": {
+            "f10": 0,
+            "f11": 0,
+            "f3": 0.86,
+            "f9": 0,
+            "f1": 0,
+            "f6": 0.01,
+            "f4": 0,
+            "f5": 0.03,
+            "f7": 0.09,
+            "f8": 0,
+            "ninguno": 0.01,
+            "f2": 0
+          }
+        },
+        "evidencia_sueldo_bajo": {
+          "type": "choice",
+          "choice": "f10",
+          "confidence": 0.96,
+          "probabilities": {
+            "f4": 0,
+            "f11": 0,
+            "f3": 0.03,
+            "f9": 0,
+            "f1": 0,
+            "f6": 0,
+            "f10": 0.97,
+            "f5": 0,
+            "f7": 0,
+            "f8": 0,
+            "ninguno": 0,
+            "f2": 0
+          }
+        },
+        "evidencia_sin_sueldo": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.66,
+          "probabilities": {
+            "ninguno": 0.7,
+            "f11": 0,
+            "f3": 0,
+            "f9": 0.25,
+            "f1": 0,
+            "f6": 0,
+            "f10": 0.05,
+            "f5": 0,
+            "f7": 0,
+            "f8": 0,
+            "f2": 0,
+            "f4": 0
+          }
+        },
+        "evidencia_trabajo_gratis": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.74,
+          "probabilities": {
+            "f10": 0.23,
+            "f11": 0,
+            "f3": 0,
+            "f9": 0,
+            "f1": 0,
+            "f6": 0,
+            "f4": 0,
+            "f5": 0,
+            "f7": 0,
+            "f8": 0,
+            "ninguno": 0.77,
+            "f2": 0
+          }
+        },
+        "evidencia_pago_bolivares": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.9,
+          "probabilities": {
+            "f4": 0,
+            "f11": 0.02,
+            "f3": 0,
+            "f9": 0,
+            "f1": 0,
+            "f6": 0,
+            "f10": 0.07,
+            "f5": 0,
+            "f7": 0,
+            "f8": 0,
+            "ninguno": 0.91,
+            "f2": 0
+          }
+        },
+        "evidencia_camiseta": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.96,
+          "probabilities": {
+            "f4": 0,
+            "f11": 0.03,
+            "f3": 0,
+            "f9": 0,
+            "f1": 0,
+            "f6": 0,
+            "f10": 0,
+            "f5": 0,
+            "f7": 0,
+            "f8": 0,
+            "f2": 0,
+            "ninguno": 0.97
+          }
+        },
+        "evidencia_horario_abusivo": {
+          "type": "choice",
+          "choice": "f11",
+          "confidence": 1,
+          "probabilities": {
+            "f10": 0,
+            "f11": 1,
+            "f3": 0,
+            "f9": 0,
+            "f1": 0,
+            "f6": 0,
+            "f4": 0,
+            "f5": 0,
+            "f7": 0,
+            "f8": 0,
+            "ninguno": 0,
+            "f2": 0
+          }
+        },
+        "evidencia_estafa": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.91,
+          "probabilities": {
+            "f4": 0,
+            "f11": 0,
+            "f3": 0,
+            "f9": 0,
+            "f1": 0,
+            "f6": 0,
+            "f10": 0.07,
+            "f5": 0,
+            "f7": 0,
+            "f8": 0,
+            "ninguno": 0.93,
+            "f2": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "pyme",
+      "label": "Programador y community manager",
+      "accepted": ["explotacion", "departamento_it"],
+      "chars": 380,
+      "fragments": 4,
+      "questions": 20,
+      "inputTokens": 3003,
+      "jevMs": 719,
+      "costUsd": 0.000126126,
+      "score": 96,
+      "verdict": {
+        "id": "departamento_it",
+        "label": "Quieren un departamento de IT entero",
+        "confidence": 0.63
+      },
+      "answers": {
+        "unicornio": {
+          "type": "noul",
+          "noul": 0.83
+        },
+        "multirol": {
+          "type": "noul",
+          "noul": 0.99
+        },
+        "sueldo_bajo": {
+          "type": "noul",
+          "noul": 0.91
+        },
+        "sin_sueldo": {
+          "type": "noul",
+          "noul": 0.03
+        },
+        "trabajo_gratis": {
+          "type": "noul",
+          "noul": 0.07
+        },
+        "pago_bolivares": {
+          "type": "noul",
+          "noul": 0.92
+        },
+        "camiseta": {
+          "type": "noul",
+          "noul": 0.93
+        },
+        "horario_abusivo": {
+          "type": "noul",
+          "noul": 0.85
+        },
+        "estafa": {
+          "type": "noul",
+          "noul": 0.08
+        },
+        "absurdo": {
+          "type": "score",
+          "score": 2.76,
+          "confidence": 0.76,
+          "legend": {
+            "0": "Fair: pay, requirements and conditions are reasonable for the role.",
+            "1": "Some issues: one or two weak points, but a developer could reasonably accept it.",
+            "2": "Bad: several unfair conditions; most experienced developers would decline.",
+            "3": "Absurd: the demands and the pay or conditions are so mismatched it reads like a joke."
+          },
+          "probabilities": {
+            "0": 0,
+            "1": 0,
+            "2": 0.23,
+            "3": 0.77
+          }
+        },
+        "veredicto": {
+          "type": "choice",
+          "choice": "departamento_it",
+          "confidence": 0.63,
+          "probabilities": {
+            "departamento_it": 0.7,
+            "decente": 0,
+            "explotacion": 0.3,
+            "estafa": 0,
+            "sin_info": 0,
+            "gratis": 0
+          }
+        },
+        "evidencia_unicornio": {
+          "type": "choice",
+          "choice": "f1",
+          "confidence": 1,
+          "probabilities": {
+            "f2": 0,
+            "f1": 1,
+            "f4": 0,
+            "f3": 0,
+            "ninguno": 0
+          }
+        },
+        "evidencia_multirol": {
+          "type": "choice",
+          "choice": "f1",
+          "confidence": 1,
+          "probabilities": {
+            "f2": 0,
+            "f1": 1,
+            "f4": 0,
+            "f3": 0,
+            "ninguno": 0
+          }
+        },
+        "evidencia_sueldo_bajo": {
+          "type": "choice",
+          "choice": "f3",
+          "confidence": 0.86,
+          "probabilities": {
+            "f2": 0,
+            "f1": 0.11,
+            "f4": 0,
+            "f3": 0.89,
+            "ninguno": 0
+          }
+        },
+        "evidencia_sin_sueldo": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.48,
+          "probabilities": {
+            "f2": 0.09,
+            "f1": 0.03,
+            "f4": 0,
+            "f3": 0.29,
+            "ninguno": 0.59
+          }
+        },
+        "evidencia_trabajo_gratis": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.31,
+          "probabilities": {
+            "f2": 0.42,
+            "f1": 0.01,
+            "f4": 0.11,
+            "f3": 0.02,
+            "ninguno": 0.44
+          }
+        },
+        "evidencia_pago_bolivares": {
+          "type": "choice",
+          "choice": "f3",
+          "confidence": 1,
+          "probabilities": {
+            "f2": 0,
+            "f1": 0,
+            "f4": 0,
+            "f3": 1,
+            "ninguno": 0
+          }
+        },
+        "evidencia_camiseta": {
+          "type": "choice",
+          "choice": "f2",
+          "confidence": 1,
+          "probabilities": {
+            "f2": 1,
+            "f1": 0,
+            "f4": 0,
+            "f3": 0,
+            "ninguno": 0
+          }
+        },
+        "evidencia_horario_abusivo": {
+          "type": "choice",
+          "choice": "f4",
+          "confidence": 1,
+          "probabilities": {
+            "f2": 0,
+            "f1": 0,
+            "f4": 1,
+            "f3": 0,
+            "ninguno": 0
+          }
+        },
+        "evidencia_estafa": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.95,
+          "probabilities": {
+            "f2": 0.01,
+            "f1": 0,
+            "f4": 0,
+            "f3": 0.02,
+            "ninguno": 0.97
+          }
+        }
+      }
+    },
+    {
+      "id": "gratis",
+      "label": "La prueba técnica que es el producto",
+      "accepted": ["gratis"],
+      "chars": 272,
+      "fragments": 4,
+      "questions": 20,
+      "inputTokens": 2940,
+      "jevMs": 643,
+      "costUsd": 0.00012348,
+      "score": 93,
+      "verdict": {
+        "id": "gratis",
+        "label": "Quieren que trabajes gratis",
+        "confidence": 0.98
+      },
+      "answers": {
+        "unicornio": {
+          "type": "noul",
+          "noul": 0.76
+        },
+        "multirol": {
+          "type": "noul",
+          "noul": 0.47
+        },
+        "sueldo_bajo": {
+          "type": "noul",
+          "noul": 0.85
+        },
+        "sin_sueldo": {
+          "type": "noul",
+          "noul": 0.9
+        },
+        "trabajo_gratis": {
+          "type": "noul",
+          "noul": 0.94
+        },
+        "pago_bolivares": {
+          "type": "noul",
+          "noul": 0.05
+        },
+        "camiseta": {
+          "type": "noul",
+          "noul": 0.15
+        },
+        "horario_abusivo": {
+          "type": "noul",
+          "noul": 0.63
+        },
+        "estafa": {
+          "type": "noul",
+          "noul": 0.23
+        },
+        "absurdo": {
+          "type": "score",
+          "score": 2.61,
+          "confidence": 0.61,
+          "legend": {
+            "0": "Fair: pay, requirements and conditions are reasonable for the role.",
+            "1": "Some issues: one or two weak points, but a developer could reasonably accept it.",
+            "2": "Bad: several unfair conditions; most experienced developers would decline.",
+            "3": "Absurd: the demands and the pay or conditions are so mismatched it reads like a joke."
+          },
+          "probabilities": {
+            "0": 0,
+            "1": 0,
+            "2": 0.39,
+            "3": 0.61
+          }
+        },
+        "veredicto": {
+          "type": "choice",
+          "choice": "gratis",
+          "confidence": 0.98,
+          "probabilities": {
+            "sin_info": 0,
+            "decente": 0,
+            "departamento_it": 0.01,
+            "explotacion": 0,
+            "estafa": 0,
+            "gratis": 0.99
+          }
+        },
+        "evidencia_unicornio": {
+          "type": "choice",
+          "choice": "f2",
+          "confidence": 0.96,
+          "probabilities": {
+            "ninguno": 0,
+            "f1": 0,
+            "f4": 0.03,
+            "f2": 0.97,
+            "f3": 0
+          }
+        },
+        "evidencia_multirol": {
+          "type": "choice",
+          "choice": "f2",
+          "confidence": 0.99,
+          "probabilities": {
+            "ninguno": 0,
+            "f1": 0.01,
+            "f4": 0,
+            "f2": 0.99,
+            "f3": 0
+          }
+        },
+        "evidencia_sueldo_bajo": {
+          "type": "choice",
+          "choice": "f4",
+          "confidence": 0.96,
+          "probabilities": {
+            "ninguno": 0,
+            "f1": 0,
+            "f4": 0.97,
+            "f2": 0.03,
+            "f3": 0
+          }
+        },
+        "evidencia_sin_sueldo": {
+          "type": "choice",
+          "choice": "f4",
+          "confidence": 1,
+          "probabilities": {
+            "ninguno": 0,
+            "f1": 0,
+            "f4": 1,
+            "f2": 0,
+            "f3": 0
+          }
+        },
+        "evidencia_trabajo_gratis": {
+          "type": "choice",
+          "choice": "f4",
+          "confidence": 0.98,
+          "probabilities": {
+            "ninguno": 0,
+            "f1": 0,
+            "f4": 0.98,
+            "f2": 0.02,
+            "f3": 0
+          }
+        },
+        "evidencia_pago_bolivares": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 1,
+          "probabilities": {
+            "ninguno": 1,
+            "f1": 0,
+            "f4": 0,
+            "f2": 0,
+            "f3": 0
+          }
+        },
+        "evidencia_camiseta": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.8,
+          "probabilities": {
+            "ninguno": 0.84,
+            "f1": 0,
+            "f4": 0.02,
+            "f2": 0.12,
+            "f3": 0.02
+          }
+        },
+        "evidencia_horario_abusivo": {
+          "type": "choice",
+          "choice": "f2",
+          "confidence": 0.94,
+          "probabilities": {
+            "ninguno": 0.04,
+            "f1": 0,
+            "f4": 0,
+            "f2": 0.96,
+            "f3": 0
+          }
+        },
+        "evidencia_estafa": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.42,
+          "probabilities": {
+            "ninguno": 0.53,
+            "f1": 0,
+            "f4": 0.08,
+            "f2": 0.39,
+            "f3": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "estafa",
+      "label": "Gana 3000$ semanales",
+      "accepted": ["estafa"],
+      "chars": 249,
+      "fragments": 4,
+      "questions": 20,
+      "inputTokens": 2958,
+      "jevMs": 672,
+      "costUsd": 0.000124236,
+      "score": 97,
+      "verdict": {
+        "id": "estafa",
+        "label": "Esto es una estafa",
+        "confidence": 1
+      },
+      "answers": {
+        "unicornio": {
+          "type": "noul",
+          "noul": 0.15
+        },
+        "multirol": {
+          "type": "noul",
+          "noul": 0.1
+        },
+        "sueldo_bajo": {
+          "type": "noul",
+          "noul": 0.08
+        },
+        "sin_sueldo": {
+          "type": "noul",
+          "noul": 0.07
+        },
+        "trabajo_gratis": {
+          "type": "noul",
+          "noul": 0.18
+        },
+        "pago_bolivares": {
+          "type": "noul",
+          "noul": 0.04
+        },
+        "camiseta": {
+          "type": "noul",
+          "noul": 0.16
+        },
+        "horario_abusivo": {
+          "type": "noul",
+          "noul": 0.15
+        },
+        "estafa": {
+          "type": "noul",
+          "noul": 0.98
+        },
+        "absurdo": {
+          "type": "score",
+          "score": 2.93,
+          "confidence": 0.93,
+          "legend": {
+            "0": "Fair: pay, requirements and conditions are reasonable for the role.",
+            "1": "Some issues: one or two weak points, but a developer could reasonably accept it.",
+            "2": "Bad: several unfair conditions; most experienced developers would decline.",
+            "3": "Absurd: the demands and the pay or conditions are so mismatched it reads like a joke."
+          },
+          "probabilities": {
+            "0": 0,
+            "1": 0,
+            "2": 0.07,
+            "3": 0.93
+          }
+        },
+        "veredicto": {
+          "type": "choice",
+          "choice": "estafa",
+          "confidence": 1,
+          "probabilities": {
+            "decente": 0,
+            "gratis": 0,
+            "departamento_it": 0,
+            "sin_info": 0,
+            "estafa": 1,
+            "explotacion": 0
+          }
+        },
+        "evidencia_unicornio": {
+          "type": "choice",
+          "choice": "f2",
+          "confidence": 0.47,
+          "probabilities": {
+            "f4": 0,
+            "f2": 0.58,
+            "f1": 0.04,
+            "f3": 0.01,
+            "ninguno": 0.37
+          }
+        },
+        "evidencia_multirol": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.96,
+          "probabilities": {
+            "f4": 0,
+            "f2": 0.02,
+            "f1": 0,
+            "f3": 0.02,
+            "ninguno": 0.96
+          }
+        },
+        "evidencia_sueldo_bajo": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.9,
+          "probabilities": {
+            "f4": 0,
+            "f2": 0.04,
+            "f1": 0.02,
+            "f3": 0.02,
+            "ninguno": 0.92
+          }
+        },
+        "evidencia_sin_sueldo": {
+          "type": "choice",
+          "choice": "f3",
+          "confidence": 0.23,
+          "probabilities": {
+            "f4": 0.02,
+            "f2": 0.07,
+            "f1": 0.17,
+            "f3": 0.38,
+            "ninguno": 0.36
+          }
+        },
+        "evidencia_trabajo_gratis": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.79,
+          "probabilities": {
+            "f4": 0,
+            "f2": 0.04,
+            "f1": 0,
+            "f3": 0.13,
+            "ninguno": 0.83
+          }
+        },
+        "evidencia_pago_bolivares": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.99,
+          "probabilities": {
+            "f4": 0,
+            "f2": 0,
+            "f1": 0,
+            "f3": 0,
+            "ninguno": 1
+          }
+        },
+        "evidencia_camiseta": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.6,
+          "probabilities": {
+            "f4": 0.31,
+            "f2": 0,
+            "f1": 0,
+            "f3": 0,
+            "ninguno": 0.6900000000000001
+          }
+        },
+        "evidencia_horario_abusivo": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 1,
+          "probabilities": {
+            "f4": 0,
+            "f2": 0,
+            "f1": 0,
+            "f3": 0,
+            "ninguno": 1
+          }
+        },
+        "evidencia_estafa": {
+          "type": "choice",
+          "choice": "f3",
+          "confidence": 1,
+          "probabilities": {
+            "f4": 0,
+            "f2": 0,
+            "f1": 0,
+            "f3": 1,
+            "ninguno": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "decente",
+      "label": "Una oferta decente",
+      "accepted": ["decente"],
+      "chars": 361,
+      "fragments": 9,
+      "questions": 20,
+      "inputTokens": 4003,
+      "jevMs": 650,
+      "costUsd": 0.000168126,
+      "score": 7,
+      "verdict": {
+        "id": "decente",
+        "label": "Oferta decente",
+        "confidence": 0.94
+      },
+      "answers": {
+        "unicornio": {
+          "type": "noul",
+          "noul": 0.08
+        },
+        "multirol": {
+          "type": "noul",
+          "noul": 0.05
+        },
+        "sueldo_bajo": {
+          "type": "noul",
+          "noul": 0.23
+        },
+        "sin_sueldo": {
+          "type": "noul",
+          "noul": 0.02
+        },
+        "trabajo_gratis": {
+          "type": "noul",
+          "noul": 0.03
+        },
+        "pago_bolivares": {
+          "type": "noul",
+          "noul": 0.03
+        },
+        "camiseta": {
+          "type": "noul",
+          "noul": 0.03
+        },
+        "horario_abusivo": {
+          "type": "noul",
+          "noul": 0.08
+        },
+        "estafa": {
+          "type": "noul",
+          "noul": 0.07
+        },
+        "absurdo": {
+          "type": "score",
+          "score": 0.4,
+          "confidence": 0.6,
+          "legend": {
+            "0": "Fair: pay, requirements and conditions are reasonable for the role.",
+            "1": "Some issues: one or two weak points, but a developer could reasonably accept it.",
+            "2": "Bad: several unfair conditions; most experienced developers would decline.",
+            "3": "Absurd: the demands and the pay or conditions are so mismatched it reads like a joke."
+          },
+          "probabilities": {
+            "0": 0.62,
+            "1": 0.36,
+            "2": 0.02,
+            "3": 0
+          }
+        },
+        "veredicto": {
+          "type": "choice",
+          "choice": "decente",
+          "confidence": 0.94,
+          "probabilities": {
+            "estafa": 0,
+            "gratis": 0,
+            "decente": 0.96,
+            "explotacion": 0.04,
+            "sin_info": 0,
+            "departamento_it": 0
+          }
+        },
+        "evidencia_unicornio": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.53,
+          "probabilities": {
+            "f5": 0.41,
+            "f2": 0,
+            "f8": 0,
+            "f7": 0,
+            "f6": 0,
+            "ninguno": 0.58,
+            "f4": 0,
+            "f1": 0.01,
+            "f3": 0,
+            "f9": 0
+          }
+        },
+        "evidencia_multirol": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.89,
+          "probabilities": {
+            "f9": 0,
+            "f2": 0,
+            "f8": 0,
+            "f7": 0.01,
+            "f6": 0,
+            "ninguno": 0.91,
+            "f4": 0,
+            "f5": 0,
+            "f3": 0,
+            "f1": 0.08
+          }
+        },
+        "evidencia_sueldo_bajo": {
+          "type": "choice",
+          "choice": "f4",
+          "confidence": 0.78,
+          "probabilities": {
+            "f5": 0.06,
+            "f2": 0,
+            "f8": 0,
+            "ninguno": 0.13,
+            "f6": 0,
+            "f7": 0,
+            "f4": 0.81,
+            "f1": 0,
+            "f3": 0,
+            "f9": 0
+          }
+        },
+        "evidencia_sin_sueldo": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.58,
+          "probabilities": {
+            "f3": 0.35,
+            "f2": 0,
+            "f8": 0,
+            "f7": 0,
+            "f6": 0,
+            "ninguno": 0.62,
+            "f4": 0.03,
+            "f1": 0,
+            "f9": 0,
+            "f5": 0
+          }
+        },
+        "evidencia_trabajo_gratis": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.99,
+          "probabilities": {
+            "f1": 0,
+            "f2": 0,
+            "f8": 0,
+            "f7": 0,
+            "f6": 0,
+            "ninguno": 0.99,
+            "f4": 0,
+            "f5": 0,
+            "f9": 0.01,
+            "f3": 0
+          }
+        },
+        "evidencia_pago_bolivares": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.99,
+          "probabilities": {
+            "f5": 0,
+            "f2": 0,
+            "f8": 0,
+            "f7": 0,
+            "f6": 0,
+            "ninguno": 0.99,
+            "f4": 0.01,
+            "f1": 0,
+            "f9": 0,
+            "f3": 0
+          }
+        },
+        "evidencia_camiseta": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.99,
+          "probabilities": {
+            "f1": 0,
+            "f2": 0,
+            "f8": 0,
+            "ninguno": 0.99,
+            "f6": 0.01,
+            "f7": 0,
+            "f4": 0,
+            "f5": 0,
+            "f9": 0,
+            "f3": 0
+          }
+        },
+        "evidencia_horario_abusivo": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.65,
+          "probabilities": {
+            "f9": 0,
+            "f2": 0,
+            "f8": 0,
+            "ninguno": 0.69,
+            "f6": 0.31,
+            "f7": 0,
+            "f4": 0,
+            "f1": 0,
+            "f3": 0,
+            "f5": 0
+          }
+        },
+        "evidencia_estafa": {
+          "type": "choice",
+          "choice": "ninguno",
+          "confidence": 0.94,
+          "probabilities": {
+            "f3": 0,
+            "f2": 0,
+            "f8": 0,
+            "f7": 0,
+            "f6": 0,
+            "ninguno": 0.95,
+            "f4": 0.05,
+            "f5": 0,
+            "f9": 0,
+            "f1": 0
+          }
+        }
+      }
+    }
+  ]
+}

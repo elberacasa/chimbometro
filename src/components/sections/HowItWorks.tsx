@@ -1,12 +1,13 @@
 import { QUESTIONS, RED_FLAG_QUESTIONS, type RedFlagId } from "@/lib/chimba/questions";
-import { ABSURDITY_SHARE, FLAG_FLOOR, RED_FLAGS } from "@/lib/chimba/score";
+import { DEFAULT_POLICY, RED_FLAGS } from "@/lib/chimba/score";
 import { formatDecimal } from "@/lib/format";
 import styles from "./Sections.module.css";
 
-const TOTAL = Object.keys(QUESTIONS).length;
 const FLAGS = Object.keys(RED_FLAG_QUESTIONS).length;
+// Judgments plus one evidence question per red flag.
+const TOTAL = Object.keys(QUESTIONS).length + FLAGS;
 const example = JSON.stringify({ unicornio: RED_FLAG_QUESTIONS.unicornio }, null, 2);
-const share = Math.round(ABSURDITY_SHARE * 100);
+const share = Math.round(DEFAULT_POLICY.absurdityShare * 100);
 
 export function HowItWorks() {
   return (
@@ -31,9 +32,10 @@ export function HowItWorks() {
         <li>
           <h3>Un solo request con {TOTAL} preguntas</h3>
           <p>
-            {FLAGS} de sí o no, una escala de 0 a 3 y una elección entre seis veredictos. Jev las
-            responde en paralelo y ninguna ve la respuesta de las otras. Cada pregunta se escribe
-            así:
+            {FLAGS} de sí o no, una escala de 0 a 3, una elección entre seis veredictos y, por cada
+            bandera, una elección entre los fragmentos de tu oferta para encontrar la evidencia. Jev
+            las responde en paralelo y ninguna ve la respuesta de las otras. Cada pregunta se
+            escribe así:
           </p>
           <pre className={styles.code} tabIndex={0}>
             {example}
@@ -52,8 +54,8 @@ export function HowItWorks() {
           <p>
             La fórmula no es IA: es código que puedes leer. La mitad viene de qué tan injusta ve Jev
             la oferta en general; la otra mitad, de las banderas rojas, cada una con su peso. Las
-            probabilidades menores a {formatDecimal(FLAG_FLOOR)} casi no cuentan, para que el ruido
-            de muchas banderas no sume un veredicto.
+            probabilidades menores a {formatDecimal(DEFAULT_POLICY.floor)} casi no cuentan, para que
+            el ruido de muchas banderas no sume un veredicto.
           </p>
           <div className={styles.formula}>
             puntaje = {share} × absurdo / 3 + {100 - share} × [1 − (1 − peso₁ × p₁) × (1 − peso₂ ×
@@ -72,6 +74,10 @@ export function HowItWorks() {
           </table>
         </li>
       </ol>
+      <p className={styles.more}>
+        <a href="/docs">Leer la documentación técnica</a>: arquitectura, cada pregunta tal como se
+        envía, la fórmula para jugar con ella, y los datos de latencia y costo.
+      </p>
     </section>
   );
 }

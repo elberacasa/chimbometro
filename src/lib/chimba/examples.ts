@@ -11,7 +11,8 @@ export const EXAMPLES: Example[] = [
   {
     id: "unicornio",
     label: "El junior que sabe todo",
-    accepted: ["departamento_it"],
+    // Jev splits between these two; both describe a $250 junior who must do everything.
+    accepted: ["departamento_it", "explotacion"],
     text:
       "Se busca Desarrollador Junior (1 año de experiencia). Requisitos: dominio de React, Angular y Vue, " +
       "Node.js, Python y PHP (Laravel). Bases de datos: PostgreSQL, MySQL, SQL Server, Oracle y MongoDB. " +

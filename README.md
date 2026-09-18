@@ -4,12 +4,17 @@ Pega una oferta de trabajo y mide qué tan chimba es. Built for r/dev_venezuela 
 [Jev](https://docs.typesafe.ai), TypeSafe's System One model: it answers typed questions with
 calibrated probabilities instead of writing text.
 
-One request asks Jev 11 questions in parallel: 9 red flags (yes/no), how unfair the offer is (0–3)
-and a verdict (one of six). Plain code turns those probabilities into a 0–100 score. The page shows
-every step live — the request leaving, Jev's answers, tokens, cost and latency — and every Jev call
-made while building the project is recorded in [`ledger/jev-usage.jsonl`](ledger/jev-usage.jsonl).
+One request asks Jev 20 questions in parallel: 9 red flags (yes/no), how unfair the offer is
+(0–3), a verdict (one of six), and, per red flag, which fragment of the offer is the evidence
+("select instead of generate", so citations can't be invented). Plain code turns the probabilities
+into a 0–100 score. The page shows every step live: a pipeline diagram driven by the real stream,
+a trace with server timestamps, lines from each flag to the words that triggered it, and a receipt
+with tokens, cost and latency. `/docs` explains the architecture, every question as sent, the
+formula (with a playground that re-scores saved answers without calling Jev), and real latency and
+cost charts. Every Jev call made while building the project is recorded in
+[`ledger/jev-usage.jsonl`](ledger/jev-usage.jsonl).
 
-Typical request: ~1,450 input tokens, ~$0.00006, ~0.6 s.
+Typical request: 20 questions, ~3,500 input tokens, ~$0.00015, ~0.7 s.
 
 ## Run it
 
@@ -26,14 +31,22 @@ npm run dev                 # http://localhost:3000
 | `npm run jev:eval` | Runs the example offers through Jev and checks each verdict; appends to the ledger |
 | `npm run build` | Production build (the cost section is rendered from the ledger at build time) |
 
+Locally, rate limits use memory even if `.env.local` holds production's Redis (from
+`vercel env pull`), so development never spends production's budget. Set `CHIMBA_DEV_REDIS=1` to
+test against Redis on purpose.
+
 ## How it is put together
 
 ```
 src/
   app/api/chimba/route.ts   POST endpoint; streams NDJSON events as each step happens
+  app/api/stats/route.ts    today's measured offers and Jev spend (cached 10 s)
+  app/docs/                 technical documentation page
+  lib/server/               guard (limits, budget, origin) and server-only config
   lib/jev/                  typed HTTP client, pricing, wire types (no SDK dependency)
   lib/chimba/
-    questions.ts            everything Jev is asked, in one place
+    questions.ts            the judgment questions Jev is asked
+    evidence.ts             offer → fragments, and one evidence question per flag
     score.ts                the scoring formula (code, not model)
     extract.ts              salary and technologies read with plain code
     analyze.ts              one offer → Jev → score, with timings

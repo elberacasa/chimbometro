@@ -20,7 +20,7 @@ const encode = (s: string) => new TextEncoder().encode(s);
 
 describe("readEvents", () => {
   it("reassembles events whose bytes arrive split, even inside a multibyte character", async () => {
-    const a = JSON.stringify({ type: "received", t: 0, chars: 42 });
+    const a = JSON.stringify({ type: "received", t: 0, chars: 42, guardMs: 3 });
     const b = JSON.stringify({ type: "error", t: 5, message: "Jev está con mucha demanda." });
     const bytes = encode(`${a}\n${b}\n`);
     // "á" is two bytes in UTF-8; cut between them.
@@ -32,7 +32,9 @@ describe("readEvents", () => {
   });
 
   it("accepts a final line without a trailing newline", async () => {
-    const events = await collect([encode(JSON.stringify({ type: "received", t: 0, chars: 1 }))]);
+    const events = await collect([
+      encode(JSON.stringify({ type: "received", t: 0, chars: 1, guardMs: 3 })),
+    ]);
     expect(events).toHaveLength(1);
   });
 });

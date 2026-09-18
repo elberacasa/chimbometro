@@ -156,6 +156,13 @@
   text-wrap: balance;
 }
 
+/* Evidence map */
+
+.evidence {
+  padding-block: clamp(2.5rem, 5vw, 3.5rem);
+  border-top: 1px solid var(--rule);
+}
+
 /* Results */
 
 .results {

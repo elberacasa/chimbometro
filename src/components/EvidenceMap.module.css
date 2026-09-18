@@ -1,0 +1,242 @@
+.map {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(3rem, 8vw, 7rem);
+}
+
+.heading {
+  font-size: var(--step-3);
+}
+
+.sub {
+  margin: 0.35rem 0 1rem;
+  color: var(--ink-3);
+  font-size: var(--step--1);
+}
+
+/* The offer, set as a readable document with the cited fragments marked. */
+
+.text {
+  width: fit-content;
+  max-width: 58ch;
+  font-size: 1.02rem;
+  line-height: 1.75;
+  white-space: pre-line;
+  color: var(--ink-2);
+}
+
+.cited {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--bad) 14%, transparent);
+  box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--bad) 70%, transparent);
+  border-radius: 3px;
+  padding: 0.05em 0.15em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  cursor: default;
+  transition: background 150ms;
+}
+
+.cited[data-active] {
+  background: color-mix(in srgb, var(--bad) 28%, transparent);
+}
+
+.placeholder {
+  display: grid;
+  gap: 0.7rem;
+  max-width: 34rem;
+}
+
+.placeholder span {
+  height: 0.8rem;
+  border-radius: 4px;
+  background: var(--rule);
+}
+
+.placeholder span:nth-child(2) {
+  width: 86%;
+}
+
+.placeholder span:nth-child(3) {
+  width: 62%;
+}
+
+/* Flags */
+
+.flags ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.flags li {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(9.5rem, 12rem) 1fr 3.2rem;
+  align-items: center;
+  column-gap: 0.9rem;
+  padding: 0.4rem 0;
+  color: var(--ink-3);
+  transition: color 300ms var(--ease-out);
+}
+
+.flags li.raised {
+  color: var(--ink);
+}
+
+.anchor {
+  position: absolute;
+  left: -0.9rem;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: var(--bad);
+}
+
+.label {
+  font-weight: 500;
+}
+
+.raised .label {
+  font-weight: 650;
+}
+
+.bar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--rule);
+  overflow: hidden;
+}
+
+.bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: var(--ink-3);
+  transition: width 700ms var(--ease-out);
+}
+
+.raised .bar > span {
+  background: var(--bad);
+}
+
+.value {
+  text-align: right;
+  font-size: var(--step--1);
+}
+
+/* On wide screens the lines carry the evidence; the quotes are for narrow screens. */
+.quote {
+  display: none;
+}
+
+/* Connector lines */
+
+.links {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.link {
+  fill: none;
+  stroke: color-mix(in srgb, var(--bad) 55%, transparent);
+  stroke-width: 1.5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 700ms var(--ease-out) forwards;
+  animation-delay: calc(300ms + var(--i) * 90ms);
+  transition:
+    stroke 150ms,
+    opacity 150ms;
+}
+
+.linkEnd {
+  fill: var(--bad);
+  opacity: 0;
+  animation: appear 200ms forwards;
+  animation-delay: calc(900ms + var(--i) * 90ms);
+}
+
+.map[data-focus] .linkEnd:not([data-active]) {
+  opacity: 0.18;
+}
+
+@keyframes appear {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Hovering a flag or a fragment isolates its link. */
+.map[data-focus] .link {
+  opacity: 0.18;
+}
+
+.map[data-focus] .link[data-active] {
+  opacity: 1;
+  stroke: var(--bad);
+  stroke-width: 2.2;
+}
+
+.flags li[data-active] .label {
+  text-decoration: underline;
+  text-decoration-color: var(--bad);
+  text-underline-offset: 0.25em;
+}
+
+@media (max-width: 900px) {
+  .map {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .links,
+  .anchor {
+    display: none;
+  }
+  .quote {
+    display: block;
+    grid-column: 1 / -1;
+    margin-top: 0.3rem;
+    padding-left: 0.7rem;
+    border-left: 2px solid var(--bad);
+    font-size: var(--step--1);
+    color: var(--ink-2);
+  }
+}
+
+@media (max-width: 520px) {
+  .flags li {
+    grid-template-columns: 1fr 3rem;
+    row-gap: 0.3rem;
+  }
+  .bar {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .linkEnd {
+    animation: none;
+    opacity: 1;
+  }
+}

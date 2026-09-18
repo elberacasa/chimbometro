@@ -38,9 +38,26 @@ const BANDS: Array<Band & { from: number }> = [
   { from: 0, id: "decente", label: "Decente" },
 ];
 
-/** Probabilities below this barely count, so noise on many flags can't add up to a verdict. */
-export const FLAG_FLOOR = 0.3;
-export const ABSURDITY_SHARE = 0.5;
+/**
+ * The scoring policy. Jev supplies probabilities; everything below is plain, tunable code.
+ * The docs page runs this same function with sliders.
+ */
+export type Policy = {
+  weights: Record<RedFlagId, number>;
+  /** Probabilities below this barely count, so noise on many flags can't add up to a verdict. */
+  floor: number;
+  /** How much of the score comes from Jev's overall unfairness judgment vs the red flags. */
+  absurdityShare: number;
+};
+
+export const DEFAULT_POLICY: Policy = {
+  weights: Object.fromEntries(Object.entries(RED_FLAGS).map(([id, f]) => [id, f.weight])) as Record<
+    RedFlagId,
+    number
+  >,
+  floor: 0.3,
+  absurdityShare: 0.5,
+};
 
 export type FlagResult = { id: RedFlagId; label: string; probability: number; weight: number };
 
@@ -54,18 +71,31 @@ export type ChimbaResult = {
   flags: FlagResult[];
 };
 
-export function scoreOffer(answers: SystemOneResponse<Questions>["answers"]): ChimbaResult {
+/** The subset of Jev's answers the score depends on. */
+export type ScoredAnswers = Pick<
+  SystemOneResponse<Questions>["answers"],
+  RedFlagId | "absurdo" | "veredicto"
+>;
+
+export function scoreOffer(answers: ScoredAnswers, policy: Policy = DEFAULT_POLICY): ChimbaResult {
   const flags = (Object.keys(RED_FLAG_QUESTIONS) as RedFlagId[])
-    .map((id) => ({ id, ...RED_FLAGS[id], probability: answers[id].noul }))
+    .map((id) => ({
+      id,
+      label: RED_FLAGS[id].label,
+      weight: policy.weights[id],
+      probability: answers[id].noul,
+    }))
     .sort((a, b) => b.probability - a.probability);
 
   // Noisy-OR: each flag independently makes the offer worse, weighted by how bad it is.
-  const clean = flags.reduce((acc, f) => acc * (1 - f.weight * aboveFloor(f.probability)), 1);
+  const clean = flags.reduce(
+    (acc, f) => acc * (1 - f.weight * aboveFloor(f.probability, policy.floor)),
+    1,
+  );
   const flagIndex = 1 - clean;
   const absurdityIndex = answers.absurdo.score / 3;
-  const score = Math.round(
-    100 * (ABSURDITY_SHARE * absurdityIndex + (1 - ABSURDITY_SHARE) * flagIndex),
-  );
+  const share = policy.absurdityShare;
+  const score = Math.round(100 * (share * absurdityIndex + (1 - share) * flagIndex));
 
   const verdictId = answers.veredicto.choice as VerdictId;
   return {
@@ -86,6 +116,6 @@ export function bandFor(score: number): Band {
   return { id, label };
 }
 
-function aboveFloor(p: number) {
-  return Math.max(0, (p - FLAG_FLOOR) / (1 - FLAG_FLOOR));
+function aboveFloor(p: number, floor: number) {
+  return floor >= 1 ? 0 : Math.max(0, (p - floor) / (1 - floor));
 }

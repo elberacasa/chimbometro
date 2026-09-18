@@ -62,6 +62,12 @@ json.dump(
         "absurdOffersInTop6": 2,
         "inputTokens": sum(usage),
         "latencyP50Ms": latency[len(latency) // 2],
+        "latencyP90Ms": latency[int(len(latency) * 0.9)],
+        # 50 ms bins of per-request round trip, for the docs histogram.
+        "latencyHistogram": [
+            {"fromMs": b, "count": sum(1 for x in latency if b <= x < b + 50)}
+            for b in range(latency[0] // 50 * 50, latency[-1] // 50 * 50 + 50, 50)
+        ],
         "painByTopic": pain,
     },
     open(OUT, "w"),

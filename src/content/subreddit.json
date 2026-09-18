@@ -8,6 +8,49 @@
   "absurdOffersInTop6": 2,
   "inputTokens": 323889,
   "latencyP50Ms": 698,
+  "latencyP90Ms": 794,
+  "latencyHistogram": [
+    {
+      "fromMs": 550,
+      "count": 7
+    },
+    {
+      "fromMs": 600,
+      "count": 25
+    },
+    {
+      "fromMs": 650,
+      "count": 76
+    },
+    {
+      "fromMs": 700,
+      "count": 59
+    },
+    {
+      "fromMs": 750,
+      "count": 20
+    },
+    {
+      "fromMs": 800,
+      "count": 10
+    },
+    {
+      "fromMs": 850,
+      "count": 4
+    },
+    {
+      "fromMs": 900,
+      "count": 2
+    },
+    {
+      "fromMs": 950,
+      "count": 1
+    },
+    {
+      "fromMs": 1000,
+      "count": 2
+    }
+  ],
   "painByTopic": [
     {
       "id": "job_search",
