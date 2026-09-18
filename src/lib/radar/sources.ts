@@ -178,6 +178,7 @@ type GobJob = {
     max_salary?: number | null;
     published_at?: number;
     seniority?: { data?: { id?: number | string } };
+    company?: { data?: { attributes?: { name?: string } } };
   };
   links?: { public_url?: string };
 };
@@ -205,7 +206,8 @@ async function getOnBoard(): Promise<Fetched> {
   const listings: Listing[] = [];
   const requested: string[] = [];
   for (let page = 1; page <= 4; page++) {
-    const url = `https://www.getonbrd.com/api/v0/search/jobs?query=developer&per_page=50&page=${page}`;
+    // expand=["company"] adds the company name, which the plain search leaves out.
+    const url = `https://www.getonbrd.com/api/v0/search/jobs?query=developer&per_page=50&page=${page}&expand=%5B%22company%22%5D`;
     requested.push(url);
     const { data } = await getJson<{ data: GobJob[] }>(url);
     for (const j of data) {
@@ -215,7 +217,7 @@ async function getOnBoard(): Promise<Fetched> {
         id: `gob-${j.id}`,
         source: "getonbrd",
         title: a.title,
-        company: "",
+        company: a.company?.data?.attributes?.name ?? "",
         location: (a.countries ?? []).join(", "),
         text: htmlToText([a.description, a.functions, a.benefits].filter(Boolean).join("\n")),
         url: j.links?.public_url ?? "https://www.getonbrd.com",

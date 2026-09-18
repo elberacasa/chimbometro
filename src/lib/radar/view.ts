@@ -9,6 +9,7 @@ export type JobView = Pick<
   | "id"
   | "source"
   | "title"
+  | "company"
   | "url"
   | "postedAt"
   | "salary"
@@ -44,6 +45,7 @@ export function toPayload(snapshot: RadarSnapshot): RadarPayload {
         id: j.id,
         source: j.source,
         title: clip(j.title),
+        company: clip(j.company),
         url: j.url,
         postedAt: j.postedAt,
         salary: j.salary,

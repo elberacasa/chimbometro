@@ -195,6 +195,8 @@ function JobRow({ job, now }: { job: JobView; now: number }) {
           {job.title}
         </a>
         <span className={styles.when}>
+          {/* Hacker News titles already start with the company. */}
+          {job.company && job.source !== "hn" && `${job.company}, `}
           {SOURCE_LABEL[job.source]}
           {job.postedAt && `, ${timeAgo(job.postedAt, now)}`}
         </span>
