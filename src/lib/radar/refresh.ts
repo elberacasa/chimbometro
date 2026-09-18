@@ -31,6 +31,8 @@ export type RadarEvent =
       title: string;
       eligible: boolean;
       isJob: boolean;
+      /** Absent in runs recorded before the tech-role question existed. */
+      techRole?: boolean;
       decidedBy: RadarJob["decidedBy"];
       quote: string | null;
       url: string;
@@ -105,6 +107,7 @@ export async function refreshRadar({ apiKey, store, budgetUsd, trigger, onEvent 
         title: job.title,
         eligible: job.eligible,
         isJob: job.isJob,
+        techRole: job.techRole,
         decidedBy: job.decidedBy,
         quote: job.quote,
         url: job.url,

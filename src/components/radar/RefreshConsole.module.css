@@ -102,18 +102,11 @@
   overscroll-behavior: contain;
 }
 
+/* Lines print instantly, like a terminal: at ~25 lines a second a fade reads as flicker. */
 .log li {
   display: grid;
   grid-template-columns: 5.6rem minmax(0, 1fr);
   gap: 0.6rem;
-  animation: line-in 140ms ease-out both;
-}
-
-@keyframes line-in {
-  from {
-    opacity: 0;
-    transform: translateY(2px);
-  }
 }
 
 .log li.idle {
@@ -187,11 +180,5 @@
   }
   .t {
     text-align: left;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .log li {
-    animation: none;
   }
 }

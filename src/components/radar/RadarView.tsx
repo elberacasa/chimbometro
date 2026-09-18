@@ -94,6 +94,7 @@ export function RadarView({ initial, renderedAt }: Props) {
   }
 
   const jobs = snapshot?.jobs ?? [];
+  const techIds = new Set(jobs.map((j) => j.id));
   const eligible = jobs.filter((j) => j.eligible);
   const juniors = eligible.filter((j) => j.seniority === "junior").length;
 
@@ -135,6 +136,7 @@ export function RadarView({ initial, renderedAt }: Props) {
 
       <RefreshConsole
         events={events}
+        techIds={techIds}
         mode={mode}
         message={message}
         onRefresh={refresh}

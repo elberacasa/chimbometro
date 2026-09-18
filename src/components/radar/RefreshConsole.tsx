@@ -10,6 +10,8 @@ export type ConsoleMode = "idle" | "live" | "replay";
 
 type Props = {
   events: RadarEvent[];
+  /** Ids the radar shows (tech roles), to label older recorded runs that lack `techRole`. */
+  techIds: Set<string>;
   mode: ConsoleMode;
   message: string | null;
   onRefresh: () => void;
@@ -24,7 +26,15 @@ const VISIBLE_LINES = 80;
  * The radar update as a terminal: which URLs our server requested, what came back, and every
  * listing Jev judged, as it happens (live) or with its original timing (replay).
  */
-export function RefreshConsole({ events, mode, message, onRefresh, onReplay, onSkip }: Props) {
+export function RefreshConsole({
+  events,
+  techIds,
+  mode,
+  message,
+  onRefresh,
+  onReplay,
+  onSkip,
+}: Props) {
   const logRef = useRef<HTMLOListElement>(null);
   const busy = mode !== "idle";
 
@@ -34,6 +44,7 @@ export function RefreshConsole({ events, mode, message, onRefresh, onReplay, onS
   const done = events.find((e) => e.type === "done");
   const tokens = judged.reduce((n, e) => n + e.tokens, 0);
   const elapsed = events.at(-1)?.t ?? 0;
+  const firstVisible = Math.max(0, events.length - VISIBLE_LINES);
 
   useEffect(() => {
     const log = logRef.current;
@@ -113,8 +124,10 @@ export function RefreshConsole({ events, mode, message, onRefresh, onReplay, onS
               "Pulsa «Actualizar ahora» para ver al radar buscar y a Jev leer cada oferta en vivo."}
           </li>
         )}
-        {events.slice(-VISIBLE_LINES).map((e, i) => (
-          <Line key={`${e.type}-${e.t}-${i}`} e={e} />
+        {events.slice(firstVisible).map((e, i) => (
+          // Keyed by position in the whole run, so lines already on screen never remount (and
+          // never replay their fade-in) as new ones arrive.
+          <Line key={firstVisible + i} e={e} techIds={techIds} />
         ))}
         {message && events.length > 0 && <li className={styles.err}>{message}</li>}
       </ol>
@@ -132,7 +145,7 @@ export function RefreshConsole({ events, mode, message, onRefresh, onReplay, onS
   );
 }
 
-function Line({ e }: { e: RadarEvent }) {
+function Line({ e, techIds }: { e: RadarEvent; techIds: Set<string> }) {
   const t = <span className={`${styles.t} num`}>+{formatInt(e.t)} ms</span>;
   switch (e.type) {
     case "start":
@@ -179,13 +192,29 @@ function Line({ e }: { e: RadarEvent }) {
           </span>
         </li>
       );
-    case "judged":
+    case "judged": {
+      const tech = e.techRole ?? techIds.has(e.id);
+      const verdict = !e.isJob
+        ? "no es empleo"
+        : !tech
+          ? "no es tech"
+          : e.eligible
+            ? "acepta VE"
+            : "no acepta";
       return (
         <li>
           {t}
           <span>
-            <span className={!e.isJob ? styles.dim : e.eligible ? styles.ok : styles.no}>
-              {!e.isJob ? "no es empleo" : e.eligible ? "acepta VE" : "no acepta"}
+            <span
+              className={
+                verdict === "acepta VE"
+                  ? styles.ok
+                  : verdict === "no acepta"
+                    ? styles.no
+                    : styles.dim
+              }
+            >
+              {verdict}
             </span>{" "}
             <a href={e.url} className={styles.job}>
               {e.title.slice(0, 70)}
@@ -198,6 +227,7 @@ function Line({ e }: { e: RadarEvent }) {
           </span>
         </li>
       );
+    }
     case "done":
       return (
         <li>
