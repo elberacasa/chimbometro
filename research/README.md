@@ -24,6 +24,8 @@ python3 export_radar_stats.py  # aggregates for the docs Laboratorio
   over-represented in the top 30; payments and tools never reach it.
 - Job listings average ~1,600 input tokens with 6 questions, ≈ $0.00007 each.
 
+That led to the Chimbómetro: paste a job offer, get a score and red flags, share the result.
+
 ## Chamba Radar experiment (2026-09-18, 501 listings from 4 sources)
 
 - 130 of 496 real job posts (26%) accept someone living in Venezuela; on HN "Who is hiring?"
@@ -31,7 +33,5 @@ python3 export_radar_stats.py  # aggregates for the docs Laboratorio
 - Structured fields (Get on Board's remote modality) must be decided in code; passing the raw
   code `remote_local` misled Jev until it was spelled out. "Contractor OK" stays between 0.5 and
   0.8 because listings rarely say, so it is not usable as a filter.
-
-That led to the Chimbómetro: paste a job offer, get a score and red flags, share the result.
 
 Caveats: RSS carries no scores or comments, and the sample leans toward top and hot posts.
