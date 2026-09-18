@@ -16,6 +16,7 @@
     "jev:eval": "tsx --env-file=.env scripts/eval-offers.ts",
     "jev:eval-radar": "tsx --env-file=.env scripts/eval-radar.ts",
     "jev:sources": "tsx --env-file=.env scripts/probe-sources.ts",
+    "radar:refresh": "tsx --env-file=.env --env-file-if-exists=.env.local scripts/refresh-radar.ts",
     "readme:art": "tsx scripts/readme-art.ts"
   },
   "engines": {
